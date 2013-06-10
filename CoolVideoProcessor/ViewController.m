@@ -7,6 +7,9 @@
 //
 
 #import "ViewController.h"
+#import "PlayVideoVC.h"
+
+#define SELECT_AND_PLAY @"selectAndPlayVideo"
 
 @interface ViewController ()
 
@@ -24,6 +27,17 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:SELECT_AND_PLAY])
+    {
+        if ([segue.destinationViewController isKindOfClass:[PlayVideoVC class]])
+        {
+            PlayVideoVC * destVC = (PlayVideoVC*)segue.destinationViewController;
+        }
+    }
 }
 
 @end

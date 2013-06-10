@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2109553517666916007D0C78 /* MergeCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2109553417666916007D0C78 /* MergeCollectionViewController.m */; };
+		2109553917666A34007D0C78 /* MergeVideoViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2109553817666A34007D0C78 /* MergeVideoViewCell.m */; };
+		2109553C17666E21007D0C78 /* MergeVideoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2109553B17666E21007D0C78 /* MergeVideoView.m */; };
+		218F1532174189E600874561 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 218F1531174189E600874561 /* AssetsLibrary.framework */; };
+		218F153417418E7900874561 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 218F153317418E7900874561 /* AVFoundation.framework */; };
+		218F1536174193A900874561 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 218F1535174193A900874561 /* MediaPlayer.framework */; };
 		21ECB9BB17401A96002C8851 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21ECB9BA17401A96002C8851 /* UIKit.framework */; };
 		21ECB9BD17401A96002C8851 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21ECB9BC17401A96002C8851 /* Foundation.framework */; };
 		21ECB9BF17401A96002C8851 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21ECB9BE17401A96002C8851 /* CoreGraphics.framework */; };
@@ -17,11 +23,22 @@
 		21ECB9CF17401A96002C8851 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 21ECB9CE17401A96002C8851 /* Default@2x.png */; };
 		21ECB9D117401A96002C8851 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 21ECB9D017401A96002C8851 /* Default-568h@2x.png */; };
 		21ECB9D417401A96002C8851 /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 21ECB9D217401A96002C8851 /* MainStoryboard_iPhone.storyboard */; };
-		21ECB9D717401A96002C8851 /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 21ECB9D517401A96002C8851 /* MainStoryboard_iPad.storyboard */; };
 		21ECB9DA17401A96002C8851 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 21ECB9D917401A96002C8851 /* ViewController.m */; };
+		21FCE9D717416FD20020E973 /* PlayVideoVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 21FCE9D617416FD20020E973 /* PlayVideoVC.m */; };
+		21FCE9DA174171C90020E973 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21FCE9D9174171C90020E973 /* CoreMedia.framework */; };
+		21FCE9DC174171D60020E973 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21FCE9DB174171D60020E973 /* MobileCoreServices.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2109553317666916007D0C78 /* MergeCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MergeCollectionViewController.h; sourceTree = "<group>"; };
+		2109553417666916007D0C78 /* MergeCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MergeCollectionViewController.m; sourceTree = "<group>"; };
+		2109553717666A34007D0C78 /* MergeVideoViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MergeVideoViewCell.h; sourceTree = "<group>"; };
+		2109553817666A34007D0C78 /* MergeVideoViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MergeVideoViewCell.m; sourceTree = "<group>"; };
+		2109553A17666E21007D0C78 /* MergeVideoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MergeVideoView.h; sourceTree = "<group>"; };
+		2109553B17666E21007D0C78 /* MergeVideoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MergeVideoView.m; sourceTree = "<group>"; };
+		218F1531174189E600874561 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
+		218F153317418E7900874561 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		218F1535174193A900874561 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		21ECB9B617401A96002C8851 /* CoolVideoProcessor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoolVideoProcessor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		21ECB9BA17401A96002C8851 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		21ECB9BC17401A96002C8851 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -36,9 +53,12 @@
 		21ECB9CE17401A96002C8851 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		21ECB9D017401A96002C8851 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		21ECB9D317401A96002C8851 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPhone.storyboard; sourceTree = "<group>"; };
-		21ECB9D617401A96002C8851 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
 		21ECB9D817401A96002C8851 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		21ECB9D917401A96002C8851 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		21FCE9D517416FD20020E973 /* PlayVideoVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayVideoVC.h; sourceTree = "<group>"; };
+		21FCE9D617416FD20020E973 /* PlayVideoVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayVideoVC.m; sourceTree = "<group>"; };
+		21FCE9D9174171C90020E973 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		21FCE9DB174171D60020E973 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,6 +66,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				218F1536174193A900874561 /* MediaPlayer.framework in Frameworks */,
+				218F153417418E7900874561 /* AVFoundation.framework in Frameworks */,
+				218F1532174189E600874561 /* AssetsLibrary.framework in Frameworks */,
+				21FCE9DC174171D60020E973 /* MobileCoreServices.framework in Frameworks */,
+				21FCE9DA174171C90020E973 /* CoreMedia.framework in Frameworks */,
 				21ECB9BB17401A96002C8851 /* UIKit.framework in Frameworks */,
 				21ECB9BD17401A96002C8851 /* Foundation.framework in Frameworks */,
 				21ECB9BF17401A96002C8851 /* CoreGraphics.framework in Frameworks */,
@@ -55,6 +80,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2109553617666925007D0C78 /* Merge */ = {
+			isa = PBXGroup;
+			children = (
+				2109553317666916007D0C78 /* MergeCollectionViewController.h */,
+				2109553417666916007D0C78 /* MergeCollectionViewController.m */,
+				2109553717666A34007D0C78 /* MergeVideoViewCell.h */,
+				2109553A17666E21007D0C78 /* MergeVideoView.h */,
+				2109553B17666E21007D0C78 /* MergeVideoView.m */,
+				2109553817666A34007D0C78 /* MergeVideoViewCell.m */,
+			);
+			name = Merge;
+			sourceTree = "<group>";
+		};
 		21ECB9AB17401A96002C8851 = {
 			isa = PBXGroup;
 			children = (
@@ -75,6 +113,11 @@
 		21ECB9B917401A96002C8851 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				218F1535174193A900874561 /* MediaPlayer.framework */,
+				218F153317418E7900874561 /* AVFoundation.framework */,
+				218F1531174189E600874561 /* AssetsLibrary.framework */,
+				21FCE9DB174171D60020E973 /* MobileCoreServices.framework */,
+				21FCE9D9174171C90020E973 /* CoreMedia.framework */,
 				21ECB9BA17401A96002C8851 /* UIKit.framework */,
 				21ECB9BC17401A96002C8851 /* Foundation.framework */,
 				21ECB9BE17401A96002C8851 /* CoreGraphics.framework */,
@@ -85,10 +128,12 @@
 		21ECB9C017401A96002C8851 /* CoolVideoProcessor */ = {
 			isa = PBXGroup;
 			children = (
+				2109553617666925007D0C78 /* Merge */,
 				21ECB9C917401A96002C8851 /* AppDelegate.h */,
 				21ECB9CA17401A96002C8851 /* AppDelegate.m */,
 				21ECB9D217401A96002C8851 /* MainStoryboard_iPhone.storyboard */,
-				21ECB9D517401A96002C8851 /* MainStoryboard_iPad.storyboard */,
+				21FCE9D517416FD20020E973 /* PlayVideoVC.h */,
+				21FCE9D617416FD20020E973 /* PlayVideoVC.m */,
 				21ECB9D817401A96002C8851 /* ViewController.h */,
 				21ECB9D917401A96002C8851 /* ViewController.m */,
 				21ECB9C117401A96002C8851 /* Supporting Files */,
@@ -166,7 +211,6 @@
 				21ECB9CF17401A96002C8851 /* Default@2x.png in Resources */,
 				21ECB9D117401A96002C8851 /* Default-568h@2x.png in Resources */,
 				21ECB9D417401A96002C8851 /* MainStoryboard_iPhone.storyboard in Resources */,
-				21ECB9D717401A96002C8851 /* MainStoryboard_iPad.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -180,6 +224,10 @@
 				21ECB9C717401A96002C8851 /* main.m in Sources */,
 				21ECB9CB17401A96002C8851 /* AppDelegate.m in Sources */,
 				21ECB9DA17401A96002C8851 /* ViewController.m in Sources */,
+				21FCE9D717416FD20020E973 /* PlayVideoVC.m in Sources */,
+				2109553517666916007D0C78 /* MergeCollectionViewController.m in Sources */,
+				2109553917666A34007D0C78 /* MergeVideoViewCell.m in Sources */,
+				2109553C17666E21007D0C78 /* MergeVideoView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -202,14 +250,6 @@
 			name = MainStoryboard_iPhone.storyboard;
 			sourceTree = "<group>";
 		};
-		21ECB9D517401A96002C8851 /* MainStoryboard_iPad.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				21ECB9D617401A96002C8851 /* en */,
-			);
-			name = MainStoryboard_iPad.storyboard;
-			sourceTree = "<group>";
-		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
@@ -222,6 +262,7 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -236,6 +277,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -250,6 +292,7 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -258,6 +301,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -267,10 +311,14 @@
 		21ECB9DE17401A96002C8851 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer: Dzmitry Tsybulka (L3U5RV4A9C)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Dzmitry Tsybulka (L3U5RV4A9C)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CoolVideoProcessor/CoolVideoProcessor-Prefix.pch";
 				INFOPLIST_FILE = "CoolVideoProcessor/CoolVideoProcessor-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "7D90A880-2548-4410-9F81-66E851DE25B3";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "7D90A880-2548-4410-9F81-66E851DE25B3";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -278,10 +326,14 @@
 		21ECB9DF17401A96002C8851 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer: Dzmitry Tsybulka (L3U5RV4A9C)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Dzmitry Tsybulka (L3U5RV4A9C)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CoolVideoProcessor/CoolVideoProcessor-Prefix.pch";
 				INFOPLIST_FILE = "CoolVideoProcessor/CoolVideoProcessor-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "7D90A880-2548-4410-9F81-66E851DE25B3";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "7D90A880-2548-4410-9F81-66E851DE25B3";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -305,6 +357,7 @@
 				21ECB9DF17401A96002C8851 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
