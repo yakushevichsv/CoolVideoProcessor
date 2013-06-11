@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MergeVideoView.h"
 
 @interface MergeVideoViewCell : UICollectionViewCell
 @property (weak, nonatomic) IBOutlet MergeVideoView *MergeVideo;

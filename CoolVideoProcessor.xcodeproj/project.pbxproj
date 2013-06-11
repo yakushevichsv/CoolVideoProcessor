@@ -13,6 +13,7 @@
 		218F1532174189E600874561 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 218F1531174189E600874561 /* AssetsLibrary.framework */; };
 		218F153417418E7900874561 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 218F153317418E7900874561 /* AVFoundation.framework */; };
 		218F1536174193A900874561 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 218F1535174193A900874561 /* MediaPlayer.framework */; };
+		21BD7B6B1767D44B0093BB2C /* checkButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 21BD7B6A1767D44B0093BB2C /* checkButton.png */; };
 		21ECB9BB17401A96002C8851 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21ECB9BA17401A96002C8851 /* UIKit.framework */; };
 		21ECB9BD17401A96002C8851 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21ECB9BC17401A96002C8851 /* Foundation.framework */; };
 		21ECB9BF17401A96002C8851 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21ECB9BE17401A96002C8851 /* CoreGraphics.framework */; };
@@ -39,6 +40,7 @@
 		218F1531174189E600874561 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		218F153317418E7900874561 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		218F1535174193A900874561 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		21BD7B6A1767D44B0093BB2C /* checkButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checkButton.png; sourceTree = "<group>"; };
 		21ECB9B617401A96002C8851 /* CoolVideoProcessor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoolVideoProcessor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		21ECB9BA17401A96002C8851 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		21ECB9BC17401A96002C8851 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -97,6 +99,7 @@
 			isa = PBXGroup;
 			children = (
 				21ECB9C017401A96002C8851 /* CoolVideoProcessor */,
+				21BD7B6A1767D44B0093BB2C /* checkButton.png */,
 				21ECB9B917401A96002C8851 /* Frameworks */,
 				21ECB9B717401A96002C8851 /* Products */,
 			);
@@ -211,6 +214,7 @@
 				21ECB9CF17401A96002C8851 /* Default@2x.png in Resources */,
 				21ECB9D117401A96002C8851 /* Default-568h@2x.png in Resources */,
 				21ECB9D417401A96002C8851 /* MainStoryboard_iPhone.storyboard in Resources */,
+				21BD7B6B1767D44B0093BB2C /* checkButton.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

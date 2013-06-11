@@ -9,5 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface MergeVideoView : UIView
-
+@property (nonatomic) BOOL tapped;
+@property (nonatomic) UIImage * firstFrame;
+@property (nonatomic) NSString * title;
 @end
