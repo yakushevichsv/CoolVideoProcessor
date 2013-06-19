@@ -10,6 +10,8 @@
 		2109553517666916007D0C78 /* MergeCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2109553417666916007D0C78 /* MergeCollectionViewController.m */; };
 		2109553917666A34007D0C78 /* MergeVideoViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2109553817666A34007D0C78 /* MergeVideoViewCell.m */; };
 		2109553C17666E21007D0C78 /* MergeVideoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2109553B17666E21007D0C78 /* MergeVideoView.m */; };
+		21095763176BC55C00C7A68A /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21095762176BC55C00C7A68A /* GLKit.framework */; };
+		21095766176BC59D00C7A68A /* LogoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 21095765176BC59D00C7A68A /* LogoViewController.m */; };
 		218F1532174189E600874561 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 218F1531174189E600874561 /* AssetsLibrary.framework */; };
 		218F153417418E7900874561 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 218F153317418E7900874561 /* AVFoundation.framework */; };
 		218F1536174193A900874561 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 218F1535174193A900874561 /* MediaPlayer.framework */; };
@@ -25,6 +27,7 @@
 		21ECB9D117401A96002C8851 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 21ECB9D017401A96002C8851 /* Default-568h@2x.png */; };
 		21ECB9D417401A96002C8851 /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 21ECB9D217401A96002C8851 /* MainStoryboard_iPhone.storyboard */; };
 		21ECB9DA17401A96002C8851 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 21ECB9D917401A96002C8851 /* ViewController.m */; };
+		21EF4F17176E3EA80000EB83 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21EF4F16176E3EA80000EB83 /* OpenGLES.framework */; };
 		21FCE9D717416FD20020E973 /* PlayVideoVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 21FCE9D617416FD20020E973 /* PlayVideoVC.m */; };
 		21FCE9DA174171C90020E973 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21FCE9D9174171C90020E973 /* CoreMedia.framework */; };
 		21FCE9DC174171D60020E973 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21FCE9DB174171D60020E973 /* MobileCoreServices.framework */; };
@@ -37,6 +40,9 @@
 		2109553817666A34007D0C78 /* MergeVideoViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MergeVideoViewCell.m; sourceTree = "<group>"; };
 		2109553A17666E21007D0C78 /* MergeVideoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MergeVideoView.h; sourceTree = "<group>"; };
 		2109553B17666E21007D0C78 /* MergeVideoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MergeVideoView.m; sourceTree = "<group>"; };
+		21095762176BC55C00C7A68A /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
+		21095764176BC59D00C7A68A /* LogoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LogoViewController.h; path = Loggo/LogoViewController.h; sourceTree = "<group>"; };
+		21095765176BC59D00C7A68A /* LogoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LogoViewController.m; path = Loggo/LogoViewController.m; sourceTree = "<group>"; };
 		218F1531174189E600874561 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		218F153317418E7900874561 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		218F1535174193A900874561 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
@@ -57,6 +63,7 @@
 		21ECB9D317401A96002C8851 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPhone.storyboard; sourceTree = "<group>"; };
 		21ECB9D817401A96002C8851 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		21ECB9D917401A96002C8851 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		21EF4F16176E3EA80000EB83 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		21FCE9D517416FD20020E973 /* PlayVideoVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayVideoVC.h; sourceTree = "<group>"; };
 		21FCE9D617416FD20020E973 /* PlayVideoVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayVideoVC.m; sourceTree = "<group>"; };
 		21FCE9D9174171C90020E973 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
@@ -68,6 +75,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				21EF4F17176E3EA80000EB83 /* OpenGLES.framework in Frameworks */,
+				21095763176BC55C00C7A68A /* GLKit.framework in Frameworks */,
 				218F1536174193A900874561 /* MediaPlayer.framework in Frameworks */,
 				218F153417418E7900874561 /* AVFoundation.framework in Frameworks */,
 				218F1532174189E600874561 /* AssetsLibrary.framework in Frameworks */,
@@ -95,6 +104,15 @@
 			name = Merge;
 			sourceTree = "<group>";
 		};
+		21095761176BC3C200C7A68A /* FunnyLogo */ = {
+			isa = PBXGroup;
+			children = (
+				21095764176BC59D00C7A68A /* LogoViewController.h */,
+				21095765176BC59D00C7A68A /* LogoViewController.m */,
+			);
+			name = FunnyLogo;
+			sourceTree = "<group>";
+		};
 		21ECB9AB17401A96002C8851 = {
 			isa = PBXGroup;
 			children = (
@@ -116,6 +134,8 @@
 		21ECB9B917401A96002C8851 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				21EF4F16176E3EA80000EB83 /* OpenGLES.framework */,
+				21095762176BC55C00C7A68A /* GLKit.framework */,
 				218F1535174193A900874561 /* MediaPlayer.framework */,
 				218F153317418E7900874561 /* AVFoundation.framework */,
 				218F1531174189E600874561 /* AssetsLibrary.framework */,
@@ -131,6 +151,7 @@
 		21ECB9C017401A96002C8851 /* CoolVideoProcessor */ = {
 			isa = PBXGroup;
 			children = (
+				21095761176BC3C200C7A68A /* FunnyLogo */,
 				2109553617666925007D0C78 /* Merge */,
 				21ECB9C917401A96002C8851 /* AppDelegate.h */,
 				21ECB9CA17401A96002C8851 /* AppDelegate.m */,
@@ -232,6 +253,7 @@
 				2109553517666916007D0C78 /* MergeCollectionViewController.m in Sources */,
 				2109553917666A34007D0C78 /* MergeVideoViewCell.m in Sources */,
 				2109553C17666E21007D0C78 /* MergeVideoView.m in Sources */,
+				21095766176BC59D00C7A68A /* LogoViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

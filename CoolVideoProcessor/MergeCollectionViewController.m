@@ -47,4 +47,9 @@
     return NSIntegerMin;
 }
 
+-(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+    return 0;
+}
+
 @end
