@@ -35,7 +35,7 @@ static SceneVertex points[] = {{0.5,0.0,0.0},
 
 -(BOOL)fullVersion
 {
-    return FALSE;
+    return TRUE;
 }
 
 -(void)viewDidLoad

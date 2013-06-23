@@ -10,6 +10,8 @@
 
 @interface MergeVideoView : UIView
 @property (nonatomic) BOOL tapped;
-@property (nonatomic) UIImage * firstFrame;
-@property (nonatomic) NSString * title;
+@property (nonatomic,strong) UIImage * firstFrame;
+@property (nonatomic,strong) NSString * title;
+@property (nonatomic) BOOL isLoading;
+@property (nonatomic) BOOL bulkReDraw;
 @end

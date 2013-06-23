@@ -35,7 +35,7 @@
     {
         if ([segue.destinationViewController isKindOfClass:[PlayVideoVC class]])
         {
-            PlayVideoVC * destVC = (PlayVideoVC*)segue.destinationViewController;
+           // PlayVideoVC * destVC = (PlayVideoVC*)segue.destinationViewController;
         }
     }
 }

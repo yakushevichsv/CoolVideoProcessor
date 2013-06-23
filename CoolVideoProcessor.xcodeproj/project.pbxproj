@@ -16,6 +16,7 @@
 		218F153417418E7900874561 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 218F153317418E7900874561 /* AVFoundation.framework */; };
 		218F1536174193A900874561 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 218F1535174193A900874561 /* MediaPlayer.framework */; };
 		21BD7B6B1767D44B0093BB2C /* checkButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 21BD7B6A1767D44B0093BB2C /* checkButton.png */; };
+		21E2FA5A177777A200784CC5 /* HeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 21E2FA59177777A200784CC5 /* HeaderView.m */; };
 		21ECB9BB17401A96002C8851 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21ECB9BA17401A96002C8851 /* UIKit.framework */; };
 		21ECB9BD17401A96002C8851 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21ECB9BC17401A96002C8851 /* Foundation.framework */; };
 		21ECB9BF17401A96002C8851 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21ECB9BE17401A96002C8851 /* CoreGraphics.framework */; };
@@ -47,6 +48,8 @@
 		218F153317418E7900874561 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		218F1535174193A900874561 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		21BD7B6A1767D44B0093BB2C /* checkButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checkButton.png; sourceTree = "<group>"; };
+		21E2FA58177777A200784CC5 /* HeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeaderView.h; sourceTree = "<group>"; };
+		21E2FA59177777A200784CC5 /* HeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeaderView.m; sourceTree = "<group>"; };
 		21ECB9B617401A96002C8851 /* CoolVideoProcessor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoolVideoProcessor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		21ECB9BA17401A96002C8851 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		21ECB9BC17401A96002C8851 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -100,6 +103,8 @@
 				2109553A17666E21007D0C78 /* MergeVideoView.h */,
 				2109553B17666E21007D0C78 /* MergeVideoView.m */,
 				2109553817666A34007D0C78 /* MergeVideoViewCell.m */,
+				21E2FA58177777A200784CC5 /* HeaderView.h */,
+				21E2FA59177777A200784CC5 /* HeaderView.m */,
 			);
 			name = Merge;
 			sourceTree = "<group>";
@@ -254,6 +259,7 @@
 				2109553917666A34007D0C78 /* MergeVideoViewCell.m in Sources */,
 				2109553C17666E21007D0C78 /* MergeVideoView.m in Sources */,
 				21095766176BC59D00C7A68A /* LogoViewController.m in Sources */,
+				21E2FA5A177777A200784CC5 /* HeaderView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
