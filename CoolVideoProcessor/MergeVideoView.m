@@ -38,9 +38,15 @@
     UITapGestureRecognizer * recognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapped:)];
     [self addGestureRecognizer:recognizer];
     
-    self.indicator = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    self.indicator = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
     self.indicator.hidden = TRUE;
     self.indicator.hidesWhenStopped = TRUE;
+    
+    //[self addSubview:self.indicator];
+    /*
+    CGRect destRect = CGRectMake(CGRectGetMidX(self.bounds)-CGRectGetMidX(self.indicator.bounds), CGRectGetMidY(self.bounds)-CGRectGetMidY(self.indicator.bounds), CGRectGetWidth(self.indicator.bounds), CGRectGetHeight(self.indicator.bounds));
+    
+    self.indicator.frame =destRect;*/
 }
 
 -(void)setIsLoading:(BOOL)isLoading
@@ -61,6 +67,16 @@
         }
         
        if (!self.bulkReDraw) [self setNeedsDisplay];
+    }
+}
+
+-(void)setTapped:(BOOL)tapped
+{
+    if (_tapped!=tapped)
+    {
+        _tapped =tapped;
+        
+        [self setNeedsDisplay];
     }
 }
 
@@ -92,7 +108,9 @@
 
 -(void)indicatorDrawRect:(CGRect)rect
 {
-    self.indicator.frame = CGRectMake(CGRectGetMidX(rect)-CGRectGetMidX(self.indicator.bounds), CGRectGetMidY(rect)-CGRectGetMidY(self.indicator.bounds), CGRectGetWidth(self.indicator.bounds), CGRectGetHeight(self.indicator.bounds));
+    CGRect destRect = CGRectMake(CGRectGetMidX(rect)-CGRectGetMidX(self.indicator.bounds), CGRectGetMidY(rect)-CGRectGetMidY(self.indicator.bounds), CGRectGetWidth(self.indicator.bounds), CGRectGetHeight(self.indicator.bounds));
+    self.indicator.hidden = FALSE;
+    [self.indicator drawRect:destRect];
 }
 
 +(UIImage*)imageWithImage: (UIImage*) sourceImage scaledToSize: (CGSize) size
@@ -112,6 +130,18 @@
     return newImage;
 }
 
+-(void)drawScaledImage:(UIImage*)image inRect:(CGRect)rect
+{
+    if (image)
+    {
+        UIImage * newImage = [[self class]imageWithImage:image scaledToSize:rect.size];
+        
+        CGPoint offset = {CGRectGetMidX(rect)-newImage.size.width*0.5,CGRectGetMidY(rect)-newImage.size.height*0.5};
+        
+        [newImage drawAtPoint:offset];
+    }
+}
+
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
 - (void)drawRect:(CGRect)rect
@@ -122,16 +152,9 @@
     if (self.isLoading)
     {
         [self indicatorDrawRect:rect];
-        return;
     }
-    if (self.firstFrame)
-    {
-        UIImage * newImage = [[self class]imageWithImage:self.firstFrame scaledToSize:rect.size];
-        
-        CGPoint offset = {CGRectGetMidX(rect)-newImage.size.width*0.5,CGRectGetMidY(rect)-newImage.size.height*0.5};
-        
-        [newImage drawAtPoint:offset];
-    }
+    
+    [self drawScaledImage:self.firstFrame inRect:rect];
     
     //[self.firstFrame  drawInRect:rect];
     CGPoint point;
