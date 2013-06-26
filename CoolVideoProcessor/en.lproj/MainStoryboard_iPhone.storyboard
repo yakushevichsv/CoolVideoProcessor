@@ -114,18 +114,24 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xtY-FU-ea2" customClass="MergeVideoView"/>
+                                                <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="bSu-7i-ptX">
+                                                    <color key="color" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </activityIndicatorView>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
-                                            <constraint firstItem="xtY-FU-ea2" firstAttribute="leading" secondItem="h28-fm-rt8" secondAttribute="leading" type="default" id="29s-4Y-6Z0"/>
-                                            <constraint firstItem="xtY-FU-ea2" firstAttribute="top" secondItem="h28-fm-rt8" secondAttribute="top" type="default" id="9fb-OM-zyH"/>
-                                            <constraint firstItem="xtY-FU-ea2" firstAttribute="trailing" secondItem="h28-fm-rt8" secondAttribute="trailing" type="default" id="gcp-c3-r1Q"/>
-                                            <constraint firstItem="xtY-FU-ea2" firstAttribute="bottom" secondItem="h28-fm-rt8" secondAttribute="bottom" type="default" id="kxE-LS-Pdk"/>
+                                            <constraint firstItem="bSu-7i-ptX" firstAttribute="centerX" secondItem="xtY-FU-ea2" secondAttribute="centerX" type="default" id="1n2-rQ-oW8"/>
+                                            <constraint firstItem="xtY-FU-ea2" firstAttribute="top" secondItem="h28-fm-rt8" secondAttribute="top" type="default" id="5JU-51-b2g"/>
+                                            <constraint firstItem="bSu-7i-ptX" firstAttribute="centerY" secondItem="xtY-FU-ea2" secondAttribute="centerY" type="user" id="hWW-Kw-Mx5"/>
+                                            <constraint firstItem="xtY-FU-ea2" firstAttribute="trailing" secondItem="h28-fm-rt8" secondAttribute="trailing" type="default" id="n3d-gX-7yp"/>
+                                            <constraint firstItem="xtY-FU-ea2" firstAttribute="bottom" secondItem="h28-fm-rt8" secondAttribute="bottom" type="default" id="qfD-gG-Vvf"/>
+                                            <constraint firstItem="xtY-FU-ea2" firstAttribute="leading" secondItem="h28-fm-rt8" secondAttribute="leading" type="default" id="zsY-f9-tHR"/>
                                         </constraints>
                                         <connections>
                                             <outlet property="MergeVideo" destination="xtY-FU-ea2" id="vIb-gx-Fkd"/>
+                                            <outlet property="indicator" destination="bSu-7i-ptX" id="6QV-hh-npz"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>

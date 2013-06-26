@@ -11,5 +11,6 @@
 
 @interface MergeVideoViewCell : UICollectionViewCell
 @property (weak, nonatomic) IBOutlet MergeVideoView *MergeVideo;
-
+@property (nonatomic) BOOL isLoading;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *indicator;
 @end

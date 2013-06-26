@@ -9,10 +9,6 @@
 #import "MergeVideoView.h"
 #define CHECK_IMAGE @"checkButton.png"
 
-@interface MergeVideoView()
-@property (nonatomic) UIActivityIndicatorView * indicator;
-@end
-
 @implementation MergeVideoView
 
 - (id)initWithFrame:(CGRect)frame
@@ -38,36 +34,6 @@
     UITapGestureRecognizer * recognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapped:)];
     [self addGestureRecognizer:recognizer];
     
-    self.indicator = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
-    self.indicator.hidden = TRUE;
-    self.indicator.hidesWhenStopped = TRUE;
-    
-    //[self addSubview:self.indicator];
-    /*
-    CGRect destRect = CGRectMake(CGRectGetMidX(self.bounds)-CGRectGetMidX(self.indicator.bounds), CGRectGetMidY(self.bounds)-CGRectGetMidY(self.indicator.bounds), CGRectGetWidth(self.indicator.bounds), CGRectGetHeight(self.indicator.bounds));
-    
-    self.indicator.frame =destRect;*/
-}
-
--(void)setIsLoading:(BOOL)isLoading
-{
-    if (_isLoading!=isLoading)
-    {
-        _isLoading = isLoading;
-        self.indicator.hidden = !isLoading;
-        if (isLoading)
-        {
-            self.firstFrame = nil;
-            self.title = nil;
-            [self.indicator startAnimating];
-        }
-        else
-        {
-            [self.indicator stopAnimating];
-        }
-        
-       if (!self.bulkReDraw) [self setNeedsDisplay];
-    }
 }
 
 -(void)setTapped:(BOOL)tapped
@@ -106,12 +72,7 @@
     }
 }
 
--(void)indicatorDrawRect:(CGRect)rect
-{
-    CGRect destRect = CGRectMake(CGRectGetMidX(rect)-CGRectGetMidX(self.indicator.bounds), CGRectGetMidY(rect)-CGRectGetMidY(self.indicator.bounds), CGRectGetWidth(self.indicator.bounds), CGRectGetHeight(self.indicator.bounds));
-    self.indicator.hidden = FALSE;
-    [self.indicator drawRect:destRect];
-}
+
 
 +(UIImage*)imageWithImage: (UIImage*) sourceImage scaledToSize: (CGSize) size
 {
@@ -149,10 +110,6 @@
     [self.backgroundColor setFill];
     UIRectFill(rect);
     
-    if (self.isLoading)
-    {
-        [self indicatorDrawRect:rect];
-    }
     
     [self drawScaledImage:self.firstFrame inRect:rect];
     

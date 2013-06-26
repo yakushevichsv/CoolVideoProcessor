@@ -235,7 +235,7 @@
         cell = [MergeVideoViewCell new];
     }
     
-    cell.MergeVideo.isLoading = TRUE;
+    cell.isLoading = TRUE;
     cell.MergeVideo.bulkReDraw = TRUE;
     
     cell.MergeVideo.tapped = FALSE;
@@ -332,7 +332,7 @@
         cell.MergeVideo.title = fileName;
         cell.MergeVideo.firstFrame = image;
         cell.MergeVideo.bulkReDraw = FALSE;
-        cell.MergeVideo.isLoading  = FALSE;
+        cell.isLoading  = FALSE;
     }];
 }
 
