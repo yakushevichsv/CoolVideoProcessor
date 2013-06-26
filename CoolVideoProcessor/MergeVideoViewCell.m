@@ -10,23 +10,6 @@
 
 @implementation MergeVideoViewCell
 
-- (id)initWithFrame:(CGRect)frame
-{
-    self = [super initWithFrame:frame];
-    if (self) {
-        [self setup];
-    }
-    return self;
-}
-
-
--(void)setup
-{
-    CGRect destRect = CGRectMake(CGRectGetMidX(self.bounds)-CGRectGetMidX(self.indicator.bounds), CGRectGetMidY(self.bounds)-CGRectGetMidY(self.indicator.bounds), CGRectGetWidth(self.indicator.bounds), CGRectGetHeight(self.indicator.bounds));
-    
-    self.indicator.frame =destRect;
-}
-
 -(void)setIsLoading:(BOOL)isLoading
 {
     if (_isLoading!=isLoading)
