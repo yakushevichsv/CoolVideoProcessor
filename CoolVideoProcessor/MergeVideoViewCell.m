@@ -21,8 +21,6 @@
         {
             self.MergeVideo.firstFrame = nil;
             self.MergeVideo.title = nil;
-            //self.firstFrame = nil;
-            //self.title = nil;
             self.MergeVideo.hidden = TRUE;
             self.indicator.hidden = FALSE;
             [self.indicator startAnimating];

@@ -37,7 +37,6 @@
 @property (nonatomic,strong) NSMutableArray * videoFiles;
 @property (nonatomic,strong) NSMutableArray * imageFiles;
 @property (nonatomic,strong) NSOperationQueue * queue;
-@property (nonatomic) BOOL done;
 @end
 
 @implementation MergeCollectionViewController
@@ -65,6 +64,7 @@
     {
         files.dataSource = self;
         files.delegate = self;
+        files.allowsMultipleSelection = TRUE;
         _files =files;
         if (files)
             [self.queue addOperationWithBlock:^{
@@ -92,7 +92,10 @@
     {
         _videoFiles = videoFiles;
         
-        if (videoFiles.count) [self reloadSection:VIDEO_SECTION];
+        if (videoFiles.count)
+        {
+            [self reloadSection:VIDEO_SECTION];
+        }
     }
 }
 
@@ -162,12 +165,29 @@
 
 #pragma mark - UICollectionViewDataSource
 
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+   MergeVideoViewCell * view = (MergeVideoViewCell*) [collectionView cellForItemAtIndexPath:indexPath];
+    view.MergeVideo.tapped = TRUE;
+}
+
+-(void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    MergeVideoViewCell * view = (MergeVideoViewCell*) [collectionView cellForItemAtIndexPath:indexPath];
+    
+    view.MergeVideo.tapped = FALSE;
+}
 
 - (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath
 {
    return [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:indexPath];
 }
 
+
+- (UICollectionViewLayoutAttributes *)layoutAttributesForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
+{
+    return [UICollectionViewLayoutAttributes layoutAttributesForSupplementaryViewOfKind:kind withIndexPath:indexPath];
+}
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
     if ([self.files isEqual:collectionView])
@@ -197,15 +217,16 @@
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
 {
+    static BOOL done = TRUE;
     if (kind == UICollectionElementKindSectionHeader)
     {
         static NSString * headerCellName = @"TitleHeader";
-        if (MIN(VIDEO_SECTION,IMAGE_SECTION) ==indexPath.section && !self.done)
+        if (MIN(VIDEO_SECTION,IMAGE_SECTION) ==indexPath.section && !done)
         {
             
             [collectionView registerClass:[HeaderView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:headerCellName];
             
-            self.done = TRUE;
+            done = TRUE;
         }
         
         HeaderView *headerView = (HeaderView*)[collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:headerCellName forIndexPath:indexPath];
@@ -218,7 +239,14 @@
         {
             title = @"Images";
         }
-        headerView.headerLabel.attributedText = [[NSAttributedString alloc]initWithString:title];
+        NSMutableAttributedString * mutableString =[[NSMutableAttributedString alloc]initWithString:title];
+        
+        [mutableString addAttribute:NSForegroundColorAttributeName
+                              value:[UIColor blackColor] range:NSMakeRange(0, title.length)];
+        
+
+        headerView.headerLabel.attributedText = mutableString;
+        
         return headerView;
     }
     else
@@ -336,4 +364,17 @@
     }];
 }
 
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"MergeTimeLineSegue"])
+    {
+            NSArray * arr = [self.files indexPathsForSelectedItems];
+            NSLog(@"Count %d",arr.count);
+            
+            for (NSIndexPath * path in arr)
+            {
+                
+            }
+    }
+}
 @end

@@ -11,31 +11,6 @@
 
 @implementation MergeVideoView
 
-- (id)initWithFrame:(CGRect)frame
-{
-    self = [super initWithFrame:frame];
-    if (self) {
-        [self setup];
-    }
-    return self;
-}
-
--(id)initWithCoder:(NSCoder *)aDecoder
-{
-    if (self= [super initWithCoder:aDecoder])
-    {
-        [self setup];
-    }
-    return self;
-}
-
--(void)setup
-{
-    UITapGestureRecognizer * recognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapped:)];
-    [self addGestureRecognizer:recognizer];
-    
-}
-
 -(void)setTapped:(BOOL)tapped
 {
     if (_tapped!=tapped)
@@ -44,14 +19,6 @@
         
         [self setNeedsDisplay];
     }
-}
-
--(void)tapped:(UITapGestureRecognizer*)recognizer
-{
-   if (recognizer.state == UIGestureRecognizerStateEnded)
-   {
-       self.tapped = !self.tapped;
-   }
 }
 
 -(void)setFirstFrame:(UIImage *)firstFrame
