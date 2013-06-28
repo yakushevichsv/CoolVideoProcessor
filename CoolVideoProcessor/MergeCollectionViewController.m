@@ -368,12 +368,24 @@
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"MergeTimeLineSegue"])
     {
-            NSArray * arr = [self.files indexPathsForSelectedItems];
-            NSLog(@"Count %d",arr.count);
-            
+        NSArray * arr = [self.files indexPathsForSelectedItems];
+        NSLog(@"Count %d",arr.count);
+        
+        NSMutableDictionary * dic =[NSMutableDictionary dictionaryWithCapacity:NUMBER_OF_SECTIONS];
+        
+        dic[@"images"] = [NSMutableArray array];
+        dic[@"video"] = [NSMutableArray array];
+        
             for (NSIndexPath * path in arr)
             {
-                
+                if (path.section == IMAGE_SECTION)
+                {
+                    [dic[@"images"] addObject:[self.imageFiles[path.row] url]];
+                }
+                else if (path.section == VIDEO_SECTION)
+                {
+                    [dic[@"video"] addObject:[self.videoFiles[path.row] url]];
+                }
             }
     }
 }

@@ -189,18 +189,36 @@
             </objects>
             <point key="canvasLocation" x="-7" y="521"/>
         </scene>
-        <!--View Controller - Position Items-->
+        <!--Position View Controller - Position Items-->
         <scene sceneID="BJM-kn-YIC">
             <objects>
-                <viewController id="z8d-2O-Ltt" sceneMemberID="viewController">
+                <viewController id="z8d-2O-Ltt" customClass="PositionViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="PWd-wc-wlb">
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="Arg-TY-cWt">
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="z8d-2O-Ltt" id="FiH-Jp-j3i"/>
+                                    <outlet property="delegate" destination="z8d-2O-Ltt" id="huS-iN-GYQ"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Arg-TY-cWt" firstAttribute="trailing" secondItem="PWd-wc-wlb" secondAttribute="trailing" type="default" id="2fN-jJ-Byt"/>
+                            <constraint firstItem="Arg-TY-cWt" firstAttribute="top" secondItem="PWd-wc-wlb" secondAttribute="top" type="default" id="HkZ-bv-f33"/>
+                            <constraint firstItem="Arg-TY-cWt" firstAttribute="leading" secondItem="PWd-wc-wlb" secondAttribute="leading" type="default" id="Quo-fx-uwx"/>
+                            <constraint firstItem="Arg-TY-cWt" firstAttribute="bottom" secondItem="PWd-wc-wlb" secondAttribute="bottom" type="default" id="RsR-m5-FGs"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Position Items" id="alg-Lv-URU">
                         <barButtonItem key="backBarButtonItem" title="Select" id="ZnU-bk-iLH"/>
                     </navigationItem>
+                    <connections>
+                        <outlet property="tableView" destination="Arg-TY-cWt" id="xQ3-vo-elP"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ofD-gc-6c4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -278,6 +296,12 @@
         <class className="PlayVideoVC" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/PlayVideoVC.h"/>
         </class>
+        <class className="PositionViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/PositionViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="tableView" candidateClass="UITableView"/>
+            </relationships>
+        </class>
         <class className="UICollectionReusableView" superclassName="UIView">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionReusableView.h"/>
         </class>
@@ -286,9 +310,6 @@
         </class>
         <class className="UICollectionViewFlowLayout" superclassName="UICollectionViewLayout">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewFlowLayout.h"/>
-        </class>
-        <class className="UICollectionViewLayout" superclassName="NSObject">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewLayout.h"/>
         </class>
         <class className="ViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/ViewController.h"/>
