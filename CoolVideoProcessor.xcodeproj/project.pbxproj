@@ -12,6 +12,7 @@
 		2109553C17666E21007D0C78 /* MergeVideoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2109553B17666E21007D0C78 /* MergeVideoView.m */; };
 		21095763176BC55C00C7A68A /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21095762176BC55C00C7A68A /* GLKit.framework */; };
 		21095766176BC59D00C7A68A /* LogoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 21095765176BC59D00C7A68A /* LogoViewController.m */; };
+		212683AD177F1F4F0018F4CB /* PositionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 212683AC177F1F4E0018F4CB /* PositionCell.m */; };
 		218F1532174189E600874561 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 218F1531174189E600874561 /* AssetsLibrary.framework */; };
 		218F153417418E7900874561 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 218F153317418E7900874561 /* AVFoundation.framework */; };
 		218F1536174193A900874561 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 218F1535174193A900874561 /* MediaPlayer.framework */; };
@@ -45,6 +46,9 @@
 		21095762176BC55C00C7A68A /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		21095764176BC59D00C7A68A /* LogoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LogoViewController.h; path = Loggo/LogoViewController.h; sourceTree = "<group>"; };
 		21095765176BC59D00C7A68A /* LogoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LogoViewController.m; path = Loggo/LogoViewController.m; sourceTree = "<group>"; };
+		212683AA177F12430018F4CB /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
+		212683AB177F1F4E0018F4CB /* PositionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PositionCell.h; sourceTree = "<group>"; };
+		212683AC177F1F4E0018F4CB /* PositionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PositionCell.m; sourceTree = "<group>"; };
 		218F1531174189E600874561 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		218F153317418E7900874561 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		218F1535174193A900874561 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
@@ -100,6 +104,8 @@
 		2109553617666925007D0C78 /* Merge */ = {
 			isa = PBXGroup;
 			children = (
+				212683AB177F1F4E0018F4CB /* PositionCell.h */,
+				212683AC177F1F4E0018F4CB /* PositionCell.m */,
 				21F211FC177E16B600D9835F /* PositionViewController.h */,
 				21F211FD177E16B600D9835F /* PositionViewController.m */,
 				2109553317666916007D0C78 /* MergeCollectionViewController.h */,
@@ -161,6 +167,7 @@
 		21ECB9C017401A96002C8851 /* CoolVideoProcessor */ = {
 			isa = PBXGroup;
 			children = (
+				212683AA177F12430018F4CB /* Constants.h */,
 				21095761176BC3C200C7A68A /* FunnyLogo */,
 				2109553617666925007D0C78 /* Merge */,
 				21ECB9C917401A96002C8851 /* AppDelegate.h */,
@@ -266,6 +273,7 @@
 				21095766176BC59D00C7A68A /* LogoViewController.m in Sources */,
 				21E2FA5A177777A200784CC5 /* HeaderView.m in Sources */,
 				21F211FE177E16B600D9835F /* PositionViewController.m in Sources */,
+				212683AD177F1F4F0018F4CB /* PositionCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

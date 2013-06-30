@@ -11,10 +11,10 @@
 #import "MergeVideoViewCell.h"
 #import "HeaderView.h"
 #import <AVFoundation/AVFoundation.h>
+#import "Constants.h"
+#import "PositionViewController.h"
 
 #define NUMBER_OF_SECTIONS 2
-#define IMAGE_SECTION 0
-#define VIDEO_SECTION NUMBER_OF_SECTIONS-1
 #define MAX_SIMULTANIOUS_OP 4
 
 
@@ -104,7 +104,7 @@
     if (![_imageFiles isEqualToArray:imageFiles])
     {
         _imageFiles  = imageFiles;
-         if (imageFiles.count) [self reloadSection:IMAGE_SECTION];
+         if (imageFiles.count) [self reloadSection:IMAGES_SECTION];
     }
 }
 
@@ -204,7 +204,7 @@
     {
         array = self.videoFiles;
     }
-    else if (section == IMAGE_SECTION)
+    else if (section == IMAGES_SECTION)
     {
         array = self.imageFiles;
     }
@@ -221,7 +221,7 @@
     if (kind == UICollectionElementKindSectionHeader)
     {
         static NSString * headerCellName = @"TitleHeader";
-        if (MIN(VIDEO_SECTION,IMAGE_SECTION) ==indexPath.section && !done)
+        if (MIN(VIDEO_SECTION,IMAGES_SECTION) ==indexPath.section && !done)
         {
             
             [collectionView registerClass:[HeaderView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:headerCellName];
@@ -235,7 +235,7 @@
         {
             title = @"Videos";
         }
-        else if (indexPath.section == IMAGE_SECTION)
+        else if (indexPath.section == IMAGES_SECTION)
         {
             title = @"Images";
         }
@@ -278,7 +278,7 @@
     {
         [self fillVideoCell:cell atIndexPath:indexPath];
     }
-    else if (indexPath.section == IMAGE_SECTION)
+    else if (indexPath.section == IMAGES_SECTION)
     {
         [self fillImageCell:cell atIndexPath:indexPath];
     }
@@ -373,20 +373,23 @@
         
         NSMutableDictionary * dic =[NSMutableDictionary dictionaryWithCapacity:NUMBER_OF_SECTIONS];
         
-        dic[@"images"] = [NSMutableArray array];
-        dic[@"video"] = [NSMutableArray array];
+        dic[IMAGES_KEY] = [NSMutableArray array];
+        dic[VIDEOS_KEY] = [NSMutableArray array];
         
             for (NSIndexPath * path in arr)
             {
-                if (path.section == IMAGE_SECTION)
+                if (path.section == IMAGES_SECTION)
                 {
-                    [dic[@"images"] addObject:[self.imageFiles[path.row] url]];
+                    [dic[IMAGES_KEY] addObject:[self.imageFiles[path.row] url]];
                 }
                 else if (path.section == VIDEO_SECTION)
                 {
-                    [dic[@"video"] addObject:[self.videoFiles[path.row] url]];
+                    [dic[VIDEOS_KEY] addObject:[self.videoFiles[path.row] url]];
                 }
             }
+        PositionViewController * controller =
+        (PositionViewController *)segue.destinationViewController;
+        [controller setURLUsingDictionary:dic];
     }
 }
 @end

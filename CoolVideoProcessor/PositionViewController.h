@@ -10,6 +10,6 @@
 
 @interface PositionViewController : UIViewController
 
-@property (nonatomic,strong) NSDictionary * dataDictionary;
+-(void)setURLUsingDictionary:(NSDictionary*)dictionary;
 
 @end
