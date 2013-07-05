@@ -197,14 +197,14 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="Arg-TY-cWt">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" allowsSelectionDuringEditing="YES" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="Arg-TY-cWt">
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" indentationWidth="10" reuseIdentifier="positionCell" textLabel="Iae-iv-Zc6" detailTextLabel="pgZ-w4-S04" style="IBUITableViewCellStyleSubtitle" id="BPO-xV-YUk" customClass="PositionCell">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="positionCell" editingAccessoryType="checkmark" textLabel="Iae-iv-Zc6" detailTextLabel="OjP-e3-t1R" style="IBUITableViewCellStyleSubtitle" id="BPO-xV-YUk" customClass="PositionCell">
                                         <rect key="frame" x="0.0" y="22" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="300" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Iae-iv-Zc6">
@@ -212,7 +212,7 @@
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                 </label>
-                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Detail" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pgZ-w4-S04">
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Detail" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OjP-e3-t1R">
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <color key="textColor" red="0.50196078431372548" green="0.50196078431372548" blue="0.50196078431372548" alpha="1" colorSpace="calibratedRGB"/>
                                                     <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -220,6 +220,9 @@
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
+                                        <connections>
+                                            <segue destination="dGR-kS-hWU" kind="modal" identifier="viewItemSeque" id="FjQ-sk-eDr"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
@@ -230,14 +233,19 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="Arg-TY-cWt" firstAttribute="trailing" secondItem="PWd-wc-wlb" secondAttribute="trailing" type="default" id="2fN-jJ-Byt"/>
                             <constraint firstItem="Arg-TY-cWt" firstAttribute="top" secondItem="PWd-wc-wlb" secondAttribute="top" type="default" id="HkZ-bv-f33"/>
-                            <constraint firstItem="Arg-TY-cWt" firstAttribute="leading" secondItem="PWd-wc-wlb" secondAttribute="leading" type="default" id="Quo-fx-uwx"/>
                             <constraint firstItem="Arg-TY-cWt" firstAttribute="bottom" secondItem="PWd-wc-wlb" secondAttribute="bottom" type="default" id="RsR-m5-FGs"/>
+                            <constraint firstItem="Arg-TY-cWt" firstAttribute="trailing" secondItem="PWd-wc-wlb" secondAttribute="trailing" type="default" id="SSO-lw-oPq"/>
+                            <constraint firstItem="Arg-TY-cWt" firstAttribute="leading" secondItem="PWd-wc-wlb" secondAttribute="leading" type="default" id="fg0-UL-Uy6"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Position Items" id="alg-Lv-URU">
                         <barButtonItem key="backBarButtonItem" title="Select" id="ZnU-bk-iLH"/>
+                        <barButtonItem key="rightBarButtonItem" title="Next" id="WUy-21-Gu6">
+                            <connections>
+                                <segue destination="yne-Sc-6kV" kind="push" identifier="mergeSegueIdentifier" id="YY1-9T-6ed"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="tableView" destination="Arg-TY-cWt" id="xQ3-vo-elP"/>
@@ -246,6 +254,92 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ofD-gc-6c4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="421" y="501"/>
+        </scene>
+        <!--Player View Controller - Watch Item-->
+        <scene sceneID="5rX-hP-g6U">
+            <objects>
+                <viewController id="dGR-kS-hWU" customClass="PlayerViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="qeq-wG-yZu">
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8bY-Da-yP9" customClass="PlayerView">
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jUh-8u-rya">
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="73" id="Smy-iy-FeZ"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                        <state key="normal" title="Play">
+                                            <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="highlighted">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="play:" destination="dGR-kS-hWU" eventType="touchUpInside" id="llR-9w-tOw"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <gestureRecognizers/>
+                                <constraints>
+                                    <constraint firstItem="jUh-8u-rya" firstAttribute="top" secondItem="8bY-Da-yP9" secondAttribute="top" constant="208" id="1YR-ut-Ebx"/>
+                                    <constraint firstItem="jUh-8u-rya" firstAttribute="centerX" secondItem="8bY-Da-yP9" secondAttribute="centerX" type="default" id="OMG-EL-BGE"/>
+                                </constraints>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="1ri-qE-aW4" appends="YES" id="u1t-4Y-3H8"/>
+                                </connections>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="8bY-Da-yP9" firstAttribute="bottom" secondItem="qeq-wG-yZu" secondAttribute="bottom" type="default" id="6fy-2k-943"/>
+                            <constraint firstItem="8bY-Da-yP9" firstAttribute="trailing" secondItem="qeq-wG-yZu" secondAttribute="trailing" type="default" id="Lu5-rP-g9j"/>
+                            <constraint firstItem="8bY-Da-yP9" firstAttribute="leading" secondItem="qeq-wG-yZu" secondAttribute="leading" type="default" id="MEj-Oz-aVe"/>
+                            <constraint firstItem="8bY-Da-yP9" firstAttribute="top" secondItem="qeq-wG-yZu" secondAttribute="top" type="default" id="REl-Sg-Chn"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Watch Item" id="UIy-Ia-6hR">
+                        <barButtonItem key="backBarButtonItem" title="Items List" id="tO0-PG-dDq"/>
+                        <barButtonItem key="rightBarButtonItem" title="Dismiss" id="fRR-9d-PBE">
+                            <connections>
+                                <segue destination="ePj-VU-iqv" kind="unwind" unwindAction="unwindToRed:" id="FKY-eK-Gww"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <connections>
+                        <outlet property="btnPlay" destination="jUh-8u-rya" id="Ate-yh-JN3"/>
+                        <outlet property="playerView" destination="8bY-Da-yP9" id="pkc-Fv-TeU"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bB6-SH-7jB" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="ePj-VU-iqv" userLabel="Exit" sceneMemberID="exit"/>
+                <tapGestureRecognizer id="1ri-qE-aW4">
+                    <connections>
+                        <action selector="tapped:" destination="dGR-kS-hWU" id="NXU-QJ-n5I"/>
+                        <outlet property="delegate" destination="dGR-kS-hWU" id="YXa-3X-jMm"/>
+                    </connections>
+                </tapGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="444" y="1099"/>
+        </scene>
+        <!--Merging Processor View Controller-->
+        <scene sceneID="X56-pq-g42">
+            <objects>
+                <viewController id="yne-Sc-6kV" customClass="MergingProcessorViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="3cE-tF-Zcw">
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="0M0-Dl-ZBS"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="7f8-QB-YmY" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="895" y="501"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="SlY-uD-sSk">
