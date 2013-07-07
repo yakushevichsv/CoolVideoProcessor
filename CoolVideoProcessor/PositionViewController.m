@@ -47,6 +47,13 @@
     self.library = [ALAssetsLibrary new];
 }
 
+-(void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    //self.navigationItem.rightBarButtonItem = [self editButtonItem];
+}
+
 -(void)setURLUsingDictionary:(NSDictionary *)dataDictionary
 {
     NSMutableArray * array = [NSMutableArray array];
@@ -242,6 +249,26 @@
             [cell setNeedsDisplay];
         });
     }];
+}
+
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	return UITableViewCellEditingStyleDelete;
+}
+
+// When editing is finished, either delete or insert new metadata items
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	NSArray *indexPaths = [NSArray arrayWithObject:indexPath];
+	
+	// Delete metadata from the assetItem and the table view
+	if (editingStyle == UITableViewCellEditingStyleDelete)
+	{
+		[self.urls removeObjectAtIndex:indexPath.row];
+        [self.durations removeObjectAtIndex:indexPath.row];
+        
+		[[self tableView] deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+	}
 }
 
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
