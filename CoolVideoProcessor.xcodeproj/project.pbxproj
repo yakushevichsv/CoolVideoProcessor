@@ -20,8 +20,6 @@
 		2190EA261789E75900D747C9 /* AssetItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 2190EA251789E75900D747C9 /* AssetItem.m */; };
 		2190EA291789EA9D00D747C9 /* AVAssetItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 2190EA281789EA9D00D747C9 /* AVAssetItem.m */; };
 		2190EA2C1789F35600D747C9 /* AssetsLibrary.m in Sources */ = {isa = PBXBuildFile; fileRef = 2190EA2B1789F35600D747C9 /* AssetsLibrary.m */; };
-		21AE4BAF1785E90500A92DE7 /* PlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 21AE4BAE1785E90500A92DE7 /* PlayerView.m */; };
-		21AE4BB31785EE5D00A92DE7 /* PlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 21AE4BB21785EE5D00A92DE7 /* PlayerViewController.m */; };
 		21BD7B6B1767D44B0093BB2C /* checkButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 21BD7B6A1767D44B0093BB2C /* checkButton.png */; };
 		21E2FA5A177777A200784CC5 /* HeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 21E2FA59177777A200784CC5 /* HeaderView.m */; };
 		21ECB9BB17401A96002C8851 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21ECB9BA17401A96002C8851 /* UIKit.framework */; };
@@ -66,10 +64,6 @@
 		2190EA281789EA9D00D747C9 /* AVAssetItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AVAssetItem.m; path = Models/Assets/AVAssetItem.m; sourceTree = "<group>"; };
 		2190EA2A1789F35600D747C9 /* AssetsLibrary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AssetsLibrary.h; path = Models/Assets/AssetsLibrary.h; sourceTree = "<group>"; };
 		2190EA2B1789F35600D747C9 /* AssetsLibrary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AssetsLibrary.m; path = Models/Assets/AssetsLibrary.m; sourceTree = "<group>"; };
-		21AE4BAD1785E90500A92DE7 /* PlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlayerView.h; path = Views/PlayerView.h; sourceTree = "<group>"; };
-		21AE4BAE1785E90500A92DE7 /* PlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PlayerView.m; path = Views/PlayerView.m; sourceTree = "<group>"; };
-		21AE4BB11785EE5D00A92DE7 /* PlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlayerViewController.h; path = Controllers/PlayerViewController.h; sourceTree = "<group>"; };
-		21AE4BB21785EE5D00A92DE7 /* PlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PlayerViewController.m; path = Controllers/PlayerViewController.m; sourceTree = "<group>"; };
 		21BD7B6A1767D44B0093BB2C /* checkButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checkButton.png; sourceTree = "<group>"; };
 		21E2FA58177777A200784CC5 /* HeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeaderView.h; sourceTree = "<group>"; };
 		21E2FA59177777A200784CC5 /* HeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeaderView.m; sourceTree = "<group>"; };
@@ -103,9 +97,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				218F1536174193A900874561 /* MediaPlayer.framework in Frameworks */,
 				21EF4F17176E3EA80000EB83 /* OpenGLES.framework in Frameworks */,
 				21095763176BC55C00C7A68A /* GLKit.framework in Frameworks */,
-				218F1536174193A900874561 /* MediaPlayer.framework in Frameworks */,
 				218F153417418E7900874561 /* AVFoundation.framework in Frameworks */,
 				218F1532174189E600874561 /* AssetsLibrary.framework in Frameworks */,
 				21FCE9DC174171D60020E973 /* MobileCoreServices.framework in Frameworks */,
@@ -122,8 +116,6 @@
 		2109553617666925007D0C78 /* Merge */ = {
 			isa = PBXGroup;
 			children = (
-				212683AB177F1F4E0018F4CB /* PositionCell.h */,
-				212683AC177F1F4E0018F4CB /* PositionCell.m */,
 				21F211FC177E16B600D9835F /* PositionViewController.h */,
 				21F211FD177E16B600D9835F /* PositionViewController.m */,
 				211D3A491782F1C700665A5E /* MergingProcessorViewController.h */,
@@ -173,8 +165,8 @@
 		21AE4BAC1785E8E900A92DE7 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				21AE4BAD1785E90500A92DE7 /* PlayerView.h */,
-				21AE4BAE1785E90500A92DE7 /* PlayerView.m */,
+				212683AB177F1F4E0018F4CB /* PositionCell.h */,
+				212683AC177F1F4E0018F4CB /* PositionCell.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -182,8 +174,6 @@
 		21AE4BB01785EE2C00A92DE7 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				21AE4BB11785EE5D00A92DE7 /* PlayerViewController.h */,
-				21AE4BB21785EE5D00A92DE7 /* PlayerViewController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -337,8 +327,6 @@
 				21F211FE177E16B600D9835F /* PositionViewController.m in Sources */,
 				212683AD177F1F4F0018F4CB /* PositionCell.m in Sources */,
 				211D3A4B1782F1C700665A5E /* MergingProcessorViewController.m in Sources */,
-				21AE4BAF1785E90500A92DE7 /* PlayerView.m in Sources */,
-				21AE4BB31785EE5D00A92DE7 /* PlayerViewController.m in Sources */,
 				2190EA261789E75900D747C9 /* AssetItem.m in Sources */,
 				2190EA291789EA9D00D747C9 /* AVAssetItem.m in Sources */,
 				2190EA2C1789F35600D747C9 /* AssetsLibrary.m in Sources */,

@@ -34,4 +34,9 @@
     return nil;
 }
 
+-(void)flush
+{
+    
+}
+
 @end

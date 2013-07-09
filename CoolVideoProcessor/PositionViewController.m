@@ -6,14 +6,14 @@
 //  Copyright (c) 2013 Siarhei Yakushevich. All rights reserved.
 //
 
-#import "PositionViewController.h"
 #import <AssetsLibrary/AssetsLibrary.h>
 #import <AVFoundation/AVFoundation.h>
+#import <MediaPlayer/MediaPlayer.h>
 #import <CoreMedia/CoreMedia.h>
 #import "Constants.h"
+#import "PositionViewController.h"
 #import "PositionCell.h"
 #import "MergingProcessorViewController.h"
-#import "PlayerViewController.h"
 
 @interface PositionViewController ()<UITableViewDataSource,UITableViewDelegate>
 
@@ -196,7 +196,7 @@
     return nil;
 }
 
--(NSNumber*)durationForAsset:(AVURLAsset*)asset cell:(PositionCell*)cell imagePtr:(UIImage**)imagePtr
+-(NSNumber*)durationForAsset:(AVURLAsset*)asset imagePtr:(UIImage**)imagePtr
 {
     NSError *error = nil;
     AVKeyValueStatus tracksStatus = [asset statusOfValueForKey:@"duration"
@@ -229,23 +229,28 @@
     NSInteger row = path.row;
     [asset loadValuesAsynchronouslyForKeys:keys completionHandler:^{
         UIImage * image = nil;
-        NSNumber * duration = [self durationForAsset:asset cell:cell imagePtr:&image];
+        NSNumber * duration = [self durationForAsset:asset imagePtr:&image];
         self.durations[row]=duration;
         NSString * title = [self titleForAsset:asset];
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            cell.imageView.image = image;
-            cell.textLabel.text = title ? title :@"No name";
+            [cell.btnImage setImage:image forState:UIControlStateNormal];
+            [cell.btnImage sizeToFit];
+            cell.lblTitle.text  =title ? title :@"No name";
+            //cell.imageView.image = image;
+            //cell.textLabel.text = title ? title :@"No name";
             NSTimeInterval durationTime = [duration doubleValue];
             if (durationTime)
             {
-                cell.detailTextLabel.text= [[self class] formatDuration:durationTime];
+                cell.lblSubTitle.text = [[self class] formatDuration:durationTime];
+                //cell.detailTextLabel.text= [[self class] formatDuration:durationTime];
             }
             else
             {
-                cell.detailTextLabel.text = @"";
+                cell.lblSubTitle.text = @"";
             }
             cell.hidden = FALSE;
+            //[cell setNeedsLayout];
             [cell setNeedsDisplay];
         });
     }];
@@ -284,20 +289,10 @@
     [self swapInArray:self.durations sourceIndex:sourceIndex destIndex:destIndex];
 }
 
--(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSTimeInterval totalTime =[self.durations[indexPath.row] doubleValue];
-    if (totalTime)
-    {
-        [self performSegueWithIdentifier:@"viewItemSeque" sender:self];
-    }
-    else
-    {
-        UIAlertView * view = [UIAlertView new];
-        view.title=@"Attention";
-        view.alertViewStyle= UIAlertViewStyleDefault;
-        view.message =@"Content is not a video!";
-        [view show];    }
+   PositionCell * cell = (PositionCell*)[tableView cellForRowAtIndexPath:indexPath];
+    [self imagePressed:cell.btnImage];
 }
 
 -(void)swapInArray:(NSMutableArray*)array sourceIndex:(NSUInteger)sIndex
@@ -353,13 +348,56 @@
     
         controller.dictionary = dic;
     }
-    else if ([segue.identifier isEqualToString:@"viewItemSeque"])
-    {
-       PlayerViewController * controller =
-        (PlayerViewController*)segue.destinationViewController;
-        NSInteger row = [self.tableView indexPathForSelectedRow].row;
-        [controller setUrl:self.urls[row]];
-    }
 }
+
+#pragma mark -Table View Cell
+
+- (IBAction)imagePressed:(UIButton *)sender
+{
+    UITableViewCell* cell = (UITableViewCell*)sender.superview.superview;
+    NSParameterAssert([cell isKindOfClass:[UITableViewCell class]]);
+    NSIndexPath * indexPath = [self.tableView indexPathForCell:cell];
+    NSInteger index = indexPath.row;
+    
+    if ([self.durations[index] doubleValue] ==0 )
+    {
+        //TODO: provide displaying image....
+        return;
+    }
+   NSURL* url = (NSURL*)self.urls[index];
+    
+    MPMoviePlayerViewController * controller= [[MPMoviePlayerViewController alloc]initWithContentURL:url];
+    controller.moviePlayer.shouldAutoplay = YES;
+    
+    [[NSNotificationCenter defaultCenter]removeObserver:controller name:MPMoviePlayerPlaybackDidFinishNotification object:controller.moviePlayer];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playerPlaybackDidFinish:) name:MPMoviePlayerPlaybackDidFinishNotification object:controller.moviePlayer];
+    controller.moviePlayer.controlStyle = MPMovieControlStyleFullscreen;
+    [controller.moviePlayer prepareToPlay];
+    
+    [self presentMoviePlayerViewControllerAnimated:controller];
+}
+
+#pragma mark - MPMoviePlayer Delegate
+
+-(void)playerPlaybackDidFinish:(NSNotification*)notification
+{
+     if ([notification.userInfo[MPMoviePlayerPlaybackDidFinishReasonUserInfoKey] integerValue]==MPMovieFinishReasonUserExited)
+     {
+         [[NSNotificationCenter defaultCenter]removeObserver:self name:MPMoviePlayerPlaybackDidFinishNotification object:notification.object];
+         
+         MPMoviePlayerController * controller = ( MPMoviePlayerController * )notification.object;
+         
+         [controller pause];
+         controller.initialPlaybackTime =-1;
+         [controller stop];
+         controller.initialPlaybackTime = -1;
+         
+         [self dismissMoviePlayerViewControllerAnimated];
+
+     }
+    
+}
+
 
 @end
