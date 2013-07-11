@@ -7,7 +7,9 @@
 //
 #import <AVFoundation/AVFoundation.h>
 #import <AssetsLibrary/AssetsLibrary.h>
+#import <CoreMedia/CoreMedia.h>
 #import "MergingProcessorViewController.h"
+#import "AssetsLibrary.h"
 
 @interface MergingProcessorViewController ()
 @property (nonatomic,strong) ALAssetsLibrary * library;
@@ -88,22 +90,43 @@
 -(void)executeTask
 {
     AVMutableComposition * composition = [AVMutableComposition composition];
-    //AVAssetReaderOutput
+    BOOL error = FALSE;
     for (id key in self.dictionary)
     {
-        AVURLAsset * asset = [[AVURLAsset alloc]initWithURL:key options:@{AVURLAssetPreferPreciseDurationAndTimingKey:@(YES)}];
-        AVAssetReader * reader =[AVAssetReader assetReaderWithAsset:asset error:nil];
-        if (reader.status !=AVAssetReaderStatusFailed)
+        if (![self appendToComposition:composition key:key])
         {
-            NSArray * valueObj = self.dictionary[key];
-            NSTimeInterval startTime =(NSTimeInterval)[valueObj[1] doubleValue];
-            NSTimeInterval durationTime =(NSTimeInterval)[valueObj.lastObject doubleValue];
-            CMTime start = CMTimeMakeWithSeconds(startTime, 1);
-            CMTime duration = CMTimeMakeWithSeconds(durationTime, 1);
-            reader.timeRange = CMTimeRangeMake(start, duration);
-            
+            error = TRUE;
+            break;
         }
     }
+    
+    if (!error)
+    {
+        [AssetsLibrary exportComposition:composition aURL:[[self class]pathForResultVideo] competition:^(NSError *error) {
+            
+        }];
+    }
+}
+
+-(BOOL)appendToComposition:(AVMutableComposition*)composition key:(id)key
+{
+    NSURL * url = (NSURL*)key;
+    AVURLAsset * asset = [[AVURLAsset alloc]initWithURL:url options:@{AVURLAssetPreferPreciseDurationAndTimingKey:@(YES)}];
+    
+    // calculate time
+    
+    NSArray * valueObj = self.dictionary[key];
+    NSTimeInterval startTime =(NSTimeInterval)[valueObj[1] doubleValue];
+    NSTimeInterval durationTime =(NSTimeInterval)[valueObj.lastObject doubleValue];
+    CMTime start = CMTimeMakeWithSeconds(startTime, 1);
+    CMTime duration = CMTimeMakeWithSeconds(durationTime, 1);
+    
+    CMTimeRange range = CMTimeRangeMake(start,duration);
+    NSError * error = nil;
+    BOOL result = [composition insertTimeRange:range ofAsset:asset atTime:composition.duration error:&error];
+    
+    if (error) NSLog(@"ERROR: %@",error);
+    return result;
 }
 
 @end
