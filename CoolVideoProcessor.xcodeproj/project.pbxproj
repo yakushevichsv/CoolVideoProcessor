@@ -35,6 +35,7 @@
 		21ECB9DA17401A96002C8851 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 21ECB9D917401A96002C8851 /* ViewController.m */; };
 		21EF4F17176E3EA80000EB83 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21EF4F16176E3EA80000EB83 /* OpenGLES.framework */; };
 		21F211FE177E16B600D9835F /* PositionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 21F211FD177E16B600D9835F /* PositionViewController.m */; };
+		21FC31691792CE4600D98A05 /* ALAssetItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 21FC31681792CE4600D98A05 /* ALAssetItem.m */; };
 		21FCE9D717416FD20020E973 /* PlayVideoVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 21FCE9D617416FD20020E973 /* PlayVideoVC.m */; };
 		21FCE9DA174171C90020E973 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21FCE9D9174171C90020E973 /* CoreMedia.framework */; };
 		21FCE9DC174171D60020E973 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21FCE9DB174171D60020E973 /* MobileCoreServices.framework */; };
@@ -86,6 +87,8 @@
 		21EF4F16176E3EA80000EB83 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		21F211FC177E16B600D9835F /* PositionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PositionViewController.h; sourceTree = "<group>"; };
 		21F211FD177E16B600D9835F /* PositionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PositionViewController.m; sourceTree = "<group>"; };
+		21FC31671792CE4600D98A05 /* ALAssetItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ALAssetItem.h; path = Models/Assets/ALAssetItem.h; sourceTree = "<group>"; };
+		21FC31681792CE4600D98A05 /* ALAssetItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ALAssetItem.m; path = Models/Assets/ALAssetItem.m; sourceTree = "<group>"; };
 		21FCE9D517416FD20020E973 /* PlayVideoVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayVideoVC.h; sourceTree = "<group>"; };
 		21FCE9D617416FD20020E973 /* PlayVideoVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayVideoVC.m; sourceTree = "<group>"; };
 		21FCE9D9174171C90020E973 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
@@ -158,6 +161,8 @@
 				2190EA281789EA9D00D747C9 /* AVAssetItem.m */,
 				2190EA2A1789F35600D747C9 /* AssetsLibrary.h */,
 				2190EA2B1789F35600D747C9 /* AssetsLibrary.m */,
+				21FC31671792CE4600D98A05 /* ALAssetItem.h */,
+				21FC31681792CE4600D98A05 /* ALAssetItem.m */,
 			);
 			name = Assets;
 			sourceTree = "<group>";
@@ -330,6 +335,7 @@
 				2190EA261789E75900D747C9 /* AssetItem.m in Sources */,
 				2190EA291789EA9D00D747C9 /* AVAssetItem.m in Sources */,
 				2190EA2C1789F35600D747C9 /* AssetsLibrary.m in Sources */,
+				21FC31691792CE4600D98A05 /* ALAssetItem.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -9,9 +9,17 @@
 #import <Foundation/Foundation.h>
 
 typedef void (^alCompletitionBlock)(NSError *error);
-
+typedef void (^alVoidCompletitionBlock)(void);
 @class AVMutableComposition;
 @interface AssetsLibrary : NSObject
+
+-(id)initWithLibraryChangedHandler:(alVoidCompletitionBlock)completitionBlock;
+-(void)loadLibraryWithCompletitionBlock:(alVoidCompletitionBlock)completitionBlock;
+
+
+@property (nonatomic,strong) NSMutableArray *videoAssetItems;
+@property (nonatomic,strong) NSMutableArray *imageAssetItems;
+@property (nonatomic,strong) alVoidCompletitionBlock completitionBlock;
 
 +(void)exportComposition:(AVMutableComposition*)composition atPath:(NSString*)path competition:(alCompletitionBlock)competition;
 

@@ -11,7 +11,4 @@
 @interface MergeCollectionViewController : UIViewController
 @property (weak, nonatomic) IBOutlet UICollectionView *files;
 
-
--(void)prepareFiles;
-
 @end

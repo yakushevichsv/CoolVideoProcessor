@@ -11,5 +11,7 @@
 @interface MergingProcessorViewController : UIViewController
 
 @property (nonatomic,strong) NSMutableDictionary* dictionary;
-
+@property (weak, nonatomic) IBOutlet UILabel *lblTitle;
+@property (weak, nonatomic) IBOutlet UIProgressView *pvProgress;
+@property (nonatomic,readonly) NSURL * mergedVideo;
 @end

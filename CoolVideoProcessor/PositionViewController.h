@@ -10,6 +10,6 @@
 
 @interface PositionViewController : UIViewController
 
--(void)setURLUsingDictionary:(NSDictionary*)dictionary;
+@property (nonatomic,strong) NSMutableArray * items;
 
 @end

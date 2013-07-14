@@ -10,18 +10,15 @@
 
 @implementation AssetItem
 
--(id)initWithURL:(NSURL *)url
+-(id)initWithURL:(NSURL *)url type:(AssetItemType)type mediaType:(AssetItemMediaType)mediaType
 {
     if (self=[super init])
     {
         _url = url;
+        _type = type;
+        _mediaType = mediaType;
     }
     return self;
-}
-
--(NSString*)title
-{
-    return self.url.pathComponents.lastObject;
 }
 
 - (NSString *)loadTitleWithCompletitionHandler:(completitionBlock)completionHandler
@@ -31,7 +28,13 @@
 
 - (UIImage *)loadThumbnailWithCompletitionHandler:(completitionBlock)completionHandler
 {
-    return nil;
+    return self.image;
+}
+
+
+-(NSTimeInterval)loadDurationWithCompletitionHandler:(completitionBlock)completionHandler
+{
+    return self.duration;
 }
 
 -(void)flush

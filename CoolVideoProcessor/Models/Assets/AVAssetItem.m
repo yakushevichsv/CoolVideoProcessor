@@ -13,7 +13,6 @@
 @property(nonatomic, strong) AVAsset *videoAsset;
 @property(nonatomic, strong) AVAssetImageGenerator *imageGenerator;
 @property(nonatomic, strong) UIImage *image;
-
 @property(nonatomic, readonly, unsafe_unretained) dispatch_once_t titleToken;
 @property(nonatomic, readonly, unsafe_unretained) dispatch_once_t thumbnailToken;
 
@@ -21,9 +20,9 @@
 
 @implementation AVAssetItem
 
--(id)initWithURL:(NSURL *)url
+-(id)initWithURL:(NSURL *)url mediaType:(AssetItemMediaType)mediaType
 {
-    if (self =[super initWithURL:url])
+    if (self =[super initWithURL:url type:AssetItemTypeAV mediaType:mediaType])
     {
         [self setup];
     }
