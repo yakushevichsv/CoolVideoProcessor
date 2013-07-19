@@ -191,18 +191,247 @@
 }
 
 
+static NSUInteger g_index = 0;
+
+static AVAssetReader* g_movieReader = nil;
+
+-(BOOL)xyz:(AVURLAsset *)asset index:(NSUInteger)index
+{
+    BOOL postpone = FALSE;
+    
+    AVKeyValueStatus status = [asset statusOfValueForKey:@"tracks" error:nil];
+    
+    if (status != AVKeyValueStatusLoaded)
+    {
+        
+        [asset loadValuesAsynchronouslyForKeys:@[@"tracks"] completionHandler:^{
+            NSArray * tracks = [asset tracksWithMediaType:AVMediaTypeVideo];
+            
+            NSParameterAssert(tracks.count == 1);
+            
+            
+            AVAssetTrack * videoTrack = (AVAssetTrack*)[tracks lastObject];
+            NSError * error = nil;
+            
+            [g_movieReader cancelReading];
+            
+            g_movieReader = [[AVAssetReader alloc] initWithAsset:asset error:&error];
+            if (error)
+                NSLog(@"Error %@",error.localizedDescription);
+            //AVAssetReaderOutput * readerOutput = [AVAssetReaderOutput new];
+            NSString* key = (NSString*)kCVPixelBufferPixelFormatTypeKey;
+            NSNumber* value = [NSNumber numberWithUnsignedInt:kCVPixelFormatType_32BGRA];
+            NSDictionary* videoSettings =
+            [NSDictionary dictionaryWithObject:value forKey:key];
+            
+            [g_movieReader addOutput:[AVAssetReaderTrackOutput
+                                     assetReaderTrackOutputWithTrack:videoTrack
+                                     outputSettings:videoSettings]];
+            if (![g_movieReader startReading])
+            {
+                NSLog(@"Status %d, error %@",g_movieReader.status,g_movieReader.error);
+            }
+            else
+            {
+                if (g_movieReader.status == AVAssetReaderStatusReading)
+                {
+                    AVAssetReaderTrackOutput * output = [g_movieReader.outputs objectAtIndex:0];
+                    
+                    
+                    
+                    //reading....
+                    
+                    
+                    BOOL first = FALSE;
+                    
+                    //creating writer...
+                    CMSampleBufferRef sampleBuffer = [output copyNextSampleBuffer];
+                    AVAssetWriterInputPixelBufferAdaptor *adaptor;
+                    AVAssetWriter *videoWriter;
+                    while (sampleBuffer)
+                    {
+                        CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
+                        
+                        // Lock the image buffer
+                        CVPixelBufferLockBaseAddress(imageBuffer,0);
+                        
+                        // Get information of the image
+                        uint8_t *baseAddress = (uint8_t *)CVPixelBufferGetBaseAddress(imageBuffer);
+                        size_t bytesPerRow = CVPixelBufferGetBytesPerRow(imageBuffer);
+                        size_t width = CVPixelBufferGetWidth(imageBuffer);
+                        size_t height = CVPixelBufferGetHeight(imageBuffer);
+                        
+                        //*Create a CGImageRef from the CVImageBufferRef*/
+                        CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+                        CGContextRef newContext = CGBitmapContextCreate(baseAddress, width, height, 8, bytesPerRow, colorSpace, kCGBitmapByteOrder32Little | kCGImageAlphaPremultipliedFirst);
+                        CGImageRef beginImage = CGBitmapContextCreateImage(newContext);
+                        
+                        /*We release some components*/
+                        CGContextRelease(newContext); 
+                        CGColorSpaceRelease(colorSpace);
+                        
+                        
+                        //
+                        //  Here's where you can process the buffer!
+                        //  (your code goes here)
+                        //
+                        //  Finish processing the buffer!
+                        //
+                        
+                        // Unlock the image buffer
+                        CVPixelBufferUnlockBaseAddress(imageBuffer,0);
+                        CFRelease(sampleBuffer);
+                        
+                        CGImageRef cgimg =[self applyFilter:beginImage];
+                        UIImage *newImg = [UIImage imageWithCGImage:cgimg];
+                        CGImageRelease(cgimg);
+                    
+                        
+                        if (!first)
+                        {
+                            
+                            CGSize frameSize = newImg.size;
+                            
+                            NSError *error = nil;
+                            videoWriter = [[AVAssetWriter alloc] initWithURL:
+                                                          [NSURL fileURLWithPath:nil] fileType:AVFileTypeQuickTimeMovie
+                                                                                      error:&error];
+                            
+                            if(error) {
+                                NSLog(@"error creating AssetWriter: %@",[error description]);
+                            }
+                            NSDictionary *videoSettings = [NSDictionary dictionaryWithObjectsAndKeys:
+                                                           AVVideoCodecH264, AVVideoCodecKey,
+                                                           [NSNumber numberWithInt:frameSize.width], AVVideoWidthKey,
+                                                           [NSNumber numberWithInt:frameSize.height], AVVideoHeightKey,
+                                                           nil];
+                            
+                            AVAssetWriterInput* writerInput = [AVAssetWriterInput
+                                                                assetWriterInputWithMediaType:AVMediaTypeVideo
+                                                                outputSettings:videoSettings];
+                            
+                            NSMutableDictionary *attributes = [[NSMutableDictionary alloc] init];
+                            [attributes setObject:[NSNumber numberWithUnsignedInt:kCVPixelFormatType_32ARGB] forKey:(NSString*)kCVPixelBufferPixelFormatTypeKey];
+                            [attributes setObject:[NSNumber numberWithUnsignedInt:frameSize.width] forKey:(NSString*)kCVPixelBufferWidthKey];
+                            [attributes setObject:[NSNumber numberWithUnsignedInt:frameSize.height] forKey:(NSString*)kCVPixelBufferHeightKey];
+                            
+                            adaptor = [AVAssetWriterInputPixelBufferAdaptor
+                                                                             assetWriterInputPixelBufferAdaptorWithAssetWriterInput:writerInput
+                                                                             sourcePixelBufferAttributes:attributes];
+                            
+                            [videoWriter addInput:writerInput];
+                            
+                            // fixes all errors
+                            writerInput.expectsMediaDataInRealTime = YES;
+                            
+                            //Start a session:
+                            BOOL start = [videoWriter startWriting];
+                            NSLog(@"Session started? %d", start);
+                            [videoWriter startSessionAtSourceTime:kCMTimeZero];
+                            
+                            
+                        }
+                        
+                        CVPixelBufferRef buffer = NULL;
+                        buffer = [self pixelBufferFromCGImage:[newImg CGImage]];
+                        BOOL result = [adaptor appendPixelBuffer:buffer withPresentationTime:kCMTimeZero];
+                        
+                        if (result == NO) //failes on 3GS, but works on iphone 4
+                            NSLog(@"failed to append buffer");
+                        
+                        if(buffer)
+                            CVBufferRelease(buffer);
+                        
+                                                
+                       // int reverseSort = NO;
+                       // NSArray *newArray = [array sortedArrayUsingFunction:sort context:&reverseSort];
+                        
+                        CGFloat delta = 0.0;//1.0/[newArray count];
+                        
+                        int fps = 0;//(int)fpsSlider.value;
+                        
+                        //int i = 0;
+                       
+                            if (adaptor.assetWriterInput.readyForMoreMediaData)
+                            {
+                                
+                                
+                                CMTime frameTime = CMTimeMake(1, fps);
+                                CMTime lastTime=CMTimeMake(i, fps);
+                                CMTime presentTime=CMTimeAdd(lastTime, frameTime);
+                                
+                                BOOL result = [adaptor appendPixelBuffer:buffer withPresentationTime:presentTime];
+                                
+                                if (result == NO) //failes on 3GS, but works on iphone 4
+                                {
+                                    NSLog(@"failed to append buffer");
+                                    NSLog(@"The error is %@", [videoWriter error]);
+                                }
+                                if(buffer)
+                                    CVBufferRelease(buffer);
+                                [NSThread sleepForTimeInterval:0.05];
+                            }
+                            else
+                            {
+                                NSLog(@"error");
+                                //i--;
+                            }
+                            [NSThread sleepForTimeInterval:0.02];
+                        }
+                        
+                        //Finish the session:
+                        [writerInput markAsFinished];
+                        [videoWriter finishWriting];
+                        CVPixelBufferPoolRelease(adaptor.pixelBufferPool);
+                        [videoWriter release];
+                        [writerInput release];
+                    }
+                        
+                        
+                    
+                        sampleBuffer = [output copyNextSampleBuffer];
+                    }
+                }
+            }
+            
+            g_index = index+1;
+        }];
+        postpone = TRUE;
+        
+    }
+    return postpone;
+}
+
+-(CGImageRef)applyFilter:(CGImageRef)beginImage
+{
+    CIFilter *filter = [CIFilter filterWithName:@"CISepiaTone"
+                                  keysAndValues: kCIInputImageKey, beginImage,
+                        @"inputIntensity", [NSNumber numberWithFloat:0.4], nil];
+    
+    CGImageRelease(beginImage);
+    
+    
+    CIImage *outputImage = [filter outputImage];
+    
+    CIContext *context = [CIContext contextWithOptions:nil];
+    CGImageRef cgimg =
+    [context createCGImage:outputImage fromRect:[outputImage extent]];
+    return cgimg;
+}
+
 -(BOOL)appendToComposition:(AVMutableComposition*)composition key:(id)key
 {
     NSURL * url = (NSURL*)key;
     AVURLAsset * asset = [[AVURLAsset alloc]initWithURL:url options:@{AVURLAssetPreferPreciseDurationAndTimingKey:@(YES)}];
+    
     
     // calculate time
     
     NSArray * valueObj = [self.dictionary[key]lastObject];
     NSTimeInterval startTime =(NSTimeInterval)[valueObj[1] doubleValue];
     NSTimeInterval durationTime =(NSTimeInterval)[valueObj.lastObject doubleValue];
-    CMTime start = CMTimeMakeWithSeconds(startTime, 1);
-    CMTime duration = CMTimeMakeWithSeconds(durationTime, 1);
+    CMTime start = CMTimeMake(startTime, 1);
+    CMTime duration = CMTimeMake(durationTime, 1);
     
     CMTimeRange range = CMTimeRangeMake(start,duration);
     NSError * error = nil;
@@ -210,6 +439,49 @@
     
     if (error) NSLog(@"ERROR: %@",error);
     return result;
+}
+
+- (CVPixelBufferRef) pixelBufferFromCGImage: (CGImageRef) image
+{
+    NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
+                             [NSNumber numberWithBool:YES], kCVPixelBufferCGImageCompatibilityKey,
+                             [NSNumber numberWithBool:YES], kCVPixelBufferCGBitmapContextCompatibilityKey,
+                             nil];
+    CVPixelBufferRef pxbuffer = NULL;
+    
+    CVPixelBufferCreate(kCFAllocatorDefault, CGImageGetWidth(image),
+                        CGImageGetHeight(image), kCVPixelFormatType_32ARGB, (__bridge CFDictionaryRef) options,
+                        &pxbuffer);
+    
+    CVPixelBufferLockBaseAddress(pxbuffer, 0);
+    void *pxdata = CVPixelBufferGetBaseAddress(pxbuffer);
+    
+    CGColorSpaceRef rgbColorSpace = CGColorSpaceCreateDeviceRGB();
+    CGContextRef context = CGBitmapContextCreate(pxdata, CGImageGetWidth(image),
+                                                 CGImageGetHeight(image), 8, 4*CGImageGetWidth(image), rgbColorSpace,
+                                                 kCGImageAlphaNoneSkipFirst);
+    
+    CGContextConcatCTM(context, CGAffineTransformMakeRotation(0));
+    
+    CGAffineTransform flipVertical = CGAffineTransformMake(
+                                                           1, 0, 0, -1, 0, CGImageGetHeight(image)
+                                                           );
+    CGContextConcatCTM(context, flipVertical);
+    
+    CGAffineTransform flipHorizontal = CGAffineTransformMake(
+                                                             -1.0, 0.0, 0.0, 1.0, CGImageGetWidth(image), 0.0
+                                                             );
+    
+    CGContextConcatCTM(context, flipHorizontal);
+    
+    CGContextDrawImage(context, CGRectMake(0, 0, CGImageGetWidth(image),
+                                           CGImageGetHeight(image)), image);
+    CGColorSpaceRelease(rgbColorSpace);
+    CGContextRelease(context);
+    
+    CVPixelBufferUnlockBaseAddress(pxbuffer, 0);
+    
+    return pxbuffer;
 }
 
 @end
