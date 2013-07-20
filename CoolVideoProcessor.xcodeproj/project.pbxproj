@@ -12,6 +12,7 @@
 		2109553C17666E21007D0C78 /* MergeVideoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2109553B17666E21007D0C78 /* MergeVideoView.m */; };
 		21095763176BC55C00C7A68A /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21095762176BC55C00C7A68A /* GLKit.framework */; };
 		21095766176BC59D00C7A68A /* LogoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 21095765176BC59D00C7A68A /* LogoViewController.m */; };
+		21122FB4179AFCF000E6CA7C /* VideoWatcherViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 21122FB3179AFCF000E6CA7C /* VideoWatcherViewController.m */; };
 		211D3A4B1782F1C700665A5E /* MergingProcessorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 211D3A4A1782F1C700665A5E /* MergingProcessorViewController.m */; };
 		212683AD177F1F4F0018F4CB /* PositionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 212683AC177F1F4E0018F4CB /* PositionCell.m */; };
 		218F1532174189E600874561 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 218F1531174189E600874561 /* AssetsLibrary.framework */; };
@@ -35,6 +36,8 @@
 		21ECB9DA17401A96002C8851 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 21ECB9D917401A96002C8851 /* ViewController.m */; };
 		21EF4F17176E3EA80000EB83 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21EF4F16176E3EA80000EB83 /* OpenGLES.framework */; };
 		21F211FE177E16B600D9835F /* PositionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 21F211FD177E16B600D9835F /* PositionViewController.m */; };
+		21F55F71179A6E7600121105 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21F55F70179A6E7600121105 /* CoreVideo.framework */; };
+		21F55F73179A6EB400121105 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21F55F72179A6EB400121105 /* CoreImage.framework */; };
 		21FC31691792CE4600D98A05 /* ALAssetItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 21FC31681792CE4600D98A05 /* ALAssetItem.m */; };
 		21FCE9D717416FD20020E973 /* PlayVideoVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 21FCE9D617416FD20020E973 /* PlayVideoVC.m */; };
 		21FCE9DA174171C90020E973 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21FCE9D9174171C90020E973 /* CoreMedia.framework */; };
@@ -51,6 +54,8 @@
 		21095762176BC55C00C7A68A /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		21095764176BC59D00C7A68A /* LogoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LogoViewController.h; path = Loggo/LogoViewController.h; sourceTree = "<group>"; };
 		21095765176BC59D00C7A68A /* LogoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LogoViewController.m; path = Loggo/LogoViewController.m; sourceTree = "<group>"; };
+		21122FB2179AFCF000E6CA7C /* VideoWatcherViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VideoWatcherViewController.h; path = Controllers/VideoWatcherViewController.h; sourceTree = "<group>"; };
+		21122FB3179AFCF000E6CA7C /* VideoWatcherViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VideoWatcherViewController.m; path = Controllers/VideoWatcherViewController.m; sourceTree = "<group>"; };
 		211D3A491782F1C700665A5E /* MergingProcessorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MergingProcessorViewController.h; sourceTree = "<group>"; };
 		211D3A4A1782F1C700665A5E /* MergingProcessorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MergingProcessorViewController.m; sourceTree = "<group>"; };
 		212683AA177F12430018F4CB /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
@@ -87,6 +92,8 @@
 		21EF4F16176E3EA80000EB83 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		21F211FC177E16B600D9835F /* PositionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PositionViewController.h; sourceTree = "<group>"; };
 		21F211FD177E16B600D9835F /* PositionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PositionViewController.m; sourceTree = "<group>"; };
+		21F55F70179A6E7600121105 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
+		21F55F72179A6EB400121105 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
 		21FC31671792CE4600D98A05 /* ALAssetItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ALAssetItem.h; path = Models/Assets/ALAssetItem.h; sourceTree = "<group>"; };
 		21FC31681792CE4600D98A05 /* ALAssetItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ALAssetItem.m; path = Models/Assets/ALAssetItem.m; sourceTree = "<group>"; };
 		21FCE9D517416FD20020E973 /* PlayVideoVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayVideoVC.h; sourceTree = "<group>"; };
@@ -100,6 +107,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				21F55F73179A6EB400121105 /* CoreImage.framework in Frameworks */,
+				21F55F71179A6E7600121105 /* CoreVideo.framework in Frameworks */,
 				218F1536174193A900874561 /* MediaPlayer.framework in Frameworks */,
 				21EF4F17176E3EA80000EB83 /* OpenGLES.framework in Frameworks */,
 				21095763176BC55C00C7A68A /* GLKit.framework in Frameworks */,
@@ -179,6 +188,8 @@
 		21AE4BB01785EE2C00A92DE7 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				21122FB2179AFCF000E6CA7C /* VideoWatcherViewController.h */,
+				21122FB3179AFCF000E6CA7C /* VideoWatcherViewController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -186,6 +197,8 @@
 		21ECB9AB17401A96002C8851 = {
 			isa = PBXGroup;
 			children = (
+				21F55F72179A6EB400121105 /* CoreImage.framework */,
+				21F55F70179A6E7600121105 /* CoreVideo.framework */,
 				21ECB9C017401A96002C8851 /* CoolVideoProcessor */,
 				21BD7B6A1767D44B0093BB2C /* checkButton.png */,
 				21ECB9B917401A96002C8851 /* Frameworks */,
@@ -336,6 +349,7 @@
 				2190EA291789EA9D00D747C9 /* AVAssetItem.m in Sources */,
 				2190EA2C1789F35600D747C9 /* AssetsLibrary.m in Sources */,
 				21FC31691792CE4600D98A05 /* ALAssetItem.m in Sources */,
+				21122FB4179AFCF000E6CA7C /* VideoWatcherViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

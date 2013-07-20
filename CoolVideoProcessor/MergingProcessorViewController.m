@@ -123,7 +123,17 @@
     for (id key in self.dictionary)
     {
         [self changeStatus:[NSString stringWithFormat:@"Processing %d video out of %d",index+1,count] percent:percent];
-        if (![self appendToComposition:composition key:key])
+        
+        {
+            NSURL * url = (NSURL*)key;
+            AVURLAsset * asset = [[AVURLAsset alloc]initWithURL:url options:@{AVURLAssetPreferPreciseDurationAndTimingKey:@(YES)}];
+            
+            if ([self xyz:asset index:0])
+            {
+                return;
+            }
+        }
+        //if (![self appendToComposition:composition key:key])
         {
             isError = TRUE;
             break;
@@ -227,6 +237,7 @@ static AVAssetReader* g_movieReader = nil;
             [g_movieReader addOutput:[AVAssetReaderTrackOutput
                                      assetReaderTrackOutputWithTrack:videoTrack
                                      outputSettings:videoSettings]];
+            
             if (![g_movieReader startReading])
             {
                 NSLog(@"Status %d, error %@",g_movieReader.status,g_movieReader.error);
@@ -235,12 +246,10 @@ static AVAssetReader* g_movieReader = nil;
             {
                 if (g_movieReader.status == AVAssetReaderStatusReading)
                 {
-                    AVAssetReaderTrackOutput * output = [g_movieReader.outputs objectAtIndex:0];
+                    AVAssetReaderTrackOutput * output = g_movieReader.outputs.lastObject;
                     
-                    
-                    
+                    NSParameterAssert(g_movieReader.outputs.count ==1);
                     //reading....
-                    
                     
                     BOOL first = FALSE;
                     
@@ -248,6 +257,9 @@ static AVAssetReader* g_movieReader = nil;
                     CMSampleBufferRef sampleBuffer = [output copyNextSampleBuffer];
                     AVAssetWriterInputPixelBufferAdaptor *adaptor;
                     AVAssetWriter *videoWriter;
+                    AVAssetWriterInput* writerInput;
+                    NSUInteger index = 0;
+                    NSURL * url = [[self class]pathForResultVideo];
                     while (sampleBuffer)
                     {
                         CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
@@ -278,23 +290,28 @@ static AVAssetReader* g_movieReader = nil;
                         //  Finish processing the buffer!
                         //
                         
-                        // Unlock the image buffer
-                        CVPixelBufferUnlockBaseAddress(imageBuffer,0);
-                        CFRelease(sampleBuffer);
-                        
-                        CGImageRef cgimg =[self applyFilter:beginImage];
+                        CGImageRef cgimg = beginImage;// [self applyFilter:beginImage];
                         UIImage *newImg = [UIImage imageWithCGImage:cgimg];
                         CGImageRelease(cgimg);
+                        // Unlock the image buffer
+                        CVPixelBufferUnlockBaseAddress(imageBuffer,0);
+                        //CMSampleBufferInvalidate(sampleBuffer);
+                        CFRelease(sampleBuffer);
+                        
+                        
                     
+                        
+                        CVPixelBufferRef buffer = NULL;
                         
                         if (!first)
                         {
+                            
                             
                             CGSize frameSize = newImg.size;
                             
                             NSError *error = nil;
                             videoWriter = [[AVAssetWriter alloc] initWithURL:
-                                                          [NSURL fileURLWithPath:nil] fileType:AVFileTypeQuickTimeMovie
+                                                          url fileType:AVFileTypeQuickTimeMovie
                                                                                       error:&error];
                             
                             if(error) {
@@ -306,7 +323,7 @@ static AVAssetReader* g_movieReader = nil;
                                                            [NSNumber numberWithInt:frameSize.height], AVVideoHeightKey,
                                                            nil];
                             
-                            AVAssetWriterInput* writerInput = [AVAssetWriterInput
+                            writerInput = [AVAssetWriterInput
                                                                 assetWriterInputWithMediaType:AVMediaTypeVideo
                                                                 outputSettings:videoSettings];
                             
@@ -326,40 +343,35 @@ static AVAssetReader* g_movieReader = nil;
                             
                             //Start a session:
                             BOOL start = [videoWriter startWriting];
+                            
+                            if (start){
+                                [videoWriter startSessionAtSourceTime:kCMTimeZero];
+                                    
+                                first = TRUE;
+                            }
                             NSLog(@"Session started? %d", start);
-                            [videoWriter startSessionAtSourceTime:kCMTimeZero];
-                            
-                            
                         }
-                        
-                        CVPixelBufferRef buffer = NULL;
-                        buffer = [self pixelBufferFromCGImage:[newImg CGImage]];
-                        BOOL result = [adaptor appendPixelBuffer:buffer withPresentationTime:kCMTimeZero];
-                        
-                        if (result == NO) //failes on 3GS, but works on iphone 4
-                            NSLog(@"failed to append buffer");
-                        
-                        if(buffer)
-                            CVBufferRelease(buffer);
                         
                                                 
                        // int reverseSort = NO;
                        // NSArray *newArray = [array sortedArrayUsingFunction:sort context:&reverseSort];
                         
-                        CGFloat delta = 0.0;//1.0/[newArray count];
+                        //CGFloat delta = 0.0;//1.0/[newArray count];
                         
-                        int fps = 0;//(int)fpsSlider.value;
+                       //(int)fpsSlider.value;
                         
                         //int i = 0;
                        
                             if (adaptor.assetWriterInput.readyForMoreMediaData)
                             {
+                                 int fps = 30;
                                 
                                 
                                 CMTime frameTime = CMTimeMake(1, fps);
-                                CMTime lastTime=CMTimeMake(i, fps);
+                                CMTime lastTime=CMTimeMake(index++, fps);
                                 CMTime presentTime=CMTimeAdd(lastTime, frameTime);
                                 
+                                buffer = [self pixelBufferFromCGImage:[newImg CGImage]];
                                 BOOL result = [adaptor appendPixelBuffer:buffer withPresentationTime:presentTime];
                                 
                                 if (result == NO) //failes on 3GS, but works on iphone 4
@@ -369,31 +381,32 @@ static AVAssetReader* g_movieReader = nil;
                                 }
                                 if(buffer)
                                     CVBufferRelease(buffer);
-                                [NSThread sleepForTimeInterval:0.05];
+                                //[NSThread sleepForTimeInterval:0.05];
                             }
                             else
                             {
                                 NSLog(@"error");
-                                //i--;
+                                index--;
                             }
-                            [NSThread sleepForTimeInterval:0.02];
-                        }
-                        
-                        //Finish the session:
-                        [writerInput markAsFinished];
-                        [videoWriter finishWriting];
-                        CVPixelBufferPoolRelease(adaptor.pixelBufferPool);
-                        [videoWriter release];
-                        [writerInput release];
-                    }
-                        
+                            //[NSThread sleepForTimeInterval:0.02];
                         
                     
                         sampleBuffer = [output copyNextSampleBuffer];
                     }
+                    //Finish the session:
+                    [writerInput markAsFinished];
+                    [videoWriter finishWritingWithCompletionHandler:^{
+                        
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            [self displayByURL:url];
+                        });
+                    }];
+                    CVPixelBufferPoolRelease(adaptor.pixelBufferPool);
                 }
+                
+                        
             }
-            
+             
             g_index = index+1;
         }];
         postpone = TRUE;

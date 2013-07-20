@@ -15,6 +15,7 @@
 #import "PositionCell.h"
 #import "MergingProcessorViewController.h"
 #import "AssetItem.h"
+#import "VideoWatcherViewController.h"
 
 @interface PositionViewController ()<UITableViewDataSource,UITableViewDelegate>
 
@@ -215,6 +216,22 @@
     
         controller.dictionary = dic;
     }
+    else if ([segue.identifier isEqualToString:@"playVideoSegue"])
+    {
+        VideoWatcherViewController * controller =
+        (VideoWatcherViewController*)segue.destinationViewController;
+       
+        NSIndexPath * indexPath = [self.tableView indexPathForSelectedRow];
+        NSInteger index = indexPath.row;
+        
+        if ([self assetItem:index].duration ==0 )
+        {
+            //TODO: provide displaying image....
+            return;
+        }
+        else
+            controller.movieURL = [self assetItem:index].url;
+    }
 }
 
 #pragma mark -Table View Cell
@@ -231,40 +248,10 @@
         //TODO: provide displaying image....
         return;
     }
-   NSURL* url = [self assetItem:index].url;
     
-    MPMoviePlayerViewController * controller= [[MPMoviePlayerViewController alloc]initWithContentURL:url];
-    controller.moviePlayer.shouldAutoplay = YES;
+    [self performSegueWithIdentifier:@"playVideoSegue" sender:self];
     
-    [[NSNotificationCenter defaultCenter]removeObserver:controller name:MPMoviePlayerPlaybackDidFinishNotification object:controller.moviePlayer];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playerPlaybackDidFinish:) name:MPMoviePlayerPlaybackDidFinishNotification object:controller.moviePlayer];
-    controller.moviePlayer.controlStyle = MPMovieControlStyleFullscreen;
-    [controller.moviePlayer prepareToPlay];
-    
-    [self presentMoviePlayerViewControllerAnimated:controller];
-}
-
-#pragma mark - MPMoviePlayer Delegate
-
--(void)playerPlaybackDidFinish:(NSNotification*)notification
-{
-     if ([notification.userInfo[MPMoviePlayerPlaybackDidFinishReasonUserInfoKey] integerValue]==MPMovieFinishReasonUserExited)
-     {
-         [[NSNotificationCenter defaultCenter]removeObserver:self name:MPMoviePlayerPlaybackDidFinishNotification object:notification.object];
-         
-         MPMoviePlayerController * controller = ( MPMoviePlayerController * )notification.object;
-         
-         [controller pause];
-         controller.initialPlaybackTime =-1;
-         [controller stop];
-         controller.initialPlaybackTime = -1;
-         
-         [self dismissMoviePlayerViewControllerAnimated];
-
-     }
     
 }
-
 
 @end

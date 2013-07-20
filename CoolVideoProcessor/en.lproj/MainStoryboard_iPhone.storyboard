@@ -189,6 +189,24 @@
             </objects>
             <point key="canvasLocation" x="-7" y="521"/>
         </scene>
+        <!--Video Watcher View Controller-->
+        <scene sceneID="5vj-qv-dVT">
+            <objects>
+                <viewController wantsFullScreenLayout="YES" id="GTh-6D-u2I" customClass="VideoWatcherViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="W9N-Cy-ffq">
+                        <rect key="frame" x="0.0" y="20" width="320" height="460"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <connections>
+                        <segue destination="AjW-cM-xMQ" kind="unwind" unwindAction="unwindFromConfirmationForm:" id="hbM-d7-ONh"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Qtn-2b-qe8" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="AjW-cM-xMQ" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="407" y="1091"/>
+        </scene>
         <!--Position View Controller - Position Items-->
         <scene sceneID="BJM-kn-YIC">
             <objects>
@@ -222,6 +240,7 @@
                                                     </state>
                                                     <connections>
                                                         <action selector="imagePressed:" destination="z8d-2O-Ltt" eventType="touchUpInside" id="E26-nh-znB"/>
+                                                        <segue destination="GTh-6D-u2I" kind="modal" identifier="playVideoSegue" id="bJJ-gg-23j"/>
                                                     </connections>
                                                 </button>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g0K-aK-Eah">
@@ -420,6 +439,7 @@
         <class className="PositionViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/PositionViewController.h"/>
             <relationships>
+                <relationship kind="action" name="imagePressed:" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="tableView" candidateClass="UITableView"/>
             </relationships>
         </class>
@@ -431,6 +451,15 @@
         </class>
         <class className="UICollectionViewFlowLayout" superclassName="UICollectionViewLayout">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewFlowLayout.h"/>
+        </class>
+        <class className="UIStoryboardSegue" superclassName="NSObject">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIStoryboardSegue.h"/>
+        </class>
+        <class className="VideoWatcherViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/VideoWatcherViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="unwindFromConfirmationForm:" candidateClass="UIStoryboardSegue"/>
+            </relationships>
         </class>
         <class className="ViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/ViewController.h"/>
