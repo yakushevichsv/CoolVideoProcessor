@@ -12,7 +12,6 @@
 		2109553C17666E21007D0C78 /* MergeVideoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2109553B17666E21007D0C78 /* MergeVideoView.m */; };
 		21095763176BC55C00C7A68A /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21095762176BC55C00C7A68A /* GLKit.framework */; };
 		21095766176BC59D00C7A68A /* LogoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 21095765176BC59D00C7A68A /* LogoViewController.m */; };
-		21122FB4179AFCF000E6CA7C /* VideoWatcherViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 21122FB3179AFCF000E6CA7C /* VideoWatcherViewController.m */; };
 		211D3A4B1782F1C700665A5E /* MergingProcessorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 211D3A4A1782F1C700665A5E /* MergingProcessorViewController.m */; };
 		212683AD177F1F4F0018F4CB /* PositionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 212683AC177F1F4E0018F4CB /* PositionCell.m */; };
 		218F1532174189E600874561 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 218F1531174189E600874561 /* AssetsLibrary.framework */; };
@@ -22,6 +21,7 @@
 		2190EA291789EA9D00D747C9 /* AVAssetItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 2190EA281789EA9D00D747C9 /* AVAssetItem.m */; };
 		2190EA2C1789F35600D747C9 /* AssetsLibrary.m in Sources */ = {isa = PBXBuildFile; fileRef = 2190EA2B1789F35600D747C9 /* AssetsLibrary.m */; };
 		21BD7B6B1767D44B0093BB2C /* checkButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 21BD7B6A1767D44B0093BB2C /* checkButton.png */; };
+		21DFBE7F179C7A9B00BCE33B /* UIBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 21DFBE7E179C7A9B00BCE33B /* UIBaseViewController.m */; };
 		21E2FA5A177777A200784CC5 /* HeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 21E2FA59177777A200784CC5 /* HeaderView.m */; };
 		21ECB9BB17401A96002C8851 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21ECB9BA17401A96002C8851 /* UIKit.framework */; };
 		21ECB9BD17401A96002C8851 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21ECB9BC17401A96002C8851 /* Foundation.framework */; };
@@ -54,8 +54,6 @@
 		21095762176BC55C00C7A68A /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		21095764176BC59D00C7A68A /* LogoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LogoViewController.h; path = Loggo/LogoViewController.h; sourceTree = "<group>"; };
 		21095765176BC59D00C7A68A /* LogoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LogoViewController.m; path = Loggo/LogoViewController.m; sourceTree = "<group>"; };
-		21122FB2179AFCF000E6CA7C /* VideoWatcherViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VideoWatcherViewController.h; path = Controllers/VideoWatcherViewController.h; sourceTree = "<group>"; };
-		21122FB3179AFCF000E6CA7C /* VideoWatcherViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VideoWatcherViewController.m; path = Controllers/VideoWatcherViewController.m; sourceTree = "<group>"; };
 		211D3A491782F1C700665A5E /* MergingProcessorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MergingProcessorViewController.h; sourceTree = "<group>"; };
 		211D3A4A1782F1C700665A5E /* MergingProcessorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MergingProcessorViewController.m; sourceTree = "<group>"; };
 		212683AA177F12430018F4CB /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
@@ -71,6 +69,8 @@
 		2190EA2A1789F35600D747C9 /* AssetsLibrary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AssetsLibrary.h; path = Models/Assets/AssetsLibrary.h; sourceTree = "<group>"; };
 		2190EA2B1789F35600D747C9 /* AssetsLibrary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AssetsLibrary.m; path = Models/Assets/AssetsLibrary.m; sourceTree = "<group>"; };
 		21BD7B6A1767D44B0093BB2C /* checkButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checkButton.png; sourceTree = "<group>"; };
+		21DFBE7D179C7A9B00BCE33B /* UIBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIBaseViewController.h; path = Controllers/UIBaseViewController.h; sourceTree = "<group>"; };
+		21DFBE7E179C7A9B00BCE33B /* UIBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIBaseViewController.m; path = Controllers/UIBaseViewController.m; sourceTree = "<group>"; };
 		21E2FA58177777A200784CC5 /* HeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeaderView.h; sourceTree = "<group>"; };
 		21E2FA59177777A200784CC5 /* HeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeaderView.m; sourceTree = "<group>"; };
 		21ECB9B617401A96002C8851 /* CoolVideoProcessor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoolVideoProcessor.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -188,8 +188,8 @@
 		21AE4BB01785EE2C00A92DE7 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				21122FB2179AFCF000E6CA7C /* VideoWatcherViewController.h */,
-				21122FB3179AFCF000E6CA7C /* VideoWatcherViewController.m */,
+				21DFBE7D179C7A9B00BCE33B /* UIBaseViewController.h */,
+				21DFBE7E179C7A9B00BCE33B /* UIBaseViewController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -197,8 +197,6 @@
 		21ECB9AB17401A96002C8851 = {
 			isa = PBXGroup;
 			children = (
-				21F55F72179A6EB400121105 /* CoreImage.framework */,
-				21F55F70179A6E7600121105 /* CoreVideo.framework */,
 				21ECB9C017401A96002C8851 /* CoolVideoProcessor */,
 				21BD7B6A1767D44B0093BB2C /* checkButton.png */,
 				21ECB9B917401A96002C8851 /* Frameworks */,
@@ -217,6 +215,8 @@
 		21ECB9B917401A96002C8851 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				21F55F72179A6EB400121105 /* CoreImage.framework */,
+				21F55F70179A6E7600121105 /* CoreVideo.framework */,
 				21EF4F16176E3EA80000EB83 /* OpenGLES.framework */,
 				21095762176BC55C00C7A68A /* GLKit.framework */,
 				218F1535174193A900874561 /* MediaPlayer.framework */,
@@ -349,7 +349,7 @@
 				2190EA291789EA9D00D747C9 /* AVAssetItem.m in Sources */,
 				2190EA2C1789F35600D747C9 /* AssetsLibrary.m in Sources */,
 				21FC31691792CE4600D98A05 /* ALAssetItem.m in Sources */,
-				21122FB4179AFCF000E6CA7C /* VideoWatcherViewController.m in Sources */,
+				21DFBE7F179C7A9B00BCE33B /* UIBaseViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

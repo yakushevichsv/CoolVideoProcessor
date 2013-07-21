@@ -15,7 +15,6 @@
 #import "PositionCell.h"
 #import "MergingProcessorViewController.h"
 #import "AssetItem.h"
-#import "VideoWatcherViewController.h"
 
 @interface PositionViewController ()<UITableViewDataSource,UITableViewDelegate>
 
@@ -216,22 +215,6 @@
     
         controller.dictionary = dic;
     }
-    else if ([segue.identifier isEqualToString:@"playVideoSegue"])
-    {
-        VideoWatcherViewController * controller =
-        (VideoWatcherViewController*)segue.destinationViewController;
-       
-        NSIndexPath * indexPath = [self.tableView indexPathForSelectedRow];
-        NSInteger index = indexPath.row;
-        
-        if ([self assetItem:index].duration ==0 )
-        {
-            //TODO: provide displaying image....
-            return;
-        }
-        else
-            controller.movieURL = [self assetItem:index].url;
-    }
 }
 
 #pragma mark -Table View Cell
@@ -249,9 +232,7 @@
         return;
     }
     
-    [self performSegueWithIdentifier:@"playVideoSegue" sender:self];
-    
-    
+    [self displayByURL:[self assetItem:index].url];
 }
 
 @end

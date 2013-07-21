@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "UIBaseViewController.h"
 
-@interface MergingProcessorViewController : UIViewController
+@interface MergingProcessorViewController : UIBaseViewController
 
 @property (nonatomic,strong) NSMutableDictionary* dictionary;
 @property (weak, nonatomic) IBOutlet UILabel *lblTitle;

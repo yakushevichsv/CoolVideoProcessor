@@ -165,42 +165,6 @@
     }
 }
 
--(void)displayByURL:(NSURL*)url
-{
-    MPMoviePlayerViewController * controller= [[MPMoviePlayerViewController alloc]initWithContentURL:url];
-    controller.moviePlayer.shouldAutoplay = YES;
-    
-    [[NSNotificationCenter defaultCenter]removeObserver:controller name:MPMoviePlayerPlaybackDidFinishNotification object:controller.moviePlayer];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playerPlaybackDidFinish:) name:MPMoviePlayerPlaybackDidFinishNotification object:controller.moviePlayer];
-    controller.moviePlayer.controlStyle = MPMovieControlStyleFullscreen;
-    [controller.moviePlayer prepareToPlay];
-    
-    [self presentMoviePlayerViewControllerAnimated:controller];
-}
-
-#pragma mark - MPMoviePlayer Delegate
-
--(void)playerPlaybackDidFinish:(NSNotification*)notification
-{
-    if ([notification.userInfo[MPMoviePlayerPlaybackDidFinishReasonUserInfoKey] integerValue]==MPMovieFinishReasonUserExited)
-    {
-        [[NSNotificationCenter defaultCenter]removeObserver:self name:MPMoviePlayerPlaybackDidFinishNotification object:notification.object];
-        
-        MPMoviePlayerController * controller = ( MPMoviePlayerController * )notification.object;
-        
-        [controller pause];
-        controller.initialPlaybackTime =-1;
-        [controller stop];
-        controller.initialPlaybackTime = -1;
-        
-        [self dismissMoviePlayerViewControllerAnimated];
-        
-    }
-    
-}
-
-
 static NSUInteger g_index = 0;
 
 static AVAssetReader* g_movieReader = nil;
