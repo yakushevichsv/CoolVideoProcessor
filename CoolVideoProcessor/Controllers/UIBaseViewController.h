@@ -9,6 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface UIBaseViewController : UIViewController
--(void)displayByURL:(NSURL*)url;
+-(void)displayMovieByURL:(NSURL*)url;
 
 @end

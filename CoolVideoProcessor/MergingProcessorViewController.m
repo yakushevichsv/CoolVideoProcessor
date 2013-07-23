@@ -362,7 +362,7 @@ static AVAssetReader* g_movieReader = nil;
                     [videoWriter finishWritingWithCompletionHandler:^{
                         
                         dispatch_async(dispatch_get_main_queue(), ^{
-                            [self displayByURL:url];
+                            [self displayMovieByURL:url];
                         });
                     }];
                     CVPixelBufferPoolRelease(adaptor.pixelBufferPool);

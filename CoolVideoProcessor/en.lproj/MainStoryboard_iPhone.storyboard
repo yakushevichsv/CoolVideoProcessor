@@ -258,6 +258,7 @@
                                             <outlet property="btnImage" destination="is2-Ql-cAh" id="nhy-5u-u08"/>
                                             <outlet property="lblSubTitle" destination="Iax-HN-BgL" id="XKJ-Ti-VBQ"/>
                                             <outlet property="lblTitle" destination="g0K-aK-Eah" id="IPq-u5-PkR"/>
+                                            <segue destination="Rvs-6V-u8t" kind="push" identifier="applyFiltersSegue" id="qQN-OK-JI0"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -330,6 +331,21 @@
             </objects>
             <point key="canvasLocation" x="895" y="501"/>
         </scene>
+        <!--Select Filters Controller-->
+        <scene sceneID="XxI-GS-bSe">
+            <objects>
+                <viewController id="Rvs-6V-u8t" customClass="SelectFiltersController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="CJi-L1-ZKe">
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="Jag-G3-CHt"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="TpG-kG-xib" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1264" y="205"/>
+        </scene>
         <!--Navigation Controller-->
         <scene sceneID="SlY-uD-sSk">
             <objects>
@@ -396,7 +412,7 @@
                 <relationship kind="outlet" name="indicator" candidateClass="UIActivityIndicatorView"/>
             </relationships>
         </class>
-        <class className="MergingProcessorViewController" superclassName="UIViewController">
+        <class className="MergingProcessorViewController" superclassName="UIBaseViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MergingProcessorViewController.h"/>
             <relationships>
                 <relationship kind="outlet" name="lblTitle" candidateClass="UILabel"/>
@@ -420,9 +436,11 @@
         <class className="PositionViewController" superclassName="UIBaseViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/PositionViewController.h"/>
             <relationships>
-                <relationship kind="action" name="imagePressed:" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="tableView" candidateClass="UITableView"/>
             </relationships>
+        </class>
+        <class className="SelectFiltersController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/SelectFiltersController.h"/>
         </class>
         <class className="UIBaseViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UIBaseViewController.h"/>

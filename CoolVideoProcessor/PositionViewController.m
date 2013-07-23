@@ -15,8 +15,9 @@
 #import "PositionCell.h"
 #import "MergingProcessorViewController.h"
 #import "AssetItem.h"
+#import "SelectFiltersController.h"
 
-@interface PositionViewController ()<UITableViewDataSource,UITableViewDelegate>
+@interface PositionViewController ()<UITableViewDataSource,UITableViewDelegate,SelectFiltersDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 -(AssetItem*)assetItem:(NSInteger)index;
@@ -156,12 +157,6 @@
     [self swapInArray:self.items sourceIndex:sourceIndex destIndex:destIndex];
 }
 
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-   PositionCell * cell = (PositionCell*)[tableView cellForRowAtIndexPath:indexPath];
-    [self imagePressed:cell.btnImage];
-}
-
 -(void)swapInArray:(NSMutableArray*)array sourceIndex:(NSUInteger)sIndex
  destIndex:(NSUInteger)dIndex
 {
@@ -215,6 +210,15 @@
     
         controller.dictionary = dic;
     }
+    else if ([segue.identifier isEqualToString:@"applyFiltersSegue"])
+    {
+        SelectFiltersController * controller =
+        (SelectFiltersController*)segue.destinationViewController;
+        NSIndexPath * path = [self.tableView indexPathForSelectedRow];
+        controller.item = (AssetItem*)self.items[path.row];
+        controller.delegate =self;
+        [self.tableView deselectRowAtIndexPath:path animated:YES];
+    }
 }
 
 #pragma mark -Table View Cell
@@ -232,7 +236,15 @@
         return;
     }
     
-    [self displayByURL:[self assetItem:index].url];
+    [self displayMovieByURL:[self assetItem:index].url];
 }
+
+#pragma mark - SelectFiltesDelegate protocol
+
+-(void)selectFiltersController:(SelectFiltersController *)controller didSelectFiltersChain:(NSArray *)filters info:(NSDictionary *)filtersInfo
+{
+    //TODO: add code here...
+}
+
 
 @end

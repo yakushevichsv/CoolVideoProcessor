@@ -20,6 +20,7 @@
 		2190EA261789E75900D747C9 /* AssetItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 2190EA251789E75900D747C9 /* AssetItem.m */; };
 		2190EA291789EA9D00D747C9 /* AVAssetItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 2190EA281789EA9D00D747C9 /* AVAssetItem.m */; };
 		2190EA2C1789F35600D747C9 /* AssetsLibrary.m in Sources */ = {isa = PBXBuildFile; fileRef = 2190EA2B1789F35600D747C9 /* AssetsLibrary.m */; };
+		21BB5380179ED9CF00E6B639 /* SelectFiltersController.m in Sources */ = {isa = PBXBuildFile; fileRef = 21BB537F179ED9CF00E6B639 /* SelectFiltersController.m */; };
 		21BD7B6B1767D44B0093BB2C /* checkButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 21BD7B6A1767D44B0093BB2C /* checkButton.png */; };
 		21DFBE7F179C7A9B00BCE33B /* UIBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 21DFBE7E179C7A9B00BCE33B /* UIBaseViewController.m */; };
 		21E2FA5A177777A200784CC5 /* HeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 21E2FA59177777A200784CC5 /* HeaderView.m */; };
@@ -68,6 +69,8 @@
 		2190EA281789EA9D00D747C9 /* AVAssetItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AVAssetItem.m; path = Models/Assets/AVAssetItem.m; sourceTree = "<group>"; };
 		2190EA2A1789F35600D747C9 /* AssetsLibrary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AssetsLibrary.h; path = Models/Assets/AssetsLibrary.h; sourceTree = "<group>"; };
 		2190EA2B1789F35600D747C9 /* AssetsLibrary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AssetsLibrary.m; path = Models/Assets/AssetsLibrary.m; sourceTree = "<group>"; };
+		21BB537E179ED9CF00E6B639 /* SelectFiltersController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SelectFiltersController.h; path = Controllers/SelectFiltersController.h; sourceTree = "<group>"; };
+		21BB537F179ED9CF00E6B639 /* SelectFiltersController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SelectFiltersController.m; path = Controllers/SelectFiltersController.m; sourceTree = "<group>"; };
 		21BD7B6A1767D44B0093BB2C /* checkButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checkButton.png; sourceTree = "<group>"; };
 		21DFBE7D179C7A9B00BCE33B /* UIBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIBaseViewController.h; path = Controllers/UIBaseViewController.h; sourceTree = "<group>"; };
 		21DFBE7E179C7A9B00BCE33B /* UIBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIBaseViewController.m; path = Controllers/UIBaseViewController.m; sourceTree = "<group>"; };
@@ -190,6 +193,8 @@
 			children = (
 				21DFBE7D179C7A9B00BCE33B /* UIBaseViewController.h */,
 				21DFBE7E179C7A9B00BCE33B /* UIBaseViewController.m */,
+				21BB537E179ED9CF00E6B639 /* SelectFiltersController.h */,
+				21BB537F179ED9CF00E6B639 /* SelectFiltersController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -350,6 +355,7 @@
 				2190EA2C1789F35600D747C9 /* AssetsLibrary.m in Sources */,
 				21FC31691792CE4600D98A05 /* ALAssetItem.m in Sources */,
 				21DFBE7F179C7A9B00BCE33B /* UIBaseViewController.m in Sources */,
+				21BB5380179ED9CF00E6B639 /* SelectFiltersController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

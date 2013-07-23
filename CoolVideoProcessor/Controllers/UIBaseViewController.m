@@ -14,7 +14,7 @@
 
 @implementation UIBaseViewController
 
--(void)displayByURL:(NSURL*)url
+-(void)displayMovieByURL:(NSURL*)url
 {
     MPMoviePlayerViewController * controller= [[MPMoviePlayerViewController alloc]initWithContentURL:url];
     controller.moviePlayer.shouldAutoplay = YES;
