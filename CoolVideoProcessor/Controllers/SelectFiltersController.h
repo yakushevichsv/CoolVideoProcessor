@@ -18,5 +18,6 @@
 @interface SelectFiltersController : UIViewController
 @property (nonatomic,weak) id<SelectFiltersDelegate> delegate;
 @property (nonatomic,strong) AssetItem* item;
+@property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 
 @end

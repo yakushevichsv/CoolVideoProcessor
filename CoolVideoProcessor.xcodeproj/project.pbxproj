@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2106D18217A1ABF2008077ED /* SelectFiltersCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2106D18117A1ABF2008077ED /* SelectFiltersCell.m */; };
 		2109553517666916007D0C78 /* MergeCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2109553417666916007D0C78 /* MergeCollectionViewController.m */; };
 		2109553917666A34007D0C78 /* MergeVideoViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2109553817666A34007D0C78 /* MergeVideoViewCell.m */; };
 		2109553C17666E21007D0C78 /* MergeVideoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2109553B17666E21007D0C78 /* MergeVideoView.m */; };
@@ -46,6 +47,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2106D18017A1ABF2008077ED /* SelectFiltersCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SelectFiltersCell.h; path = Filters/SelectFiltersCell.h; sourceTree = "<group>"; };
+		2106D18117A1ABF2008077ED /* SelectFiltersCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SelectFiltersCell.m; path = Filters/SelectFiltersCell.m; sourceTree = "<group>"; };
 		2109553317666916007D0C78 /* MergeCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MergeCollectionViewController.h; sourceTree = "<group>"; };
 		2109553417666916007D0C78 /* MergeCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MergeCollectionViewController.m; sourceTree = "<group>"; };
 		2109553717666A34007D0C78 /* MergeVideoViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MergeVideoViewCell.h; sourceTree = "<group>"; };
@@ -128,6 +131,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2106D18317A1ABF7008077ED /* Filters */ = {
+			isa = PBXGroup;
+			children = (
+				2106D18017A1ABF2008077ED /* SelectFiltersCell.h */,
+				2106D18117A1ABF2008077ED /* SelectFiltersCell.m */,
+			);
+			name = Filters;
+			sourceTree = "<group>";
+		};
 		2109553617666925007D0C78 /* Merge */ = {
 			isa = PBXGroup;
 			children = (
@@ -184,6 +196,7 @@
 			children = (
 				212683AB177F1F4E0018F4CB /* PositionCell.h */,
 				212683AC177F1F4E0018F4CB /* PositionCell.m */,
+				2106D18317A1ABF7008077ED /* Filters */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -356,6 +369,7 @@
 				21FC31691792CE4600D98A05 /* ALAssetItem.m in Sources */,
 				21DFBE7F179C7A9B00BCE33B /* UIBaseViewController.m in Sources */,
 				21BB5380179ED9CF00E6B639 /* SelectFiltersController.m in Sources */,
+				2106D18217A1ABF2008077ED /* SelectFiltersCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

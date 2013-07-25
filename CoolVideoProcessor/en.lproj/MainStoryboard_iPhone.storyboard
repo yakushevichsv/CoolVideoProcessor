@@ -329,7 +329,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7f8-QB-YmY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="895" y="501"/>
+            <point key="canvasLocation" x="908" y="716"/>
         </scene>
         <!--Select Filters Controller-->
         <scene sceneID="XxI-GS-bSe">
@@ -338,9 +338,101 @@
                     <view key="view" contentMode="scaleToFill" id="CJi-L1-ZKe">
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="cdf-j8-hW2">
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="430" id="k8K-Eg-NLd"/>
+                                </constraints>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="c9i-Ng-FIt">
+                                    <size key="itemSize" width="50" height="50"/>
+                                    <size key="headerReferenceSize" width="50" height="50"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="selectFilterCell" id="X6j-82-h2a" customClass="SelectFiltersCell">
+                                        <rect key="frame" x="0.0" y="50" width="50" height="50"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" usesAttributedText="YES" lineBreakMode="wordWrap" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EUc-k5-83F">
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" relation="lessThanOrEqual" constant="50" type="user" id="Tjk-Qn-qbH"/>
+                                                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="21" type="user" id="gPF-ys-0Tv"/>
+                                                        <constraint firstAttribute="width" constant="42" id="tv4-Vo-IHf"/>
+                                                    </constraints>
+                                                    <attributedString key="attributedText"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                        <constraints>
+                                            <constraint firstItem="EUc-k5-83F" firstAttribute="centerX" secondItem="X6j-82-h2a" secondAttribute="centerX" type="default" id="ZfZ-Df-FA4"/>
+                                            <constraint firstItem="EUc-k5-83F" firstAttribute="top" secondItem="X6j-82-h2a" secondAttribute="top" type="default" id="ihO-0T-she"/>
+                                            <constraint firstAttribute="centerY" secondItem="EUc-k5-83F" secondAttribute="centerY" type="user" id="uKC-69-goR"/>
+                                        </constraints>
+                                        <connections>
+                                            <outlet property="titleLabel" destination="EUc-k5-83F" id="hIE-Hi-moC"/>
+                                        </connections>
+                                    </collectionViewCell>
+                                </cells>
+                                <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="TitleHeader" id="2KD-ns-LwT">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <view tag="2" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ROf-Bi-tuZ" customClass="HeaderView">
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cXb-1M-3MO">
+                                                    <color key="backgroundColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="134" id="Hnb-qE-GXt"/>
+                                                        <constraint firstAttribute="height" constant="21" id="Ttq-rs-PF7"/>
+                                                    </constraints>
+                                                    <attributedString key="attributedText"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="50" type="user" id="7Ap-c4-H8W"/>
+                                                <constraint firstItem="cXb-1M-3MO" firstAttribute="centerX" secondItem="ROf-Bi-tuZ" secondAttribute="centerX" type="default" id="88D-I3-2DI"/>
+                                                <constraint firstItem="cXb-1M-3MO" firstAttribute="centerY" secondItem="ROf-Bi-tuZ" secondAttribute="centerY" type="default" id="gaC-av-pnx"/>
+                                            </constraints>
+                                            <connections>
+                                                <outlet property="headerLabel" destination="cXb-1M-3MO" id="2yw-19-37n"/>
+                                            </connections>
+                                        </view>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="ROf-Bi-tuZ" firstAttribute="trailing" secondItem="2KD-ns-LwT" secondAttribute="trailing" type="default" id="EMX-B0-ibk"/>
+                                        <constraint firstItem="ROf-Bi-tuZ" firstAttribute="leading" secondItem="2KD-ns-LwT" secondAttribute="leading" type="default" id="IAj-z6-hXd"/>
+                                        <constraint firstAttribute="centerY" secondItem="ROf-Bi-tuZ" secondAttribute="centerY" type="user" id="Qkl-J5-xh3"/>
+                                        <constraint firstItem="ROf-Bi-tuZ" firstAttribute="top" secondItem="2KD-ns-LwT" secondAttribute="top" type="user" id="cgt-Xv-89j"/>
+                                    </constraints>
+                                </collectionReusableView>
+                                <connections>
+                                    <outlet property="dataSource" destination="Rvs-6V-u8t" id="vie-wF-EIj"/>
+                                    <outlet property="delegate" destination="Rvs-6V-u8t" id="GTF-YL-rv6"/>
+                                </connections>
+                            </collectionView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="cdf-j8-hW2" firstAttribute="leading" secondItem="CJi-L1-ZKe" secondAttribute="leading" type="default" id="nV7-P5-jAb"/>
+                            <constraint firstItem="cdf-j8-hW2" firstAttribute="bottom" secondItem="CJi-L1-ZKe" secondAttribute="bottom" type="default" id="vIv-Fj-GGt"/>
+                            <constraint firstItem="cdf-j8-hW2" firstAttribute="trailing" secondItem="CJi-L1-ZKe" secondAttribute="trailing" type="default" id="zQj-27-WJU"/>
+                        </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="Jag-G3-CHt"/>
+                    <navigationItem key="navigationItem" id="Jag-G3-CHt">
+                        <barButtonItem key="rightBarButtonItem" title="View results" id="Wpq-3b-XEd"/>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="collectionView" destination="cdf-j8-hW2" id="lsa-0P-RmM"/>
+                        <outlet property="cvFilters" destination="cdf-j8-hW2" id="lGm-oH-KT4"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TpG-kG-xib" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -439,8 +531,18 @@
                 <relationship kind="outlet" name="tableView" candidateClass="UITableView"/>
             </relationships>
         </class>
+        <class className="SelectFiltersCell" superclassName="UICollectionViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/SelectFiltersCell.h"/>
+            <relationships>
+                <relationship kind="outlet" name="titleLabel" candidateClass="UILabel"/>
+            </relationships>
+        </class>
         <class className="SelectFiltersController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/SelectFiltersController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="collectionView" candidateClass="UICollectionView"/>
+                <relationship kind="outlet" name="cvFilters" candidateClass="UICollectionView"/>
+            </relationships>
         </class>
         <class className="UIBaseViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UIBaseViewController.h"/>
