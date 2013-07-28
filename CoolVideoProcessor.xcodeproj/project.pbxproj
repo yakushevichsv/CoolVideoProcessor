@@ -23,6 +23,8 @@
 		2190EA2C1789F35600D747C9 /* AssetsLibrary.m in Sources */ = {isa = PBXBuildFile; fileRef = 2190EA2B1789F35600D747C9 /* AssetsLibrary.m */; };
 		21BB5380179ED9CF00E6B639 /* SelectFiltersController.m in Sources */ = {isa = PBXBuildFile; fileRef = 21BB537F179ED9CF00E6B639 /* SelectFiltersController.m */; };
 		21BD7B6B1767D44B0093BB2C /* checkButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 21BD7B6A1767D44B0093BB2C /* checkButton.png */; };
+		21D51ED017A5762700E18AFF /* FilterSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 21D51ECF17A5762700E18AFF /* FilterSettingsController.m */; };
+		21D51ED317A58B8D00E18AFF /* FilterSettingsScalarCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 21D51ED217A58B8D00E18AFF /* FilterSettingsScalarCell.m */; };
 		21DFBE7F179C7A9B00BCE33B /* UIBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 21DFBE7E179C7A9B00BCE33B /* UIBaseViewController.m */; };
 		21E2FA5A177777A200784CC5 /* HeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 21E2FA59177777A200784CC5 /* HeaderView.m */; };
 		21ECB9BB17401A96002C8851 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21ECB9BA17401A96002C8851 /* UIKit.framework */; };
@@ -75,6 +77,10 @@
 		21BB537E179ED9CF00E6B639 /* SelectFiltersController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SelectFiltersController.h; path = Controllers/SelectFiltersController.h; sourceTree = "<group>"; };
 		21BB537F179ED9CF00E6B639 /* SelectFiltersController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SelectFiltersController.m; path = Controllers/SelectFiltersController.m; sourceTree = "<group>"; };
 		21BD7B6A1767D44B0093BB2C /* checkButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checkButton.png; sourceTree = "<group>"; };
+		21D51ECE17A5762700E18AFF /* FilterSettingsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FilterSettingsController.h; path = Controllers/FilterSettingsController.h; sourceTree = "<group>"; };
+		21D51ECF17A5762700E18AFF /* FilterSettingsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FilterSettingsController.m; path = Controllers/FilterSettingsController.m; sourceTree = "<group>"; };
+		21D51ED117A58B8D00E18AFF /* FilterSettingsScalarCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FilterSettingsScalarCell.h; path = Filters/FilterSettingsScalarCell.h; sourceTree = "<group>"; };
+		21D51ED217A58B8D00E18AFF /* FilterSettingsScalarCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FilterSettingsScalarCell.m; path = Filters/FilterSettingsScalarCell.m; sourceTree = "<group>"; };
 		21DFBE7D179C7A9B00BCE33B /* UIBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIBaseViewController.h; path = Controllers/UIBaseViewController.h; sourceTree = "<group>"; };
 		21DFBE7E179C7A9B00BCE33B /* UIBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIBaseViewController.m; path = Controllers/UIBaseViewController.m; sourceTree = "<group>"; };
 		21E2FA58177777A200784CC5 /* HeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeaderView.h; sourceTree = "<group>"; };
@@ -136,6 +142,8 @@
 			children = (
 				2106D18017A1ABF2008077ED /* SelectFiltersCell.h */,
 				2106D18117A1ABF2008077ED /* SelectFiltersCell.m */,
+				21D51ED117A58B8D00E18AFF /* FilterSettingsScalarCell.h */,
+				21D51ED217A58B8D00E18AFF /* FilterSettingsScalarCell.m */,
 			);
 			name = Filters;
 			sourceTree = "<group>";
@@ -208,6 +216,8 @@
 				21DFBE7E179C7A9B00BCE33B /* UIBaseViewController.m */,
 				21BB537E179ED9CF00E6B639 /* SelectFiltersController.h */,
 				21BB537F179ED9CF00E6B639 /* SelectFiltersController.m */,
+				21D51ECE17A5762700E18AFF /* FilterSettingsController.h */,
+				21D51ECF17A5762700E18AFF /* FilterSettingsController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -370,6 +380,8 @@
 				21DFBE7F179C7A9B00BCE33B /* UIBaseViewController.m in Sources */,
 				21BB5380179ED9CF00E6B639 /* SelectFiltersController.m in Sources */,
 				2106D18217A1ABF2008077ED /* SelectFiltersCell.m in Sources */,
+				21D51ED017A5762700E18AFF /* FilterSettingsController.m in Sources */,
+				21D51ED317A58B8D00E18AFF /* FilterSettingsScalarCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
