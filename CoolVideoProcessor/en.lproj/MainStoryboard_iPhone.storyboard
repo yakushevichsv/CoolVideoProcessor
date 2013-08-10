@@ -448,15 +448,25 @@
                                                     <attributedString key="attributedText"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0ni-kX-xS3">
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="38" id="KAI-Cd-zJU"/>
+                                                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="25" type="user" id="LIk-Fs-4La"/>
+                                                        <constraint firstAttribute="width" constant="45" id="Q4a-5l-0lD"/>
+                                                    </constraints>
+                                                </imageView>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                         <constraints>
-                                            <constraint firstItem="EUc-k5-83F" firstAttribute="centerX" secondItem="X6j-82-h2a" secondAttribute="centerX" type="default" id="ZfZ-Df-FA4"/>
-                                            <constraint firstItem="EUc-k5-83F" firstAttribute="top" secondItem="X6j-82-h2a" secondAttribute="top" type="default" id="ihO-0T-she"/>
+                                            <constraint firstItem="EUc-k5-83F" firstAttribute="top" secondItem="X6j-82-h2a" secondAttribute="top" type="default" id="ELb-yf-cVC"/>
+                                            <constraint firstItem="0ni-kX-xS3" firstAttribute="centerX" secondItem="X6j-82-h2a" secondAttribute="centerX" type="default" id="Nbz-YS-wal"/>
+                                            <constraint firstItem="0ni-kX-xS3" firstAttribute="centerY" secondItem="EUc-k5-83F" secondAttribute="centerY" type="default" id="PbH-6f-a2q"/>
+                                            <constraint firstItem="0ni-kX-xS3" firstAttribute="centerX" secondItem="EUc-k5-83F" secondAttribute="centerX" type="default" id="g7e-2I-gvc"/>
                                             <constraint firstAttribute="centerY" secondItem="EUc-k5-83F" secondAttribute="centerY" type="user" id="uKC-69-goR"/>
                                         </constraints>
                                         <connections>
+                                            <outlet property="imageView" destination="0ni-kX-xS3" id="dEX-up-Xso"/>
                                             <outlet property="titleLabel" destination="EUc-k5-83F" id="hIE-Hi-moC"/>
                                         </connections>
                                     </collectionViewCell>
@@ -560,103 +570,6 @@
             <point key="canvasLocation" x="-533" y="521"/>
         </scene>
     </scenes>
-    <classes>
-        <class className="FilterSettingsController" superclassName="UIBaseViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/FilterSettingsController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="imageProcessed" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="tableView" candidateClass="UITableView"/>
-            </relationships>
-        </class>
-        <class className="FilterSettingsScalarCell" superclassName="UITableViewCell">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/FilterSettingsScalarCell.h"/>
-            <relationships>
-                <relationship kind="action" name="valueChanged:" candidateClass="UISlider"/>
-                <relationship kind="outlet" name="slider" candidateClass="UISlider"/>
-            </relationships>
-        </class>
-        <class className="HeaderView" superclassName="UICollectionReusableView">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/HeaderView.h"/>
-            <relationships>
-                <relationship kind="outlet" name="headerLabel" candidateClass="UILabel"/>
-            </relationships>
-        </class>
-        <class className="LogoViewController" superclassName="GLKViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/LogoViewController.h"/>
-        </class>
-        <class className="MergeCollectionViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MergeCollectionViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="files" candidateClass="UICollectionView"/>
-            </relationships>
-        </class>
-        <class className="MergeVideoView" superclassName="UIView">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MergeVideoView.h"/>
-        </class>
-        <class className="MergeVideoViewCell" superclassName="UICollectionViewCell">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MergeVideoViewCell.h"/>
-            <relationships>
-                <relationship kind="outlet" name="MergeVideo" candidateClass="MergeVideoView"/>
-                <relationship kind="outlet" name="indicator" candidateClass="UIActivityIndicatorView"/>
-            </relationships>
-        </class>
-        <class className="MergingProcessorViewController" superclassName="UIBaseViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MergingProcessorViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="lblTitle" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="pvProgress" candidateClass="UIProgressView"/>
-            </relationships>
-        </class>
-        <class className="NSLayoutConstraint" superclassName="NSObject">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
-        </class>
-        <class className="PlayVideoVC" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/PlayVideoVC.h"/>
-        </class>
-        <class className="PositionCell" superclassName="UITableViewCell">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/PositionCell.h"/>
-            <relationships>
-                <relationship kind="outlet" name="btnImage" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="lblSubTitle" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="lblTitle" candidateClass="UILabel"/>
-            </relationships>
-        </class>
-        <class className="PositionViewController" superclassName="UIBaseViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/PositionViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="imagePressed:" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="tableView" candidateClass="UITableView"/>
-            </relationships>
-        </class>
-        <class className="SelectFiltersCell" superclassName="UICollectionViewCell">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/SelectFiltersCell.h"/>
-            <relationships>
-                <relationship kind="outlet" name="titleLabel" candidateClass="UILabel"/>
-            </relationships>
-        </class>
-        <class className="SelectFiltersController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/SelectFiltersController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="collectionView" candidateClass="UICollectionView"/>
-                <relationship kind="outlet" name="cvFilters" candidateClass="UICollectionView"/>
-            </relationships>
-        </class>
-        <class className="UIBaseViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIBaseViewController.h"/>
-        </class>
-        <class className="UICollectionReusableView" superclassName="UIView">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionReusableView.h"/>
-        </class>
-        <class className="UICollectionViewCell" superclassName="UICollectionReusableView">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewCell.h"/>
-        </class>
-        <class className="UICollectionViewFlowLayout" superclassName="UICollectionViewLayout">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewFlowLayout.h"/>
-        </class>
-        <class className="ViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/ViewController.h"/>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
