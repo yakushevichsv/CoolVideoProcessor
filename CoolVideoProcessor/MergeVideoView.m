@@ -7,6 +7,7 @@
 //
 
 #import "MergeVideoView.h"
+#import "UIImage+Scale.h"
 #define CHECK_IMAGE @"checkButton.png"
 
 @implementation MergeVideoView
@@ -41,28 +42,12 @@
 
 
 
-+(UIImage*)imageWithImage: (UIImage*) sourceImage scaledToSize: (CGSize) size
-{
-    float oldWidth = sourceImage.size.width;
-    float oldH = sourceImage.size.height;
-    float scaleFactor = MIN(size.width / oldWidth,size.height/oldH);
-    
-    float newHeight = round(oldH * scaleFactor);
-    float newWidth = round(oldWidth * scaleFactor);
-    
-    
-    UIGraphicsBeginImageContextWithOptions(CGSizeMake(newWidth, newHeight),NO,0);
-    [sourceImage drawInRect:CGRectMake(0, 0, newWidth, newHeight)];
-    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return newImage;
-}
 
 -(void)drawScaledImage:(UIImage*)image inRect:(CGRect)rect
 {
     if (image)
     {
-        UIImage * newImage = [[self class]imageWithImage:image scaledToSize:rect.size];
+        UIImage * newImage = [image scaleToSizeWithAspectRatio:rect.size];
         
         CGPoint offset = {CGRectGetMidX(rect)-newImage.size.width*0.5,CGRectGetMidY(rect)-newImage.size.height*0.5};
         

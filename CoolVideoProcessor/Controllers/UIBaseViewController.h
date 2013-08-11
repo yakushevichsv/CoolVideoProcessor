@@ -10,5 +10,5 @@
 
 @interface UIBaseViewController : UIViewController
 -(void)displayMovieByURL:(NSURL*)url;
-
+-(void)displayImage:(UIImage*)image;
 @end

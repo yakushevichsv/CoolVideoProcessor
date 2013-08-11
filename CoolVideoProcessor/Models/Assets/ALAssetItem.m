@@ -102,4 +102,14 @@
 }
 
 
+-(void)loadImageWithCompletitionHandler:(void (^)(UIImage*image))completitionBlock
+{
+    [self.library assetForURL:self.url resultBlock:^(ALAsset *asset) {
+        UIImage * image =[UIImage imageWithCGImage:        asset.defaultRepresentation.fullResolutionImage scale:1.0 orientation:(UIImageOrientation)asset.defaultRepresentation.orientation];
+        completitionBlock(image);
+    } failureBlock:^(NSError *error) {
+        completitionBlock(nil);
+    }];
+}
+
 @end

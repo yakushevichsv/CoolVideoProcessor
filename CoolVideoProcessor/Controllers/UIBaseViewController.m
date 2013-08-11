@@ -7,9 +7,9 @@
 //
 
 #import "UIBaseViewController.h"
+#import "UIImage+Scale.h"
 #import <MediaPlayer/MediaPlayer.h>
 @interface UIBaseViewController ()
-
 @end
 
 @implementation UIBaseViewController
@@ -47,6 +47,35 @@
         
     }
     
+}
+
+
+
+
+-(void)displayImage:(UIImage*)image
+{
+    UIViewController * controller = [UIViewController new];
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:controller];
+
+    controller.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(donePressed)];
+    
+    image = [image scaleToSizeWithAspectRatio:controller.view.bounds.size];
+    UIImageView * imageView = [[UIImageView alloc]initWithImage:image];
+    
+    CGFloat yOffset = (controller.view.bounds.size.height - image.size.height)*0.5;
+    CGFloat xOffset = (controller.view.bounds.size.width - image.size.width)*0.5;
+    imageView.transform= CGAffineTransformMakeTranslation(xOffset, yOffset);
+
+    
+    [controller.view addSubview:imageView];
+    
+    
+    [self presentViewController:navController animated:YES completion:nil];
+}
+
+-(void)donePressed
+{
+    [self dismissViewControllerAnimated:NO completion:nil];
 }
 
 @end

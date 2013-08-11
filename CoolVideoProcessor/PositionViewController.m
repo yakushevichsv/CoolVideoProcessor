@@ -16,6 +16,7 @@
 #import "MergingProcessorViewController.h"
 #import "AssetItem.h"
 #import "SelectFiltersController.h"
+#import "ALAssetItem.h"
 
 @interface PositionViewController ()<UITableViewDataSource,UITableViewDelegate,SelectFiltersDelegate>
 
@@ -230,13 +231,23 @@
     NSIndexPath * indexPath = [self.tableView indexPathForCell:cell];
     NSInteger index = indexPath.row;
     
-    if ([self assetItem:index].duration ==0 )
+    if ([self assetItem:index].mediaType ==AssetItemMediaTypeImage)
     {
-        //TODO: provide displaying image....
-        return;
+        if ([self assetItem:index].type == AssetItemTypeAL )
+        {
+            ALAssetItem *al = (ALAssetItem*)[self assetItem:index];
+            
+            [al loadImageWithCompletitionHandler:^(UIImage *image) {
+                if (image)
+                {
+                    [self displayImage:image];
+                }
+            }];
+        }
     }
+    else
+        [self displayMovieByURL:[self assetItem:index].url ];
     
-    [self displayMovieByURL:[self assetItem:index].url];
 }
 
 #pragma mark - SelectFiltesDelegate protocol

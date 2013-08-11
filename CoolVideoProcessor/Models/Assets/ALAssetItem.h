@@ -10,4 +10,5 @@
 
 @interface ALAssetItem : AssetItem
 -(id)initWithURL:(NSURL *)url mediaType:(AssetItemMediaType)mediaType;
+-(void)loadImageWithCompletitionHandler:(void (^)(UIImage*image))completitionBlock;
 @end
