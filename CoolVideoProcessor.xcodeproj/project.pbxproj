@@ -23,11 +23,13 @@
 		2190EA2C1789F35600D747C9 /* AssetsLibrary.m in Sources */ = {isa = PBXBuildFile; fileRef = 2190EA2B1789F35600D747C9 /* AssetsLibrary.m */; };
 		21BB5380179ED9CF00E6B639 /* SelectFiltersController.m in Sources */ = {isa = PBXBuildFile; fileRef = 21BB537F179ED9CF00E6B639 /* SelectFiltersController.m */; };
 		21BD7B6B1767D44B0093BB2C /* checkButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 21BD7B6A1767D44B0093BB2C /* checkButton.png */; };
+		21BE238F17B81B5300E2073B /* FilterInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 21BE238E17B81B5300E2073B /* FilterInfo.m */; };
 		21D51ED017A5762700E18AFF /* FilterSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 21D51ECF17A5762700E18AFF /* FilterSettingsController.m */; };
 		21D51ED317A58B8D00E18AFF /* FilterSettingsScalarCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 21D51ED217A58B8D00E18AFF /* FilterSettingsScalarCell.m */; };
 		21DFBE7F179C7A9B00BCE33B /* UIBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 21DFBE7E179C7A9B00BCE33B /* UIBaseViewController.m */; };
 		21E2FA5A177777A200784CC5 /* HeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 21E2FA59177777A200784CC5 /* HeaderView.m */; };
 		21E878A517B7BBE400258095 /* UIImage+Scale.m in Sources */ = {isa = PBXBuildFile; fileRef = 21E878A417B7BBE400258095 /* UIImage+Scale.m */; };
+		21E878A917B7E8B900258095 /* VideoProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 21E878A817B7E8B900258095 /* VideoProcessor.m */; };
 		21ECB9BB17401A96002C8851 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21ECB9BA17401A96002C8851 /* UIKit.framework */; };
 		21ECB9BD17401A96002C8851 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21ECB9BC17401A96002C8851 /* Foundation.framework */; };
 		21ECB9BF17401A96002C8851 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21ECB9BE17401A96002C8851 /* CoreGraphics.framework */; };
@@ -78,6 +80,8 @@
 		21BB537E179ED9CF00E6B639 /* SelectFiltersController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SelectFiltersController.h; path = Controllers/SelectFiltersController.h; sourceTree = "<group>"; };
 		21BB537F179ED9CF00E6B639 /* SelectFiltersController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SelectFiltersController.m; path = Controllers/SelectFiltersController.m; sourceTree = "<group>"; };
 		21BD7B6A1767D44B0093BB2C /* checkButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checkButton.png; sourceTree = "<group>"; };
+		21BE238D17B81B5300E2073B /* FilterInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FilterInfo.h; path = Filters/FilterInfo.h; sourceTree = "<group>"; };
+		21BE238E17B81B5300E2073B /* FilterInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FilterInfo.m; path = Filters/FilterInfo.m; sourceTree = "<group>"; };
 		21D51ECE17A5762700E18AFF /* FilterSettingsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FilterSettingsController.h; path = Controllers/FilterSettingsController.h; sourceTree = "<group>"; };
 		21D51ECF17A5762700E18AFF /* FilterSettingsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FilterSettingsController.m; path = Controllers/FilterSettingsController.m; sourceTree = "<group>"; };
 		21D51ED117A58B8D00E18AFF /* FilterSettingsScalarCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FilterSettingsScalarCell.h; path = Filters/FilterSettingsScalarCell.h; sourceTree = "<group>"; };
@@ -88,6 +92,8 @@
 		21E2FA59177777A200784CC5 /* HeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeaderView.m; sourceTree = "<group>"; };
 		21E878A317B7BBE400258095 /* UIImage+Scale.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+Scale.h"; path = "Common/UIImage+Scale.h"; sourceTree = "<group>"; };
 		21E878A417B7BBE400258095 /* UIImage+Scale.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+Scale.m"; path = "Common/UIImage+Scale.m"; sourceTree = "<group>"; };
+		21E878A717B7E8B900258095 /* VideoProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VideoProcessor.h; path = Models/Filters/VideoProcessor.h; sourceTree = "<group>"; };
+		21E878A817B7E8B900258095 /* VideoProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VideoProcessor.m; path = Models/Filters/VideoProcessor.m; sourceTree = "<group>"; };
 		21ECB9B617401A96002C8851 /* CoolVideoProcessor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoolVideoProcessor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		21ECB9BA17401A96002C8851 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		21ECB9BC17401A96002C8851 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -182,6 +188,7 @@
 		2190EA221789E56600D747C9 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				21E878A617B7E87100258095 /* Filters */,
 				2190EA231789E72100D747C9 /* Assets */,
 			);
 			name = Models;
@@ -232,6 +239,17 @@
 				21E878A417B7BBE400258095 /* UIImage+Scale.m */,
 			);
 			name = Common;
+			sourceTree = "<group>";
+		};
+		21E878A617B7E87100258095 /* Filters */ = {
+			isa = PBXGroup;
+			children = (
+				21E878A717B7E8B900258095 /* VideoProcessor.h */,
+				21E878A817B7E8B900258095 /* VideoProcessor.m */,
+				21BE238D17B81B5300E2073B /* FilterInfo.h */,
+				21BE238E17B81B5300E2073B /* FilterInfo.m */,
+			);
+			name = Filters;
 			sourceTree = "<group>";
 		};
 		21ECB9AB17401A96002C8851 = {
@@ -396,6 +414,8 @@
 				21D51ED017A5762700E18AFF /* FilterSettingsController.m in Sources */,
 				21D51ED317A58B8D00E18AFF /* FilterSettingsScalarCell.m in Sources */,
 				21E878A517B7BBE400258095 /* UIImage+Scale.m in Sources */,
+				21E878A917B7E8B900258095 /* VideoProcessor.m in Sources */,
+				21BE238F17B81B5300E2073B /* FilterInfo.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
