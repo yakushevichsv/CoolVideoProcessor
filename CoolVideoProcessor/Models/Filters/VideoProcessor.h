@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+extern NSString * kVideoProcessorFilterAppliedNotification;
+
 @class FilterInfo;
 @interface VideoProcessor : NSObject
 
