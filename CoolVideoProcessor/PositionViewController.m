@@ -17,6 +17,8 @@
 #import "AssetItem.h"
 #import "SelectFiltersController.h"
 #import "ALAssetItem.h"
+#import "VideoProcessor.h"
+#import "FilterInfo.h"
 
 @interface PositionViewController ()<UITableViewDataSource,UITableViewDelegate,SelectFiltersDelegate>
 
@@ -230,8 +232,8 @@
     NSParameterAssert([cell isKindOfClass:[UITableViewCell class]]);
     NSIndexPath * indexPath = [self.tableView indexPathForCell:cell];
     NSInteger index = indexPath.row;
-    
-    if ([self assetItem:index].mediaType ==AssetItemMediaTypeImage)
+    AssetItem * assetItem = [self assetItem:index];
+    if (assetItem.mediaType ==AssetItemMediaTypeImage)
     {
         if ([self assetItem:index].type == AssetItemTypeAL )
         {
@@ -246,8 +248,41 @@
         }
     }
     else
-        [self displayMovieByURL:[self assetItem:index].url ];
+    {
+        VideoProcessor * videoProcessor = [VideoProcessor new];
+        FilterInfo * info = [FilterInfo new];
+        info.item = assetItem;
+        
+        CIFilter *filter = [CIFilter filterWithName:@"CISepiaTone"
+                                      keysAndValues: 
+                            @"inputIntensity", [NSNumber numberWithFloat:0.4], nil];
+        
+        info.range = CMTimeRangeMake(kCMTimeZero, CMTimeMakeWithSeconds(assetItem.duration, 1));
+        info.filter = filter;
+        
+        [videoProcessor applyFilter:info withCompletition:^(NSURL *url) {
+            [self displayMovieByURL:url];
+        }];
+    }
+       // [self displayMovieByURL:[self assetItem:index].url ];
     
+}
+
+-(CGImageRef)applyFilter:(CGImageRef)beginImage
+{
+    CIFilter *filter = [CIFilter filterWithName:@"CISepiaTone"
+                                  keysAndValues: kCIInputImageKey, beginImage,
+                        @"inputIntensity", [NSNumber numberWithFloat:0.4], nil];
+    
+    CGImageRelease(beginImage);
+    
+    
+    CIImage *outputImage = [filter outputImage];
+    
+    CIContext *context = [CIContext contextWithOptions:nil];
+    CGImageRef cgimg =
+    [context createCGImage:outputImage fromRect:[outputImage extent]];
+    return cgimg;
 }
 
 #pragma mark - SelectFiltesDelegate protocol

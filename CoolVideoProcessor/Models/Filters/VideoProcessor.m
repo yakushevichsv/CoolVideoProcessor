@@ -10,6 +10,12 @@
 #import "FilterInfo.h"
 #import "AssetItem.h"
 
+@interface VideoProcessor()
+{
+    FilterInfo * _info;
+}
+@end
+
 @implementation VideoProcessor
 
 -(NSURL*)pathForVideo
@@ -23,7 +29,7 @@ return [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathCompo
     NSArray *assetKeysToLoadAndTest = @[@"composable", @"tracks", @"duration",@"readable"];//@[@"playable", @"composable", @"tracks", @"duration"];
     
     
-    
+    _info = filterInfo;
     
     AVKeyValueStatus status = AVKeyValueStatusUnknown;
     
@@ -91,6 +97,9 @@ return [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathCompo
             // Add the output to the reader if possible.
             if ([reader canAddOutput:audioTrackOutput])
                 [reader addOutput:audioTrackOutput];
+            
+            if (![reader startReading])
+                return;
             
             [self filterBufferForReader:reader completitionBlock:^(NSURL *url,AVAsset*asset) {
                 
@@ -190,7 +199,8 @@ return [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathCompo
     
     while (sampleBuffer)
     {
-        CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
+        CVPixelBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
+        /*CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
         
         // Lock the image buffer
         CVPixelBufferLockBaseAddress(imageBuffer,0);
@@ -201,15 +211,13 @@ return [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathCompo
         size_t width = CVPixelBufferGetWidth(imageBuffer);
         size_t height = CVPixelBufferGetHeight(imageBuffer);
         
-        //*Create a CGImageRef from the CVImageBufferRef*/
+        //Create a CGImageRef from the CVImageBufferRef*
         CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
         CGContextRef newContext = CGBitmapContextCreate(baseAddress, width, height, 8, bytesPerRow, colorSpace, kCGBitmapByteOrder32Little | kCGImageAlphaPremultipliedFirst);
         CGImageRef beginImage = CGBitmapContextCreateImage(newContext);
-        
-        /*We release some components*/
+
         CGContextRelease(newContext);
         CGColorSpaceRelease(colorSpace);
-        
         
         //
         //  Here's where you can process the buffer!
@@ -217,20 +225,17 @@ return [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathCompo
         //
         //  Finish processing the buffer!
         //
+        UIImage *newImg = [self applyFilter:beginImage];
         
-        CGImageRef cgimg = [self applyFilter:beginImage];
-        UIImage *newImg = [UIImage imageWithCGImage:cgimg];
-        CGImageRelease(cgimg);
         // Unlock the image buffer
         CVPixelBufferUnlockBaseAddress(imageBuffer,0);
         //CMSampleBufferInvalidate(sampleBuffer);
         CFRelease(sampleBuffer);
         
+        */
         
-        
-        
-        CVPixelBufferRef buffer = NULL;
-        
+        UIImage *newImg = [self applyFilter:imageBuffer];
+        CVPixelBufferRelease(imageBuffer);
         if (!videoWriter)
         {
             
@@ -288,34 +293,42 @@ return [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathCompo
         
         //int i = 0;
         
-        buffer = [self pixelBufferFromCGImage:[newImg CGImage]];
+        {
+        CVPixelBufferRef buffer = [self pixelBufferFromCGImage:newImg.CGImage];
         
-        if (adaptor.assetWriterInput.readyForMoreMediaData)
-        {
-            int fps = 30;
-            
-            
-            CMTime frameTime = CMTimeMake(1, fps);
-            CMTime lastTime=CMTimeMake(index++, fps);
-            CMTime presentTime=CMTimeAdd(lastTime, frameTime);
-            
-            
-            BOOL result = [adaptor appendPixelBuffer:buffer withPresentationTime:presentTime];
-            
-            if (result == NO) //failes on 3GS, but works on iphone 4
+            [adaptor.assetWriterInput requestMediaDataWhenReadyOnQueue:nil usingBlock:^{
+                
+            }];
+        while (TRUE) {
+             
+            if (adaptor.assetWriterInput.readyForMoreMediaData)
             {
-                NSLog(@"failed to append buffer");
-                NSLog(@"The error is %@", [videoWriter error]);
+                const NSInteger fps = 30;
+            
+                CMTime frameTime = CMTimeMake(1, fps);
+                CMTime lastTime=CMTimeMake(index++, fps);
+                CMTime presentTime=CMTimeAdd(lastTime, frameTime);
+            
+            
+                BOOL result = [adaptor appendPixelBuffer:buffer withPresentationTime:presentTime];
+            
+                if (result == NO) //failes on 3GS, but works on iphone 4
+                {
+                    NSLog(@"failed to append buffer");
+                    NSLog(@"The error is %@", [videoWriter error]);
+                }
+                break;
             }
-            if(buffer)
-                CVBufferRelease(buffer);
-            //[NSThread sleepForTimeInterval:0.05];
+            else
+            {
+                NSLog(@"error");
+                [NSThread sleepForTimeInterval:0.02];
+            }
+        
         }
-        else
-        {
-            NSLog(@"error");
-            index--;
+        CVPixelBufferRelease(buffer);
         }
+
         //[NSThread sleepForTimeInterval:0.02];
         
         
@@ -330,21 +343,24 @@ return [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathCompo
 }
 
 
--(CGImageRef)applyFilter:(CGImageRef)beginImage
+-(UIImage *)applyFilter:(CVPixelBufferRef)beginImage
 {
-    CIFilter *filter = [CIFilter filterWithName:@"CISepiaTone"
-                                  keysAndValues: kCIInputImageKey, beginImage,
-                        @"inputIntensity", [NSNumber numberWithFloat:0.4], nil];
+    CIImage * tempImage = [CIImage imageWithCVPixelBuffer:beginImage];
     
-    CGImageRelease(beginImage);
+    //CVPixelBufferRelease(beginImage);
     
-    
-    CIImage *outputImage = [filter outputImage];
+    CIFilter * filter = _info.filter;
+    [filter setValue:tempImage forKey:kCIInputImageKey];
+    //NSLog(@"Output keys %@",filter.outputKeys);
+    CIImage *outputImage = filter.outputImage;
+
     
     CIContext *context = [CIContext contextWithOptions:nil];
     CGImageRef cgimg =
     [context createCGImage:outputImage fromRect:[outputImage extent]];
-    return cgimg;
+    UIImage *newImg = [UIImage imageWithCGImage:cgimg];
+    CGImageRelease(cgimg);
+    return newImg;
 }
 
 
@@ -356,9 +372,12 @@ return [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathCompo
                              nil];
     CVPixelBufferRef pxbuffer = NULL;
     
-    CVPixelBufferCreate(kCFAllocatorDefault, CGImageGetWidth(image),
+    if (CVPixelBufferCreate(kCFAllocatorDefault, CGImageGetWidth(image),
                         CGImageGetHeight(image), kCVPixelFormatType_32ARGB, (__bridge CFDictionaryRef) options,
-                        &pxbuffer);
+                        &pxbuffer)!=kCVReturnSuccess)
+    {
+        return nil;
+    }
     
     CVPixelBufferLockBaseAddress(pxbuffer, 0);
     void *pxdata = CVPixelBufferGetBaseAddress(pxbuffer);
