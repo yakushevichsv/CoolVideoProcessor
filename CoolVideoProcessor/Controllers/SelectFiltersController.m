@@ -10,34 +10,12 @@
 #import "SelectFiltersCell.h"
 #import "AssetItem.h"
 #import "HeaderView.h"
+#import "FilterSettingsController.h"
 
 @interface SelectFiltersController ()
 @property (nonatomic,strong) CIContext * context;
 @property (weak, nonatomic) IBOutlet UICollectionView *cvFilters;
 @end
-
-/*
- CORE_IMAGE_EXPORT NSString *kCICategoryDistortionEffect;
- CORE_IMAGE_EXPORT NSString *kCICategoryGeometryAdjustment;
- CORE_IMAGE_EXPORT NSString *kCICategoryCompositeOperation;
- CORE_IMAGE_EXPORT NSString *kCICategoryHalftoneEffect;
- CORE_IMAGE_EXPORT NSString *kCICategoryColorAdjustment;
- CORE_IMAGE_EXPORT NSString *kCICategoryColorEffect;
- CORE_IMAGE_EXPORT NSString *kCICategoryTransition;
- CORE_IMAGE_EXPORT NSString *kCICategoryTileEffect;
- CORE_IMAGE_EXPORT NSString *kCICategoryGenerator;
- CORE_IMAGE_EXPORT NSString *kCICategoryReduction __OSX_AVAILABLE_STARTING(__MAC_10_5, __IPHONE_5_0);
- CORE_IMAGE_EXPORT NSString *kCICategoryGradient;
- CORE_IMAGE_EXPORT NSString *kCICategoryStylize;
- CORE_IMAGE_EXPORT NSString *kCICategorySharpen;
- CORE_IMAGE_EXPORT NSString *kCICategoryBlur;
- 
- CORE_IMAGE_EXPORT NSString *kCICategoryVideo;
- CORE_IMAGE_EXPORT NSString *kCICategoryStillImage;
- CORE_IMAGE_EXPORT NSString *kCICategoryInterlaced;
- CORE_IMAGE_EXPORT NSString *kCICategoryNonSquarePixels;
- CORE_IMAGE_EXPORT NSString *kCICategoryHighDynamicRange;
- */
 
 static NSDictionary * g_FilterMap;
 
@@ -176,5 +154,24 @@ static NSString  * kSectionHeaderIdentifier=@"TitleHeader";
 
 }
 
+#pragma mark - Segue
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:@"selectFiltersIdentifier"])
+    {
+        FilterSettingsController * controller = (FilterSettingsController*)segue.destinationViewController;
+        
+        if ( [controller isKindOfClass:[FilterSettingsController class]])
+        {
+            NSString * title;
+            NSIndexPath * path = [self.collectionView indexPathsForSelectedItems].lastObject;
+            title =[g_FilterMap valueForKey:g_FilterMap.allKeys[path.section]][path.row];
+            
+            controller.originalImage = self.item.image;
+            controller.filter = [ CIFilter filterWithName:title];
+        }
+    }
+}
 
 @end

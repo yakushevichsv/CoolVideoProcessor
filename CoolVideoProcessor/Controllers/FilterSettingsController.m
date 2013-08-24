@@ -12,10 +12,9 @@
 #define DIC_SECTION 0
 
 @interface FilterSettingsController ()<UITableViewDataSource,UITableViewDelegate,FilterSettingsScalarCellDelegate>
-@property (nonatomic,strong) NSMutableArray *dicParamIndexes;
-
-@property (nonatomic,weak) IBOutlet UITableView* tableView;
+@property (nonatomic,weak) IBOutlet UITableView *tableView;
 @property (nonatomic,weak) IBOutlet UIImageView *imageProcessed;
+@property (nonatomic,strong) NSMutableDictionary *scalarTypes;
 
 @end
 
@@ -32,32 +31,29 @@
 
 -(void)setup
 {
-    self.dicParamIndexes = [NSMutableArray array];
+    self.scalarTypes  = [NSMutableDictionary dictionary];
 }
 
 -(void)processSettings
 {
-    NSArray * keys = [self.filter inputKeys];
-    
-    for (NSString *key in keys)
-    {
-        if ([key isEqualToString:kCIAttributeFilterCategories] || [key isEqualToString:kCIAttributeFilterDisplayName]|| [key isEqualToString:kCIAttributeFilterName]|| [key isEqualToString:@"inputImage"]
-            || [key isEqualToString:@"outputImage"])
-            continue;
-        
-        id valObj = self.filter.attributes[key];
-        
-        if ([valObj isKindOfClass:[NSDictionary class]])
+    NSDictionary *filterAttributes = [self.filter attributes];
+    NSUInteger index = 0;
+    for (NSString *key in filterAttributes) {
+        if ([key isEqualToString:kCIAttributeFilterCategories]) continue;
+        else if ([key isEqualToString:kCIAttributeFilterDisplayName]) continue;
+        else if ([key isEqualToString:@"inputImage"]) continue;
+        else if ([key isEqualToString:@"outputImage"]) continue;
+        id valueObj = filterAttributes[key];
+        if ([valueObj isKindOfClass:[NSDictionary class]])
         {
-            NSDictionary * dic = (NSDictionary*)valObj;
-            
-            if ([dic[kCIAttributeType] isEqualToString:kCIAttributeTypeScalar] && [dic[kCIAttributeClass] isEqual:[NSNumber class]])
+            NSDictionary * dic = (NSDictionary *)valueObj;
+            id scalarType = [dic objectForKey:kCIAttributeType];
+            if ([scalarType isEqualToString:kCIAttributeTypeScalar] ||
+                [scalarType isEqualToString:kCIAttributeTypeDistance])
             {
-                [self.dicParamIndexes addObject:key];
+                [self.scalarTypes setObject:@{key:filterAttributes[key]} forKey:@(index)];
+                 index++;
             }
-        }
-        else {
-            NSLog(@"Unknown parameter");
         }
     }
 }
@@ -101,7 +97,7 @@
 {
     if (section == DIC_SECTION)
     {
-        return self.dicParamIndexes.count;
+        return self.scalarTypes.count;
     }
     return -1;
 }
@@ -110,29 +106,35 @@
 {
     if (indexPath.section == DIC_SECTION)
     {
-        static NSString * scalarCellId = @"FilterSettingsScalarCell";
-        
-        FilterSettingsScalarCell * cell = [tableView dequeueReusableCellWithIdentifier:scalarCellId forIndexPath:indexPath];
-        
-        if (!cell)
+        NSDictionary* dic = (NSDictionary*)self.scalarTypes[@(indexPath.row)];
+        if (dic)
         {
-            cell = [[FilterSettingsScalarCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:scalarCellId];
+            static NSString * scalarCellId = @"FilterSettingsScalarCell";
+            
+            FilterSettingsScalarCell * cell = [tableView dequeueReusableCellWithIdentifier:scalarCellId forIndexPath:indexPath];
+            
+            if (!cell)
+            {
+                cell = [[FilterSettingsScalarCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:scalarCellId];
+            }
+            
+            id key = dic.allKeys.lastObject;
+            
+            if ([[key substringWithRange:NSMakeRange(0, @"input".length)] isEqualToString:@"input"])
+            {
+                cell.cellTitle.text = [key substringFromIndex:@"input".length];
+            }
+            
+            NSDictionary* newDic = (NSDictionary*)dic[key];
+            
+            
+            cell.slider.minimumValue = [newDic[kCIAttributeSliderMin] floatValue];
+            cell.slider.maximumValue = [newDic[kCIAttributeSliderMax] floatValue];
+            cell.slider.value = [newDic[kCIAttributeDefault] floatValue];
+            cell.delegate =self;
+            [self setProcessedImage];
+            return cell;
         }
-        
-        id key =self.dicParamIndexes[indexPath.row];
-        
-        NSDictionary* dic = (NSDictionary*) self.filter.attributes[key];
-        
-        if ([key length]>@"input".length)
-        {
-            NSString * subStr = [key substringFromIndex:@"input".length];
-            cell.cellTitle.text = subStr;
-        }
-        
-        cell.slider.minimumValue = [dic[kCIAttributeSliderMin] floatValue];
-        cell.slider.maximumValue = [dic[kCIAttributeSliderMax] floatValue];
-        cell.delegate =self;
-        return cell;
     }
     return nil;
 }
@@ -146,16 +148,20 @@
     return nil;
 }
 
+- (void)setProcessedImage
+{
+     self.imageProcessed.image = [UIImage imageWithCGImage: (__bridge CGImageRef)([self.filter outputImage])];
+}
+
 -(void)cell:(FilterSettingsScalarCell *)cell didChangeNumber:(NSNumber *)number
 {
     NSIndexPath * path = [self.tableView indexPathForCell:cell];
     
     if (path.section == DIC_SECTION)
     {
-        id key = self.dicParamIndexes[path.row];
-        
+        id key = nil;//self.dicParamIndexes[path.row];
         [self.filter setValue:number forKey:key];
-       self.imageProcessed.image = [UIImage imageWithCGImage: (__bridge CGImageRef)([self.filter outputImage])];
+        [self setProcessedImage];
     }
 }
 
