@@ -8,14 +8,17 @@
 
 #import "FilterSettingsController.h"
 #import "FilterSettingsScalarCell.h"
+#import "FilterSettingsVectorCell.h"
+
 #define NUMBER_OF_SECTIONS 1
 #define DIC_SECTION 0
 
-@interface FilterSettingsController ()<UITableViewDataSource,UITableViewDelegate,FilterSettingsScalarCellDelegate>
+@interface FilterSettingsController ()<UITableViewDataSource,UITableViewDelegate,FilterSettingsScalarCellDelegate,FilterSettingsVectorCellDelegate>
 @property (nonatomic,weak) IBOutlet UITableView *tableView;
 @property (nonatomic,weak) IBOutlet UIImageView *imageProcessed;
 @property (nonatomic,strong) NSMutableDictionary *scalarTypes;
 
+@property (nonatomic,strong) NSMutableDictionary * vectorTypes;
 @end
 
 @implementation FilterSettingsController
@@ -32,6 +35,7 @@
 -(void)setup
 {
     self.scalarTypes  = [NSMutableDictionary dictionary];
+    self.vectorTypes = [NSMutableDictionary dictionary];
 }
 
 -(void)processSettings
@@ -47,15 +51,35 @@
         if ([valueObj isKindOfClass:[NSDictionary class]])
         {
             NSDictionary * dic = (NSDictionary *)valueObj;
-            id scalarType = [dic objectForKey:kCIAttributeType];
-            if ([scalarType isEqualToString:kCIAttributeTypeScalar] ||
-                [scalarType isEqualToString:kCIAttributeTypeDistance])
+            id scalarType = [dic objectForKey:kCIAttributeClass];
+            if ([scalarType isEqualToString:@"NSNumber"])
             {
                 [self.scalarTypes setObject:@{key:filterAttributes[key]} forKey:@(index)];
                  index++;
             }
+            else if ([scalarType isEqualToString:@"CIVector"])
+            {
+                CIVector * vector = [dic objectForKey:kCIAttributeDefault];
+                [self.vectorTypes setObject:@{key:filterAttributes[key],@"count":@(vector.count)} forKey:@(index)];
+                index++;
+            }
+            else {
+                NSLog(@"Current type is %@",scalarType);
+            }
+            [self.filter setValue:dic[kCIAttributeDefault] forKey:key];
         }
+        
     }
+    
+    [self setImageForFilter];
+    
+}
+
+-(void)setImageForFilter
+{
+    CIImage * ciImage = [CIImage imageWithCGImage:self.originalImage.CGImage];
+    [self.filter setValue:ciImage forKey:kCIInputImageKey];
+ 
 }
 
 -(void)setFilter:(CIFilter *)filter
@@ -74,9 +98,9 @@
     {
         _originalImage = originalImage;
         
-        if (_originalImage && _filter)
+        if (originalImage)
         {
-            [_filter setValue:originalImage forKey:kCIInputImageKey];
+            [self setImageForFilter];
         }
     }
 }
@@ -97,7 +121,7 @@
 {
     if (section == DIC_SECTION)
     {
-        return self.scalarTypes.count;
+        return self.scalarTypes.count+self.vectorTypes.count;
     }
     return -1;
 }
@@ -106,7 +130,8 @@
 {
     if (indexPath.section == DIC_SECTION)
     {
-        NSDictionary* dic = (NSDictionary*)self.scalarTypes[@(indexPath.row)];
+        NSNumber * rowPath = @(indexPath.row);
+        NSDictionary* dic = (NSDictionary*)self.scalarTypes[rowPath];
         if (dic)
         {
             static NSString * scalarCellId = @"FilterSettingsScalarCell";
@@ -135,6 +160,25 @@
             [self setProcessedImage];
             return cell;
         }
+        else if ((dic = (NSDictionary*)self.vectorTypes[rowPath]))
+        {
+            static NSString * vectorCellId = @"FilterSettingsVectorCell";
+            
+            FilterSettingsVectorCell * cell = [tableView dequeueReusableCellWithIdentifier:vectorCellId forIndexPath:indexPath];
+            
+            NSInteger count = [dic[@"count"]integerValue];
+            NSArray * subArray = [@[@"X",@"Y",@"Z",@"W"] subarrayWithRange:NSMakeRange(0, count)];
+            
+            if (!cell)
+            {
+                cell = [[FilterSettingsVectorCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:vectorCellId cellTitles:subArray];
+            }
+            cell.delegate =self;
+            cell.cellTitles = subArray;
+            
+            return cell;
+        }
+            
     }
     return nil;
 }
@@ -150,7 +194,11 @@
 
 - (void)setProcessedImage
 {
-     self.imageProcessed.image = [UIImage imageWithCGImage: (__bridge CGImageRef)([self.filter outputImage])];
+    UIImage * resImage = [UIImage imageWithCIImage:[self.filter outputImage]];
+    self.imageProcessed.image = resImage;
+    //[self.imageProcessed sizeToFit];
+    self.imageProcessed.contentMode = UIViewContentModeScaleToFill;
+    //self.imageProcessed.contentMode = UIViewContentModeScaleAspectFill;
 }
 
 -(void)cell:(FilterSettingsScalarCell *)cell didChangeNumber:(NSNumber *)number
@@ -159,10 +207,53 @@
     
     if (path.section == DIC_SECTION)
     {
-        id key = nil;//self.dicParamIndexes[path.row];
-        [self.filter setValue:number forKey:key];
-        [self setProcessedImage];
+        NSDictionary* dic = (NSDictionary*) self.scalarTypes[@(path.row)];
+        
+        if (dic)
+        {
+            id internalKey = dic.allKeys.lastObject;
+            [self.filter setValue:number forKey:internalKey];
+            [self setProcessedImage];
+        }
     }
+}
+
+-(void)cell:(FilterSettingsVectorCell *)cell values:(NSArray*)values
+{
+    NSIndexPath * path = [self.tableView indexPathForCell:cell];
+    
+    if (path.section == DIC_SECTION)
+    {
+        NSDictionary * dic = (NSDictionary*)self.vectorTypes[@(path.row)];
+        
+        if (dic)
+        {
+            for (id key in dic.allKeys)
+            {
+               if (![key isEqualToString:@"count"])
+               {
+                   id internalKey = key;
+                   
+                   CIVector *vector;
+                   if (values.count==1)
+                   {
+                       vector = [CIVector vectorWithX:[values.lastObject floatValue]];
+                   }
+                   else if (values.count ==2)
+                   {
+                                              vector = [CIVector vectorWithX:[values[0] floatValue]
+                                                        Y:[values.lastObject floatValue]];
+                   }
+                   
+                   
+                   [self.filter setValue:vector forKey:internalKey];
+                   [self setProcessedImage];
+                   break;
+               }
+            }
+        }
+    }
+    
 }
 
 @end

@@ -21,6 +21,7 @@
 		2190EA261789E75900D747C9 /* AssetItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 2190EA251789E75900D747C9 /* AssetItem.m */; };
 		2190EA291789EA9D00D747C9 /* AVAssetItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 2190EA281789EA9D00D747C9 /* AVAssetItem.m */; };
 		2190EA2C1789F35600D747C9 /* AssetsLibrary.m in Sources */ = {isa = PBXBuildFile; fileRef = 2190EA2B1789F35600D747C9 /* AssetsLibrary.m */; };
+		21B6689017CA5CF300F696DF /* FilterSettingsVectorCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 21B6688F17CA5CF300F696DF /* FilterSettingsVectorCell.m */; };
 		21BB5380179ED9CF00E6B639 /* SelectFiltersController.m in Sources */ = {isa = PBXBuildFile; fileRef = 21BB537F179ED9CF00E6B639 /* SelectFiltersController.m */; };
 		21BD7B6B1767D44B0093BB2C /* checkButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 21BD7B6A1767D44B0093BB2C /* checkButton.png */; };
 		21BE238F17B81B5300E2073B /* FilterInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 21BE238E17B81B5300E2073B /* FilterInfo.m */; };
@@ -77,6 +78,8 @@
 		2190EA281789EA9D00D747C9 /* AVAssetItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AVAssetItem.m; path = Models/Assets/AVAssetItem.m; sourceTree = "<group>"; };
 		2190EA2A1789F35600D747C9 /* AssetsLibrary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AssetsLibrary.h; path = Models/Assets/AssetsLibrary.h; sourceTree = "<group>"; };
 		2190EA2B1789F35600D747C9 /* AssetsLibrary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AssetsLibrary.m; path = Models/Assets/AssetsLibrary.m; sourceTree = "<group>"; };
+		21B6688E17CA5CF300F696DF /* FilterSettingsVectorCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FilterSettingsVectorCell.h; path = Filters/FilterSettingsVectorCell.h; sourceTree = "<group>"; };
+		21B6688F17CA5CF300F696DF /* FilterSettingsVectorCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FilterSettingsVectorCell.m; path = Filters/FilterSettingsVectorCell.m; sourceTree = "<group>"; };
 		21BB537E179ED9CF00E6B639 /* SelectFiltersController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SelectFiltersController.h; path = Controllers/SelectFiltersController.h; sourceTree = "<group>"; };
 		21BB537F179ED9CF00E6B639 /* SelectFiltersController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SelectFiltersController.m; path = Controllers/SelectFiltersController.m; sourceTree = "<group>"; };
 		21BD7B6A1767D44B0093BB2C /* checkButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checkButton.png; sourceTree = "<group>"; };
@@ -153,6 +156,8 @@
 				2106D18117A1ABF2008077ED /* SelectFiltersCell.m */,
 				21D51ED117A58B8D00E18AFF /* FilterSettingsScalarCell.h */,
 				21D51ED217A58B8D00E18AFF /* FilterSettingsScalarCell.m */,
+				21B6688E17CA5CF300F696DF /* FilterSettingsVectorCell.h */,
+				21B6688F17CA5CF300F696DF /* FilterSettingsVectorCell.m */,
 			);
 			name = Filters;
 			sourceTree = "<group>";
@@ -416,6 +421,7 @@
 				21E878A517B7BBE400258095 /* UIImage+Scale.m in Sources */,
 				21E878A917B7E8B900258095 /* VideoProcessor.m in Sources */,
 				21BE238F17B81B5300E2073B /* FilterInfo.m in Sources */,
+				21B6689017CA5CF300F696DF /* FilterSettingsVectorCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
