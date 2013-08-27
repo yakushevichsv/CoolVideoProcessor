@@ -8,6 +8,10 @@
 
 #import "FilterSettingsVectorCell.h"
 
+@interface FilterSettingsVectorCell()<UITextFieldDelegate>
+@property (nonatomic,strong) NSMutableDictionary * dic;
+@end
+
 @implementation FilterSettingsVectorCell
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier cellTitles:(NSArray *)cellTitles
@@ -15,6 +19,7 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         self.cellTitles = cellTitles;
+        self.dic = [NSMutableDictionary dictionary];
     }
     return self;
 }
@@ -40,23 +45,32 @@
     [self.delegate cell:self values:array];
 }
 
-+(UIView*)columnWithTitle:(NSString*)title
+-(UIView*)columnWithTitle:(NSString*)title
 {
     return [self columnWithTitle:title atPoint:CGPointZero];
 }
 
-+(UIView*)columnWithTitle:(NSString*)title atPoint:(CGPoint)point
+static NSUInteger g_count = 0;
+
+-(UIView*)columnWithTitle:(NSString*)title atPoint:(CGPoint)point
 {
-    CGRect frame =  {.origin =point,.size ={30,50}};
-    UITextField * field =[[UITextField alloc]initWithFrame:frame];
-    CGFloat xNext = CGRectGetMaxX(field.frame) + 5;
-    
     CGSize size = [title sizeWithFont:[UIFont systemFontOfSize:[UIFont systemFontSize]]];
     
-    UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake(xNext, point.y, size.width, size.height)];
+    UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake(point.x, point.y, size.width, size.height)];
     label.text = title;
     
-    frame = (CGRect){.origin = point, .size = {CGRectGetMaxX(label.frame)-point.x,CGRectGetHeight(label.frame)}};
+    CGFloat xNext = CGRectGetMaxX(label.frame) + 5;
+    CGRect frame =  {.origin =CGPointMake(xNext, point.y),.size ={100,MAX(size.height,20)}};
+    
+    UITextField * field =[[UITextField alloc]initWithFrame:frame];
+    field.borderStyle = UITextBorderStyleRoundedRect;
+    field.clearButtonMode = UITextFieldViewModeWhileEditing;
+    field.returnKeyType = UIReturnKeyDone;
+    field.keyboardType = UIKeyboardTypeDecimalPad;
+
+    field.delegate = self;
+    field.tag = g_count;
+    frame = (CGRect){.origin = point, .size = {CGRectGetMaxX(field.frame)-point.x,CGRectGetHeight(label.frame)}};
     UIView * view = [[UIView alloc]initWithFrame:frame];
     [view addSubview:field];
     [view addSubview:label];
@@ -67,12 +81,12 @@
 {
     CGFloat w = CGRectGetWidth(self.frame);
     
-    return [[self class]generateSizeForTitles:titles andWidth:w];
+    return [self generateSizeForTitles:titles andWidth:w];
 }
 
 static CGSize marginSize={10.0,10.0};
 
-+(CGSize)generateSizeForTitles:(NSArray *)titles andWidth:(CGFloat)width
+-(CGSize)generateSizeForTitles:(NSArray *)titles andWidth:(CGFloat)width
 {
     UIView * view = [self columnWithTitle:titles[0]];
     CGFloat xSize,ySize;
@@ -112,11 +126,11 @@ static CGSize marginSize={10.0,10.0};
     }
     
     CGPoint point = CGPointZero;
-    
+    g_count = 0;
     for (NSString * title in self.cellTitles)
     {
-        UIView * view = [[self class]columnWithTitle:title atPoint:point];
-        
+        UIView * view = [self columnWithTitle:title atPoint:point];
+        g_count++;
         if (CGRectGetMaxX(view.frame)+marginSize.width >size.width)
         {
             point.x = 0;
@@ -128,6 +142,43 @@ static CGSize marginSize={10.0,10.0};
         }
         [self.contentView addSubview:view];
     }
+}
+
+#pragma mark -UITextFieldDelegate
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField;  
+{
+    [textField resignFirstResponder];
+    return YES;
+}
+
+
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
+{
+    [self.delegate cell:self didActivateTextField:textField];
+    return YES;
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    [self.delegate cell:self willDeactivateTextField:textField];
+    
+    NSUInteger countBefore = textField.tag -1;
+    NSMutableArray * array = [NSMutableArray arrayWithCapacity:g_count];
+    
+    for (NSUInteger i=0;i<=countBefore;i++)
+    {
+        UITextField * curTextField =(UITextField *)[textField viewWithTag:@(i)];
+        [array addObject:curTextField.text];
+    }
+    [array addObject:textField.text];
+    for (NSUInteger i=countBefore+1;i<g_count;i++)
+    {
+        UITextField * curTextField =(UITextField *)[textField viewWithTag:@(i)];
+        [array addObject:curTextField.text];
+    }
+    
+    [self.delegate cell:self values:array];
 }
 
 @end

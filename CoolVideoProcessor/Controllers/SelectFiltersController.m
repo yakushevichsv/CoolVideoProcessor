@@ -28,13 +28,15 @@ static NSString  * kSectionHeaderIdentifier=@"TitleHeader";
 {
     NSArray * names =@[kCICategoryDistortionEffect,
                        kCICategoryGeometryAdjustment,
-                       kCICategoryCompositeOperation
+                       kCICategoryCompositeOperation,
+                       kCICategoryBlur
                        ];
     
     NSArray * visibleText = @[
                               @"Distortion effect",
                               @"Geometry adjustment",
-                              @"Composite Operation"
+                              @"Composite Operation",
+                              @"Blur"
                               ];
     
     NSParameterAssert(visibleText.count == names.count);
@@ -55,9 +57,9 @@ static NSString  * kSectionHeaderIdentifier=@"TitleHeader";
             NSMutableIndexSet * indexSet= [NSMutableIndexSet new];
             for (NSUInteger j=0;j<array.count;j++)
             {
-                if (![set containsObject:array[i]])
+                if (![set containsObject:array[j]])
                 {
-                    [set addObject:array[i]];
+                    [set addObject:array[j]];
                 }
                 else
                 {

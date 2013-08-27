@@ -17,8 +17,10 @@
 @property (nonatomic,weak) IBOutlet UITableView *tableView;
 @property (nonatomic,weak) IBOutlet UIImageView *imageProcessed;
 @property (nonatomic,strong) NSMutableDictionary *scalarTypes;
-
+@property (nonatomic,strong) UIBarButtonItem *doneKeyboardBarButtonItem;
+@property (nonatomic,strong) UIBarButtonItem *rightBarButtonItem;
 @property (nonatomic,strong) NSMutableDictionary * vectorTypes;
+@property (nonatomic,strong) UITextField *activeField;
 @end
 
 @implementation FilterSettingsController
@@ -69,6 +71,11 @@
             [self.filter setValue:dic[kCIAttributeDefault] forKey:key];
         }
         
+    }
+    
+    if (self.vectorTypes.count)
+    {
+        [self registerForKeyboardNotifications];
     }
     
     [self setImageForFilter];
@@ -142,7 +149,7 @@
             {
                 cell = [[FilterSettingsScalarCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:scalarCellId];
             }
-            
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
             id key = dic.allKeys.lastObject;
             
             if ([[key substringWithRange:NSMakeRange(0, @"input".length)] isEqualToString:@"input"])
@@ -165,7 +172,7 @@
             static NSString * vectorCellId = @"FilterSettingsVectorCell";
             
             FilterSettingsVectorCell * cell = [tableView dequeueReusableCellWithIdentifier:vectorCellId forIndexPath:indexPath];
-            
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
             NSInteger count = [dic[@"count"]integerValue];
             NSArray * subArray = [@[@"X",@"Y",@"Z",@"W"] subarrayWithRange:NSMakeRange(0, count)];
             
@@ -199,6 +206,18 @@
     //[self.imageProcessed sizeToFit];
     self.imageProcessed.contentMode = UIViewContentModeScaleToFill;
     //self.imageProcessed.contentMode = UIViewContentModeScaleAspectFill;
+}
+
+#pragma mark - FilterSettingsVectorCellDelegate<NSObject>
+
+-(void)cell:(FilterSettingsVectorCell *)cell didActivateTextField:(UITextField *)field
+{
+    _activeField = field;
+}
+
+-(void)cell:(FilterSettingsVectorCell *)cell willDeactivateTextField:(UITextField *)field
+{
+    _activeField = nil;
 }
 
 -(void)cell:(FilterSettingsScalarCell *)cell didChangeNumber:(NSNumber *)number
@@ -254,6 +273,89 @@
         }
     }
     
+}
+
+#pragma mark Keyboard code
+
+- (void)registerForKeyboardNotifications
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillBeHidden:)
+                                                 name:UIKeyboardWillHideNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWasShown:)
+                                                 name:UIKeyboardDidShowNotification object:nil];
+    
+    
+}
+
+#pragma mark - Keyboard Notifications
+
+-(void)initDoneButtonOnNeed
+{
+    if (!self.doneKeyboardBarButtonItem)
+    {
+        self.doneKeyboardBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneWithKeyboard)];
+        self.doneKeyboardBarButtonItem.enabled = TRUE;
+    }
+}
+
+-(void)doneWithKeyboard
+{
+    [self.view endEditing:YES];
+}
+
+
+- (void)keyboardWillShow:(NSNotification*)aNotification
+{
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+    {
+        self.navigationItem.rightBarButtonItem.enabled = FALSE;
+        //self.tableView.contentOffset = _activeField.superview
+        [self initDoneButtonOnNeed];
+        _rightBarButtonItem = self.navigationItem.rightBarButtonItem;
+        self.navigationItem.rightBarButtonItem = self.doneKeyboardBarButtonItem;
+        self.doneKeyboardBarButtonItem.enabled = TRUE;
+    }
+}
+
+- (void)keyboardWillBeHidden:(NSNotification*)aNotification
+{
+   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+   {
+    self.navigationItem.rightBarButtonItem.enabled = FALSE;
+    
+    self.navigationItem.rightBarButtonItem = _rightBarButtonItem;
+    _rightBarButtonItem.enabled = TRUE;
+       
+       UIEdgeInsets contentInsets = UIEdgeInsetsZero;
+       self.tableView.contentInset = contentInsets;
+       self.tableView.scrollIndicatorInsets = contentInsets;
+   }
+}
+
+-(void)keyboardWasShown:(NSNotification*)aNotification
+{
+    NSDictionary* info = [aNotification userInfo];
+    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    
+    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height, 0.0);
+    self.tableView.contentInset = contentInsets;
+    self.tableView.scrollIndicatorInsets = contentInsets;
+    
+    // If active text field is hidden by keyboard, scroll it so it's visible
+    // Your application might not need or want this behavior.
+    CGRect aRect = self.tableView.frame;
+    aRect.size.height -= kbSize.height;
+    if (!CGRectContainsPoint(aRect, _activeField.frame.origin) ) {
+        CGPoint scrollPoint = CGPointMake(0.0, _activeField.frame.origin.y-kbSize.height);
+        [self.tableView setContentOffset:scrollPoint animated:YES];
+    }
 }
 
 @end

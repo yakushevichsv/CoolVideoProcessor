@@ -14,6 +14,8 @@
 
 -(void)cell:(FilterSettingsVectorCell *)cell values:(NSArray*)values;
 
+-(void)cell:(FilterSettingsVectorCell *)cell didActivateTextField:(UITextField*)field;
+-(void)cell:(FilterSettingsVectorCell *)cell willDeactivateTextField:(UITextField*)field;
 @end
 
 @interface FilterSettingsVectorCell : UITableViewCell
