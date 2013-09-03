@@ -15,6 +15,7 @@
 		21095766176BC59D00C7A68A /* LogoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 21095765176BC59D00C7A68A /* LogoViewController.m */; };
 		211D3A4B1782F1C700665A5E /* MergingProcessorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 211D3A4A1782F1C700665A5E /* MergingProcessorViewController.m */; };
 		212683AD177F1F4F0018F4CB /* PositionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 212683AC177F1F4E0018F4CB /* PositionCell.m */; };
+		2141094B17D38DD700692678 /* FilterSettingsImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2141094A17D38DD700692678 /* FilterSettingsImageCell.m */; };
 		218F1532174189E600874561 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 218F1531174189E600874561 /* AssetsLibrary.framework */; };
 		218F153417418E7900874561 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 218F153317418E7900874561 /* AVFoundation.framework */; };
 		218F1536174193A900874561 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 218F1535174193A900874561 /* MediaPlayer.framework */; };
@@ -69,6 +70,8 @@
 		212683AA177F12430018F4CB /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		212683AB177F1F4E0018F4CB /* PositionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PositionCell.h; sourceTree = "<group>"; };
 		212683AC177F1F4E0018F4CB /* PositionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PositionCell.m; sourceTree = "<group>"; };
+		2141094917D38DD700692678 /* FilterSettingsImageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FilterSettingsImageCell.h; path = Filters/FilterSettingsImageCell.h; sourceTree = "<group>"; };
+		2141094A17D38DD700692678 /* FilterSettingsImageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FilterSettingsImageCell.m; path = Filters/FilterSettingsImageCell.m; sourceTree = "<group>"; };
 		218F1531174189E600874561 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		218F153317418E7900874561 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		218F1535174193A900874561 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
@@ -156,6 +159,8 @@
 				2106D18117A1ABF2008077ED /* SelectFiltersCell.m */,
 				21D51ED117A58B8D00E18AFF /* FilterSettingsScalarCell.h */,
 				21D51ED217A58B8D00E18AFF /* FilterSettingsScalarCell.m */,
+				2141094917D38DD700692678 /* FilterSettingsImageCell.h */,
+				2141094A17D38DD700692678 /* FilterSettingsImageCell.m */,
 				21B6688E17CA5CF300F696DF /* FilterSettingsVectorCell.h */,
 				21B6688F17CA5CF300F696DF /* FilterSettingsVectorCell.m */,
 			);
@@ -422,6 +427,7 @@
 				21E878A917B7E8B900258095 /* VideoProcessor.m in Sources */,
 				21BE238F17B81B5300E2073B /* FilterInfo.m in Sources */,
 				21B6689017CA5CF300F696DF /* FilterSettingsVectorCell.m in Sources */,
+				2141094B17D38DD700692678 /* FilterSettingsImageCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

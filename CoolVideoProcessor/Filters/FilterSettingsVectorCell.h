@@ -12,7 +12,7 @@
 
 @protocol FilterSettingsVectorCellDelegate <NSObject>
 
--(void)cell:(FilterSettingsVectorCell *)cell values:(NSArray*)values;
+-(void)cell:(FilterSettingsVectorCell *)cell withVector:(CIVector*)vector;
 
 -(void)cell:(FilterSettingsVectorCell *)cell didActivateTextField:(UITextField*)field;
 -(void)cell:(FilterSettingsVectorCell *)cell willDeactivateTextField:(UITextField*)field;
@@ -24,5 +24,8 @@
 
 @property (nonatomic,weak) id<FilterSettingsVectorCellDelegate> delegate;
 @property (nonatomic,strong) NSArray *cellTitles;
+
+-(void)setCellValues:(CIVector*)cellValues;
+-(CIVector*)getValues;
 
 @end

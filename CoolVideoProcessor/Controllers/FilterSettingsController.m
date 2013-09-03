@@ -9,13 +9,21 @@
 #import "FilterSettingsController.h"
 #import "FilterSettingsScalarCell.h"
 #import "FilterSettingsVectorCell.h"
+#import "FilterSettingsImageCell.h"
 
-#define NUMBER_OF_SECTIONS 1
-#define DIC_SECTION 0
+#define NUMBER_OF_SECTIONS 2
+#define DIC_SECTION 1
+#define IMAGE_SECTION 0
+#define DEFAULT_HEIGHT 52.0
+#define SCALAR_H_KEY @"1"
+#define VECTOR_H_KEY @"2"
+#define DEFAULT_H_KEY @"3"
+#define IMAGE_H_KEY @"4"
+
+static NSDictionary * g_Height;
 
 @interface FilterSettingsController ()<UITableViewDataSource,UITableViewDelegate,FilterSettingsScalarCellDelegate,FilterSettingsVectorCellDelegate>
 @property (nonatomic,weak) IBOutlet UITableView *tableView;
-@property (nonatomic,weak) IBOutlet UIImageView *imageProcessed;
 @property (nonatomic,strong) NSMutableDictionary *scalarTypes;
 @property (nonatomic,strong) UIBarButtonItem *doneKeyboardBarButtonItem;
 @property (nonatomic,strong) UIBarButtonItem *rightBarButtonItem;
@@ -24,6 +32,11 @@
 @end
 
 @implementation FilterSettingsController
+
++(void)initialize
+{
+    g_Height =@{DEFAULT_H_KEY: @(DEFAULT_HEIGHT),VECTOR_H_KEY:@(DEFAULT_HEIGHT), SCALAR_H_KEY:@(DEFAULT_HEIGHT),IMAGE_H_KEY:@(149.0)};
+}
 
 -(id)initWithCoder:(NSCoder *)aDecoder
 {
@@ -112,13 +125,6 @@
     }
 }
 
--(void)viewDidLoad
-{
-    [super viewDidLoad];
-    
-    
-}
-
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return NUMBER_OF_SECTIONS;
@@ -130,7 +136,84 @@
     {
         return self.scalarTypes.count+self.vectorTypes.count;
     }
+    else if (section == IMAGE_SECTION)
+    {
+        return 1;
+    }
     return -1;
+}
+
+-(FilterSettingsScalarCell*)scalarCellAtIndexPath:(NSIndexPath*)indexPath
+{
+    static NSString * scalarCellId = @"FilterSettingsScalarCell";
+    
+    FilterSettingsScalarCell * cell = [self.tableView dequeueReusableCellWithIdentifier:scalarCellId forIndexPath:indexPath];
+    
+    if (!cell)
+    {
+        cell = [[FilterSettingsScalarCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:scalarCellId];
+    }
+    return cell;
+}
+
+- (FilterSettingsVectorCell*)vectorCellAtIndexPath:(NSIndexPath*)
+indexPath withAmount:(NSDictionary*)dic array:(NSArray**)arrayPtr
+{
+    static NSString * vectorCellId = @"FilterSettingsVectorCell";
+    
+    FilterSettingsVectorCell * cell = [self.tableView dequeueReusableCellWithIdentifier:vectorCellId forIndexPath:indexPath];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    NSInteger count = [dic[@"count"]integerValue];
+    NSArray * subArray = [@[@"X",@"Y",@"Z",@"W"] subarrayWithRange:NSMakeRange(0, count)];
+    (*arrayPtr) = subArray;
+    if (!cell)
+    {
+        cell = [[FilterSettingsVectorCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:vectorCellId cellTitles:subArray];
+    }
+    return cell;
+}
+
+-(FilterSettingsImageCell*)imageCellAtIndexPath:(NSIndexPath*)indexPath
+{
+    static NSString * imageCellId = @"FilterSettingsImageCell";
+    
+    FilterSettingsImageCell * cell = [self.tableView dequeueReusableCellWithIdentifier:imageCellId forIndexPath:indexPath];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    
+    if (!cell)
+    {
+        cell = [[FilterSettingsImageCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:imageCellId];
+    }
+    return cell;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSNumber * rowPath = @(indexPath.row);
+    id key;
+    if (indexPath.section == DIC_SECTION)
+    {
+        NSDictionary* dic = (NSDictionary*)self.scalarTypes[rowPath];
+        if (dic)
+        {
+            key = SCALAR_H_KEY;
+        }
+        else if ((dic = (NSDictionary*)self.vectorTypes[rowPath]))
+        {
+            key = VECTOR_H_KEY;
+        }
+        else
+            key = DEFAULT_H_KEY;
+    }
+    else if (indexPath.section == IMAGE_SECTION)
+    {
+        key = IMAGE_H_KEY;
+    }
+    else
+    {
+        key =DEFAULT_H_KEY;
+    }
+    return [g_Height[key] floatValue];
 }
 
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -141,14 +224,8 @@
         NSDictionary* dic = (NSDictionary*)self.scalarTypes[rowPath];
         if (dic)
         {
-            static NSString * scalarCellId = @"FilterSettingsScalarCell";
+            FilterSettingsScalarCell * cell =[self scalarCellAtIndexPath:indexPath];
             
-            FilterSettingsScalarCell * cell = [tableView dequeueReusableCellWithIdentifier:scalarCellId forIndexPath:indexPath];
-            
-            if (!cell)
-            {
-                cell = [[FilterSettingsScalarCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:scalarCellId];
-            }
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             id key = dic.allKeys.lastObject;
             
@@ -169,16 +246,15 @@
         }
         else if ((dic = (NSDictionary*)self.vectorTypes[rowPath]))
         {
-            static NSString * vectorCellId = @"FilterSettingsVectorCell";
-            
-            FilterSettingsVectorCell * cell = [tableView dequeueReusableCellWithIdentifier:vectorCellId forIndexPath:indexPath];
+            NSArray * subArray = nil;
+            FilterSettingsVectorCell * cell = [self vectorCellAtIndexPath:indexPath withAmount:dic array:&subArray];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            NSInteger count = [dic[@"count"]integerValue];
-            NSArray * subArray = [@[@"X",@"Y",@"Z",@"W"] subarrayWithRange:NSMakeRange(0, count)];
             
-            if (!cell)
+            id key = [self firstNotCountKeyFromDic:dic];
+            if (key)
             {
-                cell = [[FilterSettingsVectorCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:vectorCellId cellTitles:subArray];
+                NSDictionary* newDic = (NSDictionary*)dic[key];
+               [cell setCellValues:newDic[kCIAttributeDefault]];
             }
             cell.delegate =self;
             cell.cellTitles = subArray;
@@ -186,6 +262,11 @@
             return cell;
         }
             
+    }
+    else if (indexPath.section==IMAGE_SECTION)
+    {
+        FilterSettingsImageCell * cell = [self imageCellAtIndexPath:indexPath];
+        return cell;
     }
     return nil;
 }
@@ -196,16 +277,24 @@
     {
         return @"Numeric parameters";
     }
-    return nil;
+    else if (section == IMAGE_SECTION)
+    {
+        return @"Results of filtering";
+    }
+    else
+        return @"";
 }
 
 - (void)setProcessedImage
 {
     UIImage * resImage = [UIImage imageWithCIImage:[self.filter outputImage]];
-    self.imageProcessed.image = resImage;
-    //[self.imageProcessed sizeToFit];
-    self.imageProcessed.contentMode = UIViewContentModeScaleToFill;
-    //self.imageProcessed.contentMode = UIViewContentModeScaleAspectFill;
+     NSUInteger rowsNumber = [self.tableView numberOfRowsInSection:IMAGE_SECTION];
+    NSUInteger values[] = {IMAGE_SECTION, rowsNumber-1 };
+    NSIndexPath * path = [[NSIndexPath alloc]initWithIndexes:values length:sizeof(values)/sizeof(values[0])];
+    FilterSettingsImageCell * imageCell = [self imageCellAtIndexPath:path];
+    imageCell.imageView.frame=imageCell.bounds;
+    imageCell.imageView.contentMode = UIViewContentModeScaleAspectFit;
+    imageCell.imageView.image = resImage;
 }
 
 #pragma mark - FilterSettingsVectorCellDelegate<NSObject>
@@ -228,51 +317,46 @@
     {
         NSDictionary* dic = (NSDictionary*) self.scalarTypes[@(path.row)];
         
-        if (dic)
+        id internalKey;
+        if ((internalKey =[self firstNotCountKeyFromDic:dic]))
         {
-            id internalKey = dic.allKeys.lastObject;
             [self.filter setValue:number forKey:internalKey];
             [self setProcessedImage];
         }
     }
 }
 
--(void)cell:(FilterSettingsVectorCell *)cell values:(NSArray*)values
+-(void)cell:(FilterSettingsVectorCell *)cell withVector:(CIVector *)vector
 {
     NSIndexPath * path = [self.tableView indexPathForCell:cell];
     
     if (path.section == DIC_SECTION)
     {
         NSDictionary * dic = (NSDictionary*)self.vectorTypes[@(path.row)];
-        
-        if (dic)
+        id internalKey;
+        if ((internalKey =[self firstNotCountKeyFromDic:dic]))
         {
-            for (id key in dic.allKeys)
-            {
-               if (![key isEqualToString:@"count"])
-               {
-                   id internalKey = key;
-                   
-                   CIVector *vector;
-                   if (values.count==1)
-                   {
-                       vector = [CIVector vectorWithX:[values.lastObject floatValue]];
-                   }
-                   else if (values.count ==2)
-                   {
-                                              vector = [CIVector vectorWithX:[values[0] floatValue]
-                                                        Y:[values.lastObject floatValue]];
-                   }
-                   
-                   
-                   [self.filter setValue:vector forKey:internalKey];
-                   [self setProcessedImage];
-                   break;
-               }
-            }
+            [self.filter setValue:vector forKey:internalKey];
+            [self setProcessedImage];
         }
     }
     
+}
+
+-(id)firstNotCountKeyFromDic:(NSDictionary*)dic
+{
+    if (dic)
+    {
+        for (id key in dic.allKeys)
+        {
+            if (![key isEqualToString:@"count"])
+            {
+                
+                return key;
+            }
+        }
+    }
+    return nil;
 }
 
 #pragma mark Keyboard code

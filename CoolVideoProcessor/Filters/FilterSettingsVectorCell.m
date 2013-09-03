@@ -9,6 +9,9 @@
 #import "FilterSettingsVectorCell.h"
 
 @interface FilterSettingsVectorCell()<UITextFieldDelegate>
+{
+    __strong CIVector * _cellValues;
+}
 @property (nonatomic,strong) NSMutableDictionary * dic;
 @end
 
@@ -29,21 +32,78 @@
     if (![_cellTitles isEqualToArray:cellTitles])
     {
         _cellTitles = cellTitles;
-        [self constractView];
+        if (cellTitles)
+            [self constractView];
         
+            [self initValuesOfTextFields];
+       // NSArray *userInfo = [NSArray arrayWithObjects:@(140),@(200),nil];
         
-        NSArray *userInfo = [NSArray arrayWithObjects:@(140),@(200),nil];
-        
-        [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(exec:) userInfo:userInfo repeats:NO];
+        //[NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(exec:) userInfo:userInfo repeats:NO];
     }
 }
 
+-(void)setCellValues:(CIVector *)cellValues
+{
+    if (![_cellValues isEqual:cellValues])
+    {
+        _cellValues = cellValues;
+        
+        
+        [self initValuesOfTextFields];
+        
+    }
+}
+
+-(void)initValuesOfTextFields
+{
+    if (_cellValues && self.cellTitles.count == _cellValues.count)
+    {
+        
+        NSUInteger count =  MIN(_cellValues.count,self.cellTitles.count);
+        NSUInteger index = 0;
+        for (UIView * tempView in self.contentView.subviews)
+        {
+            for (UITextField * textView in tempView.subviews)
+            if ([textView isKindOfClass:[UITextField class]])
+            {
+                textView.text = [NSString stringWithFormat:@"%.2f", [_cellValues valueAtIndex:index]];
+                index++;
+                
+                if (index == count)
+                    return;
+            }
+        }
+    }
+}
+
+-(CIVector*)getValues
+{
+    CGFloat *floatPtr =(CGFloat*)malloc(sizeof(CGFloat)*self.cellTitles.count);
+    CGFloat *initFloatPtr=floatPtr;
+    for (UIView * tempView in self.contentView.subviews)
+    {
+        for (UITextField * textView in tempView.subviews)
+        if ([textView isKindOfClass:[UITextField class]])
+        {
+            CGFloat floatVal = [textView.text floatValue];
+            *floatPtr = floatVal;
+            floatPtr++;
+        }
+    }
+    CIVector * vector = [CIVector vectorWithValues:initFloatPtr count:sizeof(floatPtr)/sizeof(floatPtr[0])];
+    _cellValues = vector;
+    free(initFloatPtr);
+    
+    return vector;
+}
+
+/*
 -(void)exec:(NSNotification*)notification
 {
     NSArray *array = (NSArray*)notification.userInfo;
     
     [self.delegate cell:self values:array];
-}
+}*/
 
 -(UIView*)columnWithTitle:(NSString*)title
 {
@@ -60,7 +120,7 @@ static NSUInteger g_count = 0;
     label.text = title;
     
     CGFloat xNext = CGRectGetMaxX(label.frame) + 5;
-    CGRect frame =  {.origin =CGPointMake(xNext, point.y),.size ={100,MAX(size.height,20)}};
+    CGRect frame =  {.origin =CGPointMake(xNext, point.y),.size ={80,MAX(size.height,20)}};
     
     UITextField * field =[[UITextField alloc]initWithFrame:frame];
     field.borderStyle = UITextBorderStyleRoundedRect;
@@ -69,7 +129,7 @@ static NSUInteger g_count = 0;
     field.keyboardType = UIKeyboardTypeDecimalPad;
 
     field.delegate = self;
-    field.tag = g_count;
+    field.tag = g_count++;
     frame = (CGRect){.origin = point, .size = {CGRectGetMaxX(field.frame)-point.x,CGRectGetHeight(label.frame)}};
     UIView * view = [[UIView alloc]initWithFrame:frame];
     [view addSubview:field];
@@ -89,6 +149,7 @@ static CGSize marginSize={10.0,10.0};
 -(CGSize)generateSizeForTitles:(NSArray *)titles andWidth:(CGFloat)width
 {
     UIView * view = [self columnWithTitle:titles[0]];
+    g_count =0;
     CGFloat xSize,ySize;
     
     const CGFloat yAdd =  CGRectGetHeight(view.frame) + marginSize.height;
@@ -126,11 +187,9 @@ static CGSize marginSize={10.0,10.0};
     }
     
     CGPoint point = CGPointZero;
-    g_count = 0;
     for (NSString * title in self.cellTitles)
     {
         UIView * view = [self columnWithTitle:title atPoint:point];
-        g_count++;
         if (CGRectGetMaxX(view.frame)+marginSize.width >size.width)
         {
             point.x = 0;
@@ -162,23 +221,8 @@ static CGSize marginSize={10.0,10.0};
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
     [self.delegate cell:self willDeactivateTextField:textField];
-    
-    NSUInteger countBefore = textField.tag -1;
-    NSMutableArray * array = [NSMutableArray arrayWithCapacity:g_count];
-    
-    for (NSUInteger i=0;i<=countBefore;i++)
-    {
-        UITextField * curTextField =(UITextField *)[textField viewWithTag:@(i)];
-        [array addObject:curTextField.text];
-    }
-    [array addObject:textField.text];
-    for (NSUInteger i=countBefore+1;i<g_count;i++)
-    {
-        UITextField * curTextField =(UITextField *)[textField viewWithTag:@(i)];
-        [array addObject:curTextField.text];
-    }
-    
-    [self.delegate cell:self values:array];
+
+    [self.delegate cell:self withVector:[self getValues]];
 }
 
 @end
