@@ -97,39 +97,29 @@
     return vector;
 }
 
-/*
--(void)exec:(NSNotification*)notification
-{
-    NSArray *array = (NSArray*)notification.userInfo;
-    
-    [self.delegate cell:self values:array];
-}*/
-
--(UIView*)columnWithTitle:(NSString*)title
+- (UIView *)columnWithTitle:(NSString*)title
 {
     return [self columnWithTitle:title atPoint:CGPointZero];
 }
 
-static NSUInteger g_count = 0;
-
--(UIView*)columnWithTitle:(NSString*)title atPoint:(CGPoint)point
+- (UIView *)columnWithTitle:(NSString*)title atPoint:(CGPoint)point
 {
-    CGSize size = [title sizeWithFont:[UIFont systemFontOfSize:[UIFont systemFontSize]]];
+    CGSize size = [title sizeWithFont:[UIFont systemFontOfSize:18]];
     
     UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake(point.x, point.y, size.width, size.height)];
     label.text = title;
     
     CGFloat xNext = CGRectGetMaxX(label.frame) + 5;
-    CGRect frame =  {.origin =CGPointMake(xNext, point.y),.size ={80,MAX(size.height,20)}};
+    CGRect frame =  {.origin =CGPointMake(xNext, point.y),.size ={80,MIN(size.height*1.5,CGRectGetHeight(self.frame))}};
     
     UITextField * field =[[UITextField alloc]initWithFrame:frame];
     field.borderStyle = UITextBorderStyleRoundedRect;
     field.clearButtonMode = UITextFieldViewModeWhileEditing;
     field.returnKeyType = UIReturnKeyDone;
     field.keyboardType = UIKeyboardTypeDecimalPad;
-
+    field.font = [UIFont systemFontOfSize:18];
     field.delegate = self;
-    field.tag = g_count++;
+    
     frame = (CGRect){.origin = point, .size = {CGRectGetMaxX(field.frame)-point.x,CGRectGetHeight(label.frame)}};
     UIView * view = [[UIView alloc]initWithFrame:frame];
     [view addSubview:field];
@@ -149,7 +139,7 @@ static CGSize marginSize={10.0,10.0};
 -(CGSize)generateSizeForTitles:(NSArray *)titles andWidth:(CGFloat)width
 {
     UIView * view = [self columnWithTitle:titles[0]];
-    g_count =0;
+    
     CGFloat xSize,ySize;
     
     const CGFloat yAdd =  CGRectGetHeight(view.frame) + marginSize.height;

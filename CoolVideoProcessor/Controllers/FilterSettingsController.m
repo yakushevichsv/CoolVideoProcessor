@@ -241,7 +241,6 @@ indexPath withAmount:(NSDictionary*)dic array:(NSArray**)arrayPtr
             cell.slider.maximumValue = [newDic[kCIAttributeSliderMax] floatValue];
             cell.slider.value = [newDic[kCIAttributeDefault] floatValue];
             cell.delegate =self;
-            [self setProcessedImage];
             return cell;
         }
         else if ((dic = (NSDictionary*)self.vectorTypes[rowPath]))
@@ -265,8 +264,14 @@ indexPath withAmount:(NSDictionary*)dic array:(NSArray**)arrayPtr
     }
     else if (indexPath.section==IMAGE_SECTION)
     {
-        FilterSettingsImageCell * cell = [self imageCellAtIndexPath:indexPath];
-        return cell;
+        FilterSettingsImageCell * imageCell = [self imageCellAtIndexPath:indexPath];
+        
+        UIImage * resImage = [UIImage imageWithCIImage:[self.filter outputImage]];
+        imageCell.imageView.frame=imageCell.bounds;
+        imageCell.imageView.contentMode = UIViewContentModeScaleAspectFit;
+        imageCell.imageView.image = resImage;
+        
+        return imageCell;
     }
     return nil;
 }
@@ -287,14 +292,7 @@ indexPath withAmount:(NSDictionary*)dic array:(NSArray**)arrayPtr
 
 - (void)setProcessedImage
 {
-    UIImage * resImage = [UIImage imageWithCIImage:[self.filter outputImage]];
-     NSUInteger rowsNumber = [self.tableView numberOfRowsInSection:IMAGE_SECTION];
-    NSUInteger values[] = {IMAGE_SECTION, rowsNumber-1 };
-    NSIndexPath * path = [[NSIndexPath alloc]initWithIndexes:values length:sizeof(values)/sizeof(values[0])];
-    FilterSettingsImageCell * imageCell = [self imageCellAtIndexPath:path];
-    imageCell.imageView.frame=imageCell.bounds;
-    imageCell.imageView.contentMode = UIViewContentModeScaleAspectFit;
-    imageCell.imageView.image = resImage;
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:IMAGE_SECTION]] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 #pragma mark - FilterSettingsVectorCellDelegate<NSObject>
@@ -359,10 +357,32 @@ indexPath withAmount:(NSDictionary*)dic array:(NSArray**)arrayPtr
     return nil;
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    if (self.scalarTypes.count)
+        [self registerForKeyboardNotifications];
+}
+
+
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    if (self.scalarTypes.count)
+        [self deregisterForKeyboardNotifications];
+}
 #pragma mark Keyboard code
+
+- (void)deregisterForKeyboardNotifications
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+}
 
 - (void)registerForKeyboardNotifications
 {
+    [self deregisterForKeyboardNotifications];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillShow:)
                                                  name:UIKeyboardWillShowNotification object:nil];
@@ -370,11 +390,6 @@ indexPath withAmount:(NSDictionary*)dic array:(NSArray**)arrayPtr
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillBeHidden:)
                                                  name:UIKeyboardWillHideNotification object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWasShown:)
-                                                 name:UIKeyboardDidShowNotification object:nil];
-    
     
 }
 
@@ -406,40 +421,53 @@ indexPath withAmount:(NSDictionary*)dic array:(NSArray**)arrayPtr
         self.navigationItem.rightBarButtonItem = self.doneKeyboardBarButtonItem;
         self.doneKeyboardBarButtonItem.enabled = TRUE;
     }
+    
+    NSDictionary           *info         = [aNotification userInfo];
+    CGRect                 keyboardFrame = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    UIViewAnimationOptions options       = (UIViewAnimationOptions)([[info objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue] << 16);
+    NSTimeInterval         duration      = [[info objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    CGRect                 tableViewFrame = _tableView.frame;
+    
+    keyboardFrame               = [self.view convertRect:keyboardFrame fromView:nil];
+    CGFloat yMargin = CGRectIntersection(tableViewFrame, keyboardFrame).size.height;
+    tableViewFrame.size.height -= yMargin;
+    
+    [UIView animateWithDuration:duration
+                          delay:0.0
+                        options:options
+                     animations:^
+     {
+         _tableView.frame = tableViewFrame;
+         _tableView.contentOffset = CGPointMake(0, yMargin);
+     }
+                     completion:nil];
 }
 
 - (void)keyboardWillBeHidden:(NSNotification*)aNotification
 {
    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
    {
-    self.navigationItem.rightBarButtonItem.enabled = FALSE;
-    
-    self.navigationItem.rightBarButtonItem = _rightBarButtonItem;
-    _rightBarButtonItem.enabled = TRUE;
-       
-       UIEdgeInsets contentInsets = UIEdgeInsetsZero;
-       self.tableView.contentInset = contentInsets;
-       self.tableView.scrollIndicatorInsets = contentInsets;
+       self.navigationItem.rightBarButtonItem.enabled = FALSE;
+       self.navigationItem.rightBarButtonItem = _rightBarButtonItem;
+       _rightBarButtonItem.enabled = TRUE;
    }
+   
+    NSDictionary          *info     = [aNotification userInfo];
+    UIViewAnimationOptions options  = (UIViewAnimationOptions)([[info objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue] << 16);
+    NSTimeInterval         duration = [[info objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    
+    [UIView animateWithDuration:duration
+                          delay:0.0
+                        options:options
+                     animations:^
+     {
+         _tableView.frame = self.view.bounds;
+         _tableView.contentOffset = CGPointZero;
+     }
+                     completion:nil];
+    
 }
 
--(void)keyboardWasShown:(NSNotification*)aNotification
-{
-    NSDictionary* info = [aNotification userInfo];
-    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-    
-    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height, 0.0);
-    self.tableView.contentInset = contentInsets;
-    self.tableView.scrollIndicatorInsets = contentInsets;
-    
-    // If active text field is hidden by keyboard, scroll it so it's visible
-    // Your application might not need or want this behavior.
-    CGRect aRect = self.tableView.frame;
-    aRect.size.height -= kbSize.height;
-    if (!CGRectContainsPoint(aRect, _activeField.frame.origin) ) {
-        CGPoint scrollPoint = CGPointMake(0.0, _activeField.frame.origin.y-kbSize.height);
-        [self.tableView setContentOffset:scrollPoint animated:YES];
-    }
-}
+
 
 @end

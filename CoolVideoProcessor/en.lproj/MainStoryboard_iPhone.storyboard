@@ -343,9 +343,10 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="327" id="6Ik-Li-18c"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="327" type="user" id="T8I-ak-Jbl"/>
                                 </constraints>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" indentationWidth="10" reuseIdentifier="FilterSettingsImageCell" rowHeight="150" id="plC-Fd-JeR" customClass="FilterSettingsImageCell">
+                                    <tableViewCell userInteractionEnabled="NO" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="FilterSettingsImageCell" rowHeight="150" id="plC-Fd-JeR" customClass="FilterSettingsImageCell">
                                         <rect key="frame" x="0.0" y="22" width="327" height="150"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -364,6 +365,9 @@
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
+                                        <accessibility key="accessibilityConfiguration">
+                                            <accessibilityTraits key="traits" none="YES" notEnabled="YES"/>
+                                        </accessibility>
                                         <constraints>
                                             <constraint firstItem="TAt-bT-2Ii" firstAttribute="top" secondItem="plC-Fd-JeR" secondAttribute="top" type="default" id="f4c-x1-9cT"/>
                                             <constraint firstItem="TAt-bT-2Ii" firstAttribute="leading" secondItem="plC-Fd-JeR" secondAttribute="leading" type="default" id="jFF-wm-nNc"/>

@@ -169,9 +169,8 @@ static NSString  * kSectionHeaderIdentifier=@"TitleHeader";
             NSString * title;
             NSIndexPath * path = [self.collectionView indexPathsForSelectedItems].lastObject;
             title =[g_FilterMap valueForKey:g_FilterMap.allKeys[path.section]][path.row];
-            
-            controller.originalImage = self.item.image;
             controller.filter = [ CIFilter filterWithName:title];
+            controller.originalImage = self.item.image;            
         }
     }
 }
