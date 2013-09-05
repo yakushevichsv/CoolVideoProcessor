@@ -10,6 +10,15 @@
 
 @implementation MergeVideoViewCell
 
+-(void)prepareForReuse
+{
+    [super prepareForReuse];
+    self.MergeVideo.firstFrame = nil;
+    self.MergeVideo.bulkReDraw = FALSE;
+    self.MergeVideo.tapped = FALSE;
+    self.isLoading = FALSE;
+}
+
 -(void)setIsLoading:(BOOL)isLoading
 {
     if (_isLoading!=isLoading)

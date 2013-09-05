@@ -432,6 +432,11 @@ indexPath withAmount:(NSDictionary*)dic array:(NSArray**)arrayPtr
     CGFloat yMargin = CGRectIntersection(tableViewFrame, keyboardFrame).size.height;
     tableViewFrame.size.height -= yMargin;
     
+    NSIndexPath * path = [NSIndexPath indexPathForRow:0 inSection:IMAGE_SECTION];
+    
+    UITableViewCell * cell = [self.tableView cellForRowAtIndexPath:path];
+    yMargin = CGRectGetMaxY(cell.frame);
+    
     [UIView animateWithDuration:duration
                           delay:0.0
                         options:options

@@ -13,6 +13,7 @@
     __strong CIVector * _cellValues;
 }
 @property (nonatomic,strong) NSMutableDictionary * dic;
+@property (nonatomic,strong) NSMutableArray * rects;
 @end
 
 @implementation FilterSettingsVectorCell
@@ -41,6 +42,7 @@
         //[NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(exec:) userInfo:userInfo repeats:NO];
     }
 }
+
 
 -(void)setCellValues:(CIVector *)cellValues
 {
@@ -177,6 +179,7 @@ static CGSize marginSize={10.0,10.0};
     }
     
     CGPoint point = CGPointZero;
+    self.rects = [NSMutableArray arrayWithCapacity:self.cellTitles.count];
     for (NSString * title in self.cellTitles)
     {
         UIView * view = [self columnWithTitle:title atPoint:point];
@@ -190,7 +193,33 @@ static CGSize marginSize={10.0,10.0};
             point.x+=CGRectGetMaxX(view.frame)+marginSize.width;
         }
         [self.contentView addSubview:view];
+        
+        for (UITextField * field in view.subviews)
+        {
+            if ([field isKindOfClass:[UITextField class]])
+            {
+                CGRect curFrame = [self.contentView convertRect:field.frame fromView:view];
+                [self.rects addObject:@[NSStringFromCGRect(curFrame),field]];
+            }
+        }
     }
+}
+
+- (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event
+{
+    for (NSArray *arr in self.rects)
+    {
+        UITextField *field = arr.lastObject;
+        NSString *str = arr[0];
+        CGRect rect = CGRectFromString(str);
+        
+        if (CGRectContainsPoint(rect, point))
+        {
+            [field becomeFirstResponder];
+            return TRUE;
+        }
+    }
+    return FALSE;
 }
 
 #pragma mark -UITextFieldDelegate
