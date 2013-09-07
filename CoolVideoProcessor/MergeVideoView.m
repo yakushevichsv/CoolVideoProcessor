@@ -40,7 +40,12 @@
     }
 }
 
-
+-(CGRect) imageFrame
+{
+    CGPoint offset = {CGRectGetMidX(self.frame)-self.firstFrame.size.width*0.5,CGRectGetMidY(self.frame)-self.firstFrame.size.height*0.5};
+    
+    return (CGRect){.origin = offset,.size = self.firstFrame.size};
+}
 
 
 -(void)drawScaledImage:(UIImage*)image inRect:(CGRect)rect

@@ -13,4 +13,6 @@
 @property (nonatomic,strong) UIImage * firstFrame;
 @property (nonatomic,strong) NSString * title;
 @property (nonatomic) BOOL bulkReDraw;
+-(CGRect) imageFrame;
+
 @end

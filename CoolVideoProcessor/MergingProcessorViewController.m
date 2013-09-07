@@ -254,7 +254,12 @@ static AVAssetReader* g_movieReader = nil;
                         //  Finish processing the buffer!
                         //
                         
-                        CGImageRef cgimg = beginImage;// [self applyFilter:beginImage];
+                        {
+                            UIImage * inImage = [UIImage imageWithCGImage:beginImage];
+                            NSLog(@"Image %@",inImage);
+                        }
+                        
+                        CGImageRef cgimg = [self applyFilter:beginImage];
                         UIImage *newImg = [UIImage imageWithCGImage:cgimg];
                         CGImageRelease(cgimg);
                         // Unlock the image buffer
@@ -381,8 +386,9 @@ static AVAssetReader* g_movieReader = nil;
 
 -(CGImageRef)applyFilter:(CGImageRef)beginImage
 {
+    CIImage * inputImage = [CIImage imageWithCGImage:beginImage options:nil];
     CIFilter *filter = [CIFilter filterWithName:@"CISepiaTone"
-                                  keysAndValues: kCIInputImageKey, beginImage,
+                                  keysAndValues: kCIInputImageKey,  inputImage,
                         @"inputIntensity", [NSNumber numberWithFloat:0.4], nil];
     
     CGImageRelease(beginImage);

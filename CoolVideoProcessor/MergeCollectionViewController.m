@@ -15,6 +15,7 @@
 #import "PositionViewController.h"
 #import "AssetsLibrary.h"
 #import "AssetItem.h"
+#import "External/FWTPopoverView/FWTPopoverView.h"
 
 #define NUMBER_OF_SECTIONS 2
 
@@ -52,12 +53,127 @@
     }
 }
 
+#pragma mark - FWTPopoverView
+
+- (FWTPopoverView*)constructViewFromCell:(MergeVideoViewCell *)cell
+{
+    FWTPopoverView *popoverView = [FWTPopoverView new];
+    
+    UIImageView * imageView = [[UIImageView alloc]initWithImage:cell.MergeVideo.firstFrame];
+    const CGFloat offset = 20.0;
+    const CGFloat margin = 10.0;
+    
+    CGPoint offsetPoint = CGPointMake(offset, offset);
+    imageView.frame = (CGRect){.origin = offsetPoint,.size=imageView.bounds.size};
+    imageView.contentMode = UIViewContentModeScaleAspectFill;
+    [popoverView.contentView addSubview:imageView];
+    
+    CGFloat xStartPos = CGRectGetMaxX(imageView.frame)+margin;
+    UIFont *font = [UIFont systemFontOfSize:[UIFont systemFontSize]];
+    CGSize size = CGSizeMake(CGRectGetMidX(self.view.bounds), CGRectGetMidY(self.view.bounds));
+    
+    CGSize titleSize = [cell.MergeVideo.title sizeWithFont:font constrainedToSize:size lineBreakMode:NSLineBreakByWordWrapping];
+    
+    CGFloat yStartPos = CGRectGetMidY(imageView.frame);
+    
+    UITextView * textView = [[UITextView alloc]initWithFrame:(CGRect){.origin=CGPointMake(xStartPos, yStartPos),.size = titleSize}];
+    textView.contentOffset = CGPointMake(margin, 0);
+    textView.editable  = FALSE;
+    textView.text = cell.MergeVideo.title;
+    [popoverView.contentView addSubview:textView];
+    
+    yStartPos = CGRectGetMaxY(textView.frame)+margin;
+    xStartPos = CGRectGetMinX(imageView.frame);
+    
+    
+    UITextView * durationView = [[UITextView alloc]initWithFrame:(CGRect){.origin=CGPointMake(xStartPos, yStartPos),.size = titleSize}];
+    durationView.contentOffset = CGPointMake(margin, 0);
+    durationView.editable  = FALSE;
+    AssetItem *item;
+    
+    NSIndexPath *indexPath = [self.files indexPathForCell:cell];
+    
+    if (indexPath.section == VIDEO_SECTION)
+    {
+        item = (AssetItem *)self.library.videoAssetItems[indexPath.row];
+    }
+    else if (indexPath.section == IMAGES_SECTION)
+    {
+        item = (AssetItem *)self.library.imageAssetItems[indexPath.row];
+    }
+    
+    double duration =  [item loadDurationWithCompletitionHandler:^{}];
+    NSParameterAssert(duration == 0 && indexPath.section == IMAGES_SECTION || indexPath.section == VIDEO_SECTION);
+    
+    durationView.text = [PositionViewController formatDuration:duration];
+    [popoverView.contentView addSubview:durationView];
+    
+    UIButton * button = [UIButton buttonWithType:UIButtonTypeCustom];
+    button.bounds = CGRectMake(0, 0, 60, 20);
+    button.titleLabel.text =@"Select";
+    button.tag = 0;
+    UIEdgeInsets insets;
+    insets.left = margin;
+    insets.right = margin;
+    insets.bottom = margin;
+    insets.top = margin;
+    
+    button.titleEdgeInsets =insets;
+    button.center = CGPointMake(CGRectGetMaxX(textView.frame) - CGRectGetMinX(imageView.frame), CGRectGetMaxY(durationView.frame)+margin);
+    [button addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    [popoverView.contentView addSubview:button];
+    
+    CGPoint center = button.center;
+    button = [UIButton buttonWithType:UIButtonTypeCustom];
+    button.bounds = CGRectMake(0, 0, 60, 20);
+    button.tag = 1;
+    button.titleLabel.text =@"Cancel";
+    button.titleEdgeInsets =insets;
+    button.center = CGPointMake(button.center.x+CGRectGetMidX(button.bounds)+margin, center.y);
+    [button addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    [popoverView.contentView addSubview:button];
+    
+    return popoverView;
+}
+
+-(void)buttonPressed:(UIButton*)sender
+{
+    FWTPopoverView * popoverView = (FWTPopoverView*) sender.superview.superview;
+    BOOL dismiss = FALSE;
+    if (sender.tag == 0)
+    {
+        MergeVideoViewCell *mergedCell =
+        (MergeVideoViewCell*)[self.files cellForItemAtIndexPath:[self.files indexPathsForSelectedItems][0]];
+        mergedCell.MergeVideo.tapped = TRUE;
+        dismiss = TRUE;
+    }
+    else if (sender.tag == 1)
+    {
+        dismiss = TRUE;
+    }
+    
+    if (dismiss)
+    {
+        [popoverView dismissPopoverAnimated:FALSE];
+    }
+}
+
 #pragma mark - UICollectionViewDataSource
 
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
    MergeVideoViewCell * view = (MergeVideoViewCell*) [collectionView cellForItemAtIndexPath:indexPath];
-    view.MergeVideo.tapped = TRUE;
+   if (!view.MergeVideo.tapped)
+   {
+       FWTPopoverView *popoverView = [self constructViewFromCell:view];
+       CGRect rect = [view.MergeVideo imageFrame];
+       rect =[self.view convertRect:rect fromView:view];
+       [popoverView presentFromRect:rect
+                             inView:self.view
+            permittedArrowDirection:FWTPopoverArrowDirectionRight
+                           animated:YES];
+       view.MergeVideo.tapped = TRUE;
+   }
 }
 
 -(void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath

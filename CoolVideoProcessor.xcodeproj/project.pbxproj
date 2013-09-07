@@ -26,6 +26,8 @@
 		21BB5380179ED9CF00E6B639 /* SelectFiltersController.m in Sources */ = {isa = PBXBuildFile; fileRef = 21BB537F179ED9CF00E6B639 /* SelectFiltersController.m */; };
 		21BD7B6B1767D44B0093BB2C /* checkButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 21BD7B6A1767D44B0093BB2C /* checkButton.png */; };
 		21BE238F17B81B5300E2073B /* FilterInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 21BE238E17B81B5300E2073B /* FilterInfo.m */; };
+		21BEED5017DB6A7800EF7D98 /* libFWTPopoverView.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 21BEED4F17DB6A7800EF7D98 /* libFWTPopoverView.a */; };
+		21BEED5917DB6F2200EF7D98 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21BEED5817DB6F2200EF7D98 /* QuartzCore.framework */; };
 		21D51ED017A5762700E18AFF /* FilterSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 21D51ECF17A5762700E18AFF /* FilterSettingsController.m */; };
 		21D51ED317A58B8D00E18AFF /* FilterSettingsScalarCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 21D51ED217A58B8D00E18AFF /* FilterSettingsScalarCell.m */; };
 		21DFBE7F179C7A9B00BCE33B /* UIBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 21DFBE7E179C7A9B00BCE33B /* UIBaseViewController.m */; };
@@ -88,6 +90,13 @@
 		21BD7B6A1767D44B0093BB2C /* checkButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checkButton.png; sourceTree = "<group>"; };
 		21BE238D17B81B5300E2073B /* FilterInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FilterInfo.h; path = Filters/FilterInfo.h; sourceTree = "<group>"; };
 		21BE238E17B81B5300E2073B /* FilterInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FilterInfo.m; path = Filters/FilterInfo.m; sourceTree = "<group>"; };
+		21BEED4F17DB6A7800EF7D98 /* libFWTPopoverView.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libFWTPopoverView.a; path = CoolVideoProcessor/libFWTPopoverView.a; sourceTree = "<group>"; };
+		21BEED5317DB6B7700EF7D98 /* FWTPopoverAnimationHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FWTPopoverAnimationHelper.h; sourceTree = "<group>"; };
+		21BEED5417DB6B7700EF7D98 /* FWTPopoverArrow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FWTPopoverArrow.h; sourceTree = "<group>"; };
+		21BEED5517DB6B7700EF7D98 /* FWTPopoverBackgroundHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FWTPopoverBackgroundHelper.h; sourceTree = "<group>"; };
+		21BEED5617DB6B7700EF7D98 /* FWTPopoverView-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "FWTPopoverView-Prefix.pch"; sourceTree = "<group>"; };
+		21BEED5717DB6B7700EF7D98 /* FWTPopoverView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FWTPopoverView.h; sourceTree = "<group>"; };
+		21BEED5817DB6F2200EF7D98 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		21D51ECE17A5762700E18AFF /* FilterSettingsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FilterSettingsController.h; path = Controllers/FilterSettingsController.h; sourceTree = "<group>"; };
 		21D51ECF17A5762700E18AFF /* FilterSettingsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FilterSettingsController.m; path = Controllers/FilterSettingsController.m; sourceTree = "<group>"; };
 		21D51ED117A58B8D00E18AFF /* FilterSettingsScalarCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FilterSettingsScalarCell.h; path = Filters/FilterSettingsScalarCell.h; sourceTree = "<group>"; };
@@ -134,6 +143,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				21BEED5917DB6F2200EF7D98 /* QuartzCore.framework in Frameworks */,
+				21ECB9BF17401A96002C8851 /* CoreGraphics.framework in Frameworks */,
 				21F55F73179A6EB400121105 /* CoreImage.framework in Frameworks */,
 				21F55F71179A6E7600121105 /* CoreVideo.framework in Frameworks */,
 				218F1536174193A900874561 /* MediaPlayer.framework in Frameworks */,
@@ -145,7 +156,7 @@
 				21FCE9DA174171C90020E973 /* CoreMedia.framework in Frameworks */,
 				21ECB9BB17401A96002C8851 /* UIKit.framework in Frameworks */,
 				21ECB9BD17401A96002C8851 /* Foundation.framework in Frameworks */,
-				21ECB9BF17401A96002C8851 /* CoreGraphics.framework in Frameworks */,
+				21BEED5017DB6A7800EF7D98 /* libFWTPopoverView.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -242,6 +253,27 @@
 			name = Controllers;
 			sourceTree = "<group>";
 		};
+		21BEED5117DB6B2600EF7D98 /* External */ = {
+			isa = PBXGroup;
+			children = (
+				21BEED5217DB6B7700EF7D98 /* FWTPopoverView */,
+			);
+			name = External;
+			sourceTree = "<group>";
+		};
+		21BEED5217DB6B7700EF7D98 /* FWTPopoverView */ = {
+			isa = PBXGroup;
+			children = (
+				21BEED5317DB6B7700EF7D98 /* FWTPopoverAnimationHelper.h */,
+				21BEED5417DB6B7700EF7D98 /* FWTPopoverArrow.h */,
+				21BEED5517DB6B7700EF7D98 /* FWTPopoverBackgroundHelper.h */,
+				21BEED5617DB6B7700EF7D98 /* FWTPopoverView-Prefix.pch */,
+				21BEED5717DB6B7700EF7D98 /* FWTPopoverView.h */,
+			);
+			name = FWTPopoverView;
+			path = External/FWTPopoverView;
+			sourceTree = "<group>";
+		};
 		21E878A217B7BBBC00258095 /* Common */ = {
 			isa = PBXGroup;
 			children = (
@@ -283,6 +315,8 @@
 		21ECB9B917401A96002C8851 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				21BEED4F17DB6A7800EF7D98 /* libFWTPopoverView.a */,
+				21BEED5817DB6F2200EF7D98 /* QuartzCore.framework */,
 				21F55F72179A6EB400121105 /* CoreImage.framework */,
 				21F55F70179A6E7600121105 /* CoreVideo.framework */,
 				21EF4F16176E3EA80000EB83 /* OpenGLES.framework */,
@@ -302,6 +336,7 @@
 		21ECB9C017401A96002C8851 /* CoolVideoProcessor */ = {
 			isa = PBXGroup;
 			children = (
+				21BEED5117DB6B2600EF7D98 /* External */,
 				21E878A217B7BBBC00258095 /* Common */,
 				2190EA221789E56600D747C9 /* Models */,
 				21AE4BB01785EE2C00A92DE7 /* Controllers */,
@@ -516,6 +551,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CoolVideoProcessor/CoolVideoProcessor-Prefix.pch";
 				INFOPLIST_FILE = "CoolVideoProcessor/CoolVideoProcessor-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/CoolVideoProcessor\"",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "7D90A880-2548-4410-9F81-66E851DE25B3";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "7D90A880-2548-4410-9F81-66E851DE25B3";
@@ -531,6 +570,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CoolVideoProcessor/CoolVideoProcessor-Prefix.pch";
 				INFOPLIST_FILE = "CoolVideoProcessor/CoolVideoProcessor-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/CoolVideoProcessor\"",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "7D90A880-2548-4410-9F81-66E851DE25B3";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "7D90A880-2548-4410-9F81-66E851DE25B3";
