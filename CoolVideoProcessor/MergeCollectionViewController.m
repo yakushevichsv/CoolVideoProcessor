@@ -21,6 +21,7 @@
 
 @interface MergeCollectionViewController ()<UICollectionViewDataSource,UICollectionViewDelegate>
 
+@property (nonatomic,strong) NSMutableDictionary * activeCellsDic;
 @property (nonatomic,strong) AssetsLibrary * library;
 @end
 
@@ -66,7 +67,6 @@
     CGPoint offsetPoint = CGPointMake(offset, offset);
     imageView.frame = (CGRect){.origin = offsetPoint,.size=imageView.bounds.size};
     imageView.contentMode = UIViewContentModeScaleAspectFill;
-    [popoverView.contentView addSubview:imageView];
     
     CGFloat xStartPos = CGRectGetMaxX(imageView.frame)+margin;
     UIFont *font = [UIFont systemFontOfSize:[UIFont systemFontSize]];
@@ -74,13 +74,15 @@
     
     CGSize titleSize = [cell.MergeVideo.title sizeWithFont:font constrainedToSize:size lineBreakMode:NSLineBreakByWordWrapping];
     
+    titleSize.height +=2*margin;
     CGFloat yStartPos = CGRectGetMidY(imageView.frame);
     
     UITextView * textView = [[UITextView alloc]initWithFrame:(CGRect){.origin=CGPointMake(xStartPos, yStartPos),.size = titleSize}];
     textView.contentOffset = CGPointMake(margin, 0);
     textView.editable  = FALSE;
     textView.text = cell.MergeVideo.title;
-    [popoverView.contentView addSubview:textView];
+    textView.textColor = [UIColor whiteColor];
+    textView.backgroundColor = [UIColor clearColor];
     
     yStartPos = CGRectGetMaxY(textView.frame)+margin;
     xStartPos = CGRectGetMinX(imageView.frame);
@@ -104,51 +106,77 @@
     
     double duration =  [item loadDurationWithCompletitionHandler:^{}];
     NSParameterAssert(duration == 0 && indexPath.section == IMAGES_SECTION || indexPath.section == VIDEO_SECTION);
-    
+    durationView.textColor = [UIColor whiteColor];
     durationView.text = [PositionViewController formatDuration:duration];
-    [popoverView.contentView addSubview:durationView];
-    
-    UIButton * button = [UIButton buttonWithType:UIButtonTypeCustom];
-    button.bounds = CGRectMake(0, 0, 60, 20);
-    button.titleLabel.text =@"Select";
-    button.tag = 0;
+    durationView.backgroundColor = [UIColor clearColor];
+
+    UIButton * button1 = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    button1.bounds = CGRectMake(0, 0, 60, 20);
+    [button1 setTitle:@"Select" forState:UIControlStateNormal];//.text =@"Select";
+    button1.tag = 0;
     UIEdgeInsets insets;
-    insets.left = margin;
-    insets.right = margin;
-    insets.bottom = margin;
-    insets.top = margin;
+    insets.left = 5;
+    insets.right = 5;
+    insets.bottom = 5;
+    insets.top = 5;
+    button1.titleEdgeInsets =insets;
+    button1.center = CGPointMake(CGRectGetMinX(imageView.frame) +CGRectGetMidX(button1.bounds), CGRectGetMaxY(durationView.frame)+margin*2);
+    [button1 addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];
+   
+    NSLog(@"Frame %@",NSStringFromCGRect(button1.frame));
     
-    button.titleEdgeInsets =insets;
-    button.center = CGPointMake(CGRectGetMaxX(textView.frame) - CGRectGetMinX(imageView.frame), CGRectGetMaxY(durationView.frame)+margin);
-    [button addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    [popoverView.contentView addSubview:button];
+    UIButton * button2 = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    button2.bounds = CGRectMake(0, 0, 60, 20);
+    button2.tag = 1;
+    [button2 setTitle:@"Cancel" forState:UIControlStateNormal];
+    button2.center = CGPointMake(CGRectGetMaxX(button1.bounds)*2+margin, button1.center.y);
+    [button2 addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    NSLog(@"Frame %@",NSStringFromCGRect(button2.frame));
+
     
-    CGPoint center = button.center;
-    button = [UIButton buttonWithType:UIButtonTypeCustom];
-    button.bounds = CGRectMake(0, 0, 60, 20);
-    button.tag = 1;
-    button.titleLabel.text =@"Cancel";
-    button.titleEdgeInsets =insets;
-    button.center = CGPointMake(button.center.x+CGRectGetMidX(button.bounds)+margin, center.y);
-    [button addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    [popoverView.contentView addSubview:button];
+    CGFloat maxX =  MAX(CGRectGetMaxX(textView.frame),CGRectGetMaxX(durationView.frame)) + offset;
+    CGFloat maxY = CGRectGetMaxY(button1.frame) + offset;
+    popoverView.contentSize = CGSizeMake(maxX, maxY);
+
+    [popoverView.contentView addSubview:durationView];
+    [popoverView.contentView addSubview:textView];
+    [popoverView.contentView addSubview:imageView];
+    [popoverView.contentView addSubview:button1];
+    [popoverView.contentView addSubview:button2];
     
     return popoverView;
+}
+
+-(FWTPopoverArrowDirection)getDirectionFromRect:(CGRect)rect size:(CGSize)size
+{
+    const CGFloat x = CGRectGetMinX(rect);
+    const CGFloat y = CGRectGetMinY(rect);
+    
+    CGRect newRect = CGRectMake(x- size.width*0.5, y, size.width, size.height);
+    if (CGRectContainsRect(self.view.bounds, newRect))
+        return FWTPopoverArrowDirectionDown;
+    
+    return FWTPopoverArrowDirectionUp;
 }
 
 -(void)buttonPressed:(UIButton*)sender
 {
     FWTPopoverView * popoverView = (FWTPopoverView*) sender.superview.superview;
+    id key = [NSString stringWithFormat:@"%p",popoverView ];
     BOOL dismiss = FALSE;
+    MergeVideoViewCell *mergedCell =
+    self.activeCellsDic[key];
+    NSParameterAssert(mergedCell);
+    
     if (sender.tag == 0)
     {
-        MergeVideoViewCell *mergedCell =
-        (MergeVideoViewCell*)[self.files cellForItemAtIndexPath:[self.files indexPathsForSelectedItems][0]];
         mergedCell.MergeVideo.tapped = TRUE;
         dismiss = TRUE;
     }
     else if (sender.tag == 1)
     {
+        NSIndexPath * indexPath = [self.files indexPathForCell:mergedCell];
+        [self.files deselectItemAtIndexPath:indexPath animated:NO];
         dismiss = TRUE;
     }
     
@@ -156,6 +184,10 @@
     {
         [popoverView dismissPopoverAnimated:FALSE];
     }
+   
+    [self.activeCellsDic removeObjectForKey:key];
+    if (!self.activeCellsDic.count)
+        self.activeCellsDic = nil;
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -166,20 +198,25 @@
    if (!view.MergeVideo.tapped)
    {
        FWTPopoverView *popoverView = [self constructViewFromCell:view];
-       CGRect rect = [view.MergeVideo imageFrame];
-       rect =[self.view convertRect:rect fromView:view];
+       
+       if (!self.activeCellsDic.count)
+           self.activeCellsDic =[NSMutableDictionary dictionary];
+       
+       id key =[NSString stringWithFormat:@"%p",popoverView ];
+       self.activeCellsDic[key] = view;
+       
+       CGRect rect =[collectionView convertRect:view.bounds fromView:view];
+       collectionView.contentOffset = CGPointMake(0, CGRectGetMinY(view.frame));
        [popoverView presentFromRect:rect
-                             inView:self.view
-            permittedArrowDirection:FWTPopoverArrowDirectionRight
+                             inView:collectionView
+            permittedArrowDirection:[self getDirectionFromRect:rect size:popoverView.contentSize]
                            animated:YES];
-       view.MergeVideo.tapped = TRUE;
    }
 }
 
 -(void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     MergeVideoViewCell * view = (MergeVideoViewCell*) [collectionView cellForItemAtIndexPath:indexPath];
-    
     view.MergeVideo.tapped = FALSE;
 }
 
