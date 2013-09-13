@@ -9,6 +9,7 @@
 #import "VideoProcessor.h"
 #import "FilterInfo.h"
 #import "AssetItem.h"
+#import <MediaPlayer/MediaPlayer.h>
 
  NSString * kVideoProcessorFilterAppliedNotification =@"coolvideoprocessor.filterapplied";
 
@@ -115,10 +116,22 @@ return [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathCompo
             
             [self filterBufferForReader:reader completitionBlock:^(NSURL *url,AVAsset*asset) {
                 
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    
-                AVURLAsset * resAsset = [AVURLAsset assetWithURL:url];
+                dispatch_sync(dispatch_get_main_queue(), ^{
                 
+                AVURLAsset * resAsset = [AVURLAsset assetWithURL:url];
+               
+                    
+                    MPMoviePlayerController* controller = [[MPMoviePlayerController alloc] init];
+                    
+                    [controller setContentURL:resAsset.URL];
+                    [controller.view setFrame:CGRectMake (0, 0, 320, 476)];
+                    
+                    [[[[UIApplication sharedApplication]keyWindow] rootViewController].view addSubview:controller.view];
+                    
+                    [controller play];
+                    
+                    
+                    /*
                 if ([resAsset statusOfValueForKey:@"tracks" error:nil] != AVKeyValueStatusLoaded)
                 [resAsset loadValuesAsynchronouslyForKeys:@[@"tracks"] completionHandler:^{
                     
@@ -181,7 +194,7 @@ return [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathCompo
                                 break;
                         }
                     }];
-                }];
+                }];*/
                 });
             }];
             
@@ -292,11 +305,11 @@ return [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathCompo
                         if (reader.status == AVAssetReaderStatusCompleted)
                         {
                             [adaptor.assetWriterInput markAsFinished];
-                            CVPixelBufferPoolRelease(adaptor.pixelBufferPool);
                             [videoWriter finishWritingWithCompletionHandler:^{
+                                [reader cancelReading];
                                 completitionBlock(url,reader.asset);
-                        
                             }];
+                            CVPixelBufferPoolRelease(adaptor.pixelBufferPool);
                         }
                         break;
                     }
