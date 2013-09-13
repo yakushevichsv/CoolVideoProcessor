@@ -259,9 +259,7 @@ static AVAssetReader* g_movieReader = nil;
                             NSLog(@"Image %@",inImage);
                         }
                         
-                        CGImageRef cgimg = [self applyFilter:beginImage];
-                        UIImage *newImg = [UIImage imageWithCGImage:cgimg];
-                        CGImageRelease(cgimg);
+                        UIImage * newImg = [self applyFilter:beginImage];
                         // Unlock the image buffer
                         CVPixelBufferUnlockBaseAddress(imageBuffer,0);
                         //CMSampleBufferInvalidate(sampleBuffer);
@@ -384,7 +382,7 @@ static AVAssetReader* g_movieReader = nil;
     return postpone;
 }
 
--(CGImageRef)applyFilter:(CGImageRef)beginImage
+-(UIImage*)applyFilter:(CGImageRef)beginImage
 {
     CIImage * inputImage = [CIImage imageWithCGImage:beginImage options:nil];
     CIFilter *filter = [CIFilter filterWithName:@"CISepiaTone"
@@ -396,10 +394,7 @@ static AVAssetReader* g_movieReader = nil;
     
     CIImage *outputImage = [filter outputImage];
     
-    CIContext *context = [CIContext contextWithOptions:nil];
-    CGImageRef cgimg =
-    [context createCGImage:outputImage fromRect:[outputImage extent]];
-    return cgimg;
+    return [UIImage imageWithCIImage:outputImage];
 }
 
 -(BOOL)appendToComposition:(AVMutableComposition*)composition key:(id)key

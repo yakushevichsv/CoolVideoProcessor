@@ -115,7 +115,11 @@ return [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathCompo
             
             [self filterBufferForReader:reader completitionBlock:^(NSURL *url,AVAsset*asset) {
                 
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    
                 AVURLAsset * resAsset = [AVURLAsset assetWithURL:url];
+                
+                if ([resAsset statusOfValueForKey:@"tracks" error:nil] != AVKeyValueStatusLoaded)
                 [resAsset loadValuesAsynchronouslyForKeys:@[@"tracks"] completionHandler:^{
                     
                     
@@ -178,14 +182,13 @@ return [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathCompo
                         }
                     }];
                 }];
-                
+                });
             }];
             
-            
-                        
-
+        
             
         }];
+                               
     }
     
 }
@@ -203,9 +206,8 @@ return [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathCompo
     }
     
     const NSUInteger frameRate = roundf(((AVAssetReaderTrackOutput *)output).track.nominalFrameRate);
-    const CGSize frameSize = ((AVAssetReaderTrackOutput *)output).track.naturalSize;
+    const CGSize frameSize = /*CGSizeMake(400, 200);*/((AVAssetReaderTrackOutput *)output).track.naturalSize;
     
-    __block NSUInteger index = 0;
          NSURL * url = [self pathForVideo];
             
             NSError *error = nil;
@@ -249,23 +251,33 @@ return [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathCompo
             NSLog(@"Session started? %d", start);
     
 
-    
+
+    __block NSUInteger frameCount  =0;
+    //CMTime frameDuration = CMTimeMakeWithSeconds(1/frameRate, 1);
+    //__block CMTime nextPTS = kCMTimeZero;
             [adaptor.assetWriterInput requestMediaDataWhenReadyOnQueue:_queue usingBlock:^{
                
                 while (adaptor.assetWriterInput.readyForMoreMediaData)
                 {
-                        CMTime frameTime = CMTimeMake(frameRate, 1);
-                        CMTime lastTime=CMTimeMake(index++, frameRate);
-                        CMTime presentTime=CMTimeAdd(lastTime, frameTime);
+                    //CMTime presentTime = nextPTS;
+                    //nextPTS = CMTimeAdd(frameDuration, nextPTS);
                     
+                    CMTime presentTime = CMTimeMake(frameCount, frameRate);//CMTimeMake(frameCount*frameDuration,frameRate);
+                    
+                    NSLog(@"Current presentation time ");
+                    CMTimeShow(presentTime);
+                    
+                    frameCount++;
                     CMSampleBufferRef sampleBuffer = [output copyNextSampleBuffer];
                     
                     if (sampleBuffer)
                     {
                         UIImage *newImg = [self filteredImageFromSampleBuffer:sampleBuffer];
                         
-                        CVPixelBufferRef buffer = [self pixelBufferFromCGImage:newImg.CGImage poolRef:adaptor.pixelBufferPool];
-                        
+                        CVPixelBufferRef buffer = /*[self pixelBufferFromCGImage:newImg.CGImage poolRef:adaptor.pixelBufferPool]*/
+                        [self pixelBufferFromCGImage:newImg.CGImage size:frameSize];
+                        ;
+                        newImg = nil;
                         BOOL result = buffer && [adaptor appendPixelBuffer:buffer withPresentationTime:presentTime];
                         
                         CVPixelBufferRelease(buffer);
@@ -298,7 +310,15 @@ return [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathCompo
 -(UIImage *)filteredImageFromSampleBuffer:(CMSampleBufferRef)buffer
 {
     CVPixelBufferRef imageBuffer = CMSampleBufferGetImageBuffer(buffer);
-    UIImage *newImg = [self applyFilter:imageBuffer];
+    
+    CIImage * tempImage = [CIImage imageWithCVPixelBuffer:imageBuffer];
+    ;
+    UIImage *newImg = [UIImage imageWithCIImage:tempImage];
+   //__block UIImage *newImg = nil;
+    /*dispatch_sync(dispatch_get_main_queue(), ^{
+            newImg = [self applyFilter:imageBuffer];
+    });*/
+
     CVPixelBufferRelease(imageBuffer);
     return newImg;
 }
@@ -307,19 +327,13 @@ return [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathCompo
 {
     CIImage * tempImage = [CIImage imageWithCVPixelBuffer:beginImage];
     
-    //CVPixelBufferRelease(beginImage);
+    CVPixelBufferRelease(beginImage);
     
     CIFilter * filter = _info.filter;
     [filter setValue:tempImage forKey:kCIInputImageKey];
-    //NSLog(@"Output keys %@",filter.outputKeys);
-    CIImage *outputImage = filter.outputImage;
-
     
-    CIContext *context = [CIContext contextWithOptions:nil];
-    CGImageRef cgimg =
-    [context createCGImage:outputImage fromRect:[outputImage extent]];
-    UIImage *newImg = [UIImage imageWithCGImage:cgimg];
-    CGImageRelease(cgimg);
+    CIImage *outputImage = filter.outputImage;
+    UIImage * newImg = [UIImage imageWithCIImage:outputImage];
     return newImg;
 }
 
@@ -379,19 +393,22 @@ return [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathCompo
 }
 
 
-- (CVPixelBufferRef)pixelBufferFromCGImage:(CGImageRef)image size:(CGSize)size
-{
+- (CVPixelBufferRef) pixelBufferFromCGImage: (CGImageRef) image size:(CGSize)size{
+    
     NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
                              [NSNumber numberWithBool:YES], kCVPixelBufferCGImageCompatibilityKey,
                              [NSNumber numberWithBool:YES], kCVPixelBufferCGBitmapContextCompatibilityKey,
                              nil];
     CVPixelBufferRef pxbuffer = NULL;
     
-    if (CVPixelBufferCreate(kCFAllocatorDefault, size.width,
-                        size.height, kCVPixelFormatType_32ARGB, (__bridge CFDictionaryRef) options,
-                        &pxbuffer)!=kCVReturnSuccess)
-    {
-        return nil;
+    CVReturn status = CVPixelBufferCreate(kCFAllocatorDefault,
+                                          size.width,
+                                          size.height,
+                                          kCVPixelFormatType_32ARGB,
+                                          (__bridge CFDictionaryRef) options,
+                                          &pxbuffer);
+    if (status != kCVReturnSuccess){
+        NSLog(@"Failed to create pixel buffer");
     }
     
     CVPixelBufferLockBaseAddress(pxbuffer, 0);
@@ -400,21 +417,9 @@ return [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathCompo
     CGColorSpaceRef rgbColorSpace = CGColorSpaceCreateDeviceRGB();
     CGContextRef context = CGBitmapContextCreate(pxdata, size.width,
                                                  size.height, 8, 4*size.width, rgbColorSpace,
-                                                 kCGImageAlphaNoneSkipFirst);
-    
+                                                 kCGImageAlphaPremultipliedFirst);
+    //kCGImageAlphaNoneSkipFirst);
     CGContextConcatCTM(context, CGAffineTransformMakeRotation(0));
-    
-    CGAffineTransform flipVertical = CGAffineTransformMake(
-                                                           1, 0, 0, -1, 0, size.height
-                                                           );
-    CGContextConcatCTM(context, flipVertical);
-    
-    CGAffineTransform flipHorizontal = CGAffineTransformMake(
-                                                             -1.0, 0.0, 0.0, 1.0, size.width, 0.0
-                                                             );
-    
-    CGContextConcatCTM(context, flipHorizontal);
-    
     CGContextDrawImage(context, CGRectMake(0, 0, CGImageGetWidth(image),
                                            CGImageGetHeight(image)), image);
     CGColorSpaceRelease(rgbColorSpace);

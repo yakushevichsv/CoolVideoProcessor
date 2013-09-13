@@ -268,7 +268,7 @@
     
 }
 
--(CGImageRef)applyFilter:(CGImageRef)beginImage
+-(UIImage *)applyFilter:(CGImageRef)beginImage
 {
     CIFilter *filter = [CIFilter filterWithName:@"CISepiaTone"
                                   keysAndValues: kCIInputImageKey, beginImage,
@@ -279,10 +279,7 @@
     
     CIImage *outputImage = [filter outputImage];
     
-    CIContext *context = [CIContext contextWithOptions:nil];
-    CGImageRef cgimg =
-    [context createCGImage:outputImage fromRect:[outputImage extent]];
-    return cgimg;
+    return [UIImage imageWithCIImage:outputImage];
 }
 
 #pragma mark - SelectFiltesDelegate protocol
