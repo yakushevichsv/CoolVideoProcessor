@@ -31,6 +31,7 @@
 		21D51ED017A5762700E18AFF /* FilterSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 21D51ECF17A5762700E18AFF /* FilterSettingsController.m */; };
 		21D51ED317A58B8D00E18AFF /* FilterSettingsScalarCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 21D51ED217A58B8D00E18AFF /* FilterSettingsScalarCell.m */; };
 		21DFBE7F179C7A9B00BCE33B /* UIBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 21DFBE7E179C7A9B00BCE33B /* UIBaseViewController.m */; };
+		21E1DA3317E4EF8D00B47328 /* FileProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 21E1DA3217E4EF8D00B47328 /* FileProcessor.m */; };
 		21E2FA5A177777A200784CC5 /* HeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 21E2FA59177777A200784CC5 /* HeaderView.m */; };
 		21E878A517B7BBE400258095 /* UIImage+Scale.m in Sources */ = {isa = PBXBuildFile; fileRef = 21E878A417B7BBE400258095 /* UIImage+Scale.m */; };
 		21E878A917B7E8B900258095 /* VideoProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 21E878A817B7E8B900258095 /* VideoProcessor.m */; };
@@ -103,6 +104,8 @@
 		21D51ED217A58B8D00E18AFF /* FilterSettingsScalarCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FilterSettingsScalarCell.m; path = Filters/FilterSettingsScalarCell.m; sourceTree = "<group>"; };
 		21DFBE7D179C7A9B00BCE33B /* UIBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIBaseViewController.h; path = Controllers/UIBaseViewController.h; sourceTree = "<group>"; };
 		21DFBE7E179C7A9B00BCE33B /* UIBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIBaseViewController.m; path = Controllers/UIBaseViewController.m; sourceTree = "<group>"; };
+		21E1DA3117E4EF8D00B47328 /* FileProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FileProcessor.h; path = Models/Filters/FileProcessor.h; sourceTree = "<group>"; };
+		21E1DA3217E4EF8D00B47328 /* FileProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FileProcessor.m; path = Models/Filters/FileProcessor.m; sourceTree = "<group>"; };
 		21E2FA58177777A200784CC5 /* HeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeaderView.h; sourceTree = "<group>"; };
 		21E2FA59177777A200784CC5 /* HeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeaderView.m; sourceTree = "<group>"; };
 		21E878A317B7BBE400258095 /* UIImage+Scale.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+Scale.h"; path = "Common/UIImage+Scale.h"; sourceTree = "<group>"; };
@@ -288,6 +291,8 @@
 			children = (
 				21E878A717B7E8B900258095 /* VideoProcessor.h */,
 				21E878A817B7E8B900258095 /* VideoProcessor.m */,
+				21E1DA3117E4EF8D00B47328 /* FileProcessor.h */,
+				21E1DA3217E4EF8D00B47328 /* FileProcessor.m */,
 				21BE238D17B81B5300E2073B /* FilterInfo.h */,
 				21BE238E17B81B5300E2073B /* FilterInfo.m */,
 			);
@@ -463,6 +468,7 @@
 				21BE238F17B81B5300E2073B /* FilterInfo.m in Sources */,
 				21B6689017CA5CF300F696DF /* FilterSettingsVectorCell.m in Sources */,
 				2141094B17D38DD700692678 /* FilterSettingsImageCell.m in Sources */,
+				21E1DA3317E4EF8D00B47328 /* FileProcessor.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

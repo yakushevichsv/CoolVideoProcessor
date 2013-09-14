@@ -35,6 +35,7 @@
 {
 return [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathComponent: [NSString stringWithFormat: @"%.0f.%@", [NSDate timeIntervalSinceReferenceDate] * 1000.0, @"mov"]]];
 }
+
 -(void)applyFilter:(FilterInfo *)filterInfo withCompletition:(void (^)(NSURL *))completitionBlock
 {
     AVURLAsset * asset = [[AVURLAsset alloc]initWithURL:    filterInfo.item.url options:@{AVURLAssetPreferPreciseDurationAndTimingKey:@(YES)}];
