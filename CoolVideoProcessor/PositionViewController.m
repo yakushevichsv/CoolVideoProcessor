@@ -19,6 +19,7 @@
 #import "ALAssetItem.h"
 #import "VideoProcessor.h"
 #import "FilterInfo.h"
+#import "FileProcessor.h"
 
 @interface PositionViewController ()<UITableViewDataSource,UITableViewDelegate,SelectFiltersDelegate>
 
@@ -192,6 +193,28 @@
     return @[@(start),@(startIn),@(duration)];
 }
 
+-(CIFilter *)createFilterForItemAtIndex:(NSUInteger)index
+{
+    CIFilter *filter = [CIFilter filterWithName:@"CISepiaTone"
+                                  keysAndValues:
+                        @"inputIntensity", [NSNumber numberWithFloat:0.4], nil];
+    return filter;
+}
+
+- (NSArray *)createProcessingImageArray
+{
+    NSMutableArray * array = [NSMutableArray arrayWithCapacity:self.items.count];
+    for (AssetItem * item in self.items)
+    {
+        ProcessingImageInfo * info = [ProcessingImageInfo new];
+        info.item = item;
+        info.timeRange = CMTimeMakeWithSeconds(6, 1);
+        info.filter = [self createFilterForItemAtIndex:NSUIntegerMax];
+        [array addObject:info];
+    }
+    return array;
+}
+
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([segue.identifier isEqualToString:@"mergeSegueIdentifier"])
@@ -200,18 +223,36 @@
     NSMutableDictionary * dic=[NSMutableDictionary dictionaryWithCapacity:self.items.count];
     NSUInteger index = 0;
     NSTimeInterval start =0;
+    BOOL pureImages = YES;
     for (AssetItem * item in self.items)
     {
         NSArray * array =[self timeRangeForIndex:index atStart:index<2 ? 0 : start];
         [dic setObject:@[item,array] forKey:item.url];
         start+=[array.lastObject doubleValue];
         index++;
+        
+        if (pureImages && item.duration)
+        {
+            pureImages = NO;
+        }
     }
+        
+        
+        
+            MergingProcessorViewController * controller =
+            (MergingProcessorViewController*)segue.destinationViewController;
     
-    MergingProcessorViewController * controller =
-    (MergingProcessorViewController*)segue.destinationViewController;
-    
-        controller.dictionary = dic;
+            controller.dictionary = dic;
+        
+        if (pureImages)
+        {
+            controller.dictionary = nil;
+            
+            NSArray *array = [self createProcessingImageArray];
+            
+            controller.pureImages = array;
+        }
+        
     }
     else if ([segue.identifier isEqualToString:@"applyFiltersSegue"])
     {

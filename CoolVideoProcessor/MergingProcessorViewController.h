@@ -15,4 +15,5 @@
 @property (weak, nonatomic) IBOutlet UILabel *lblTitle;
 @property (weak, nonatomic) IBOutlet UIProgressView *pvProgress;
 @property (nonatomic,readonly) NSURL * mergedVideo;
+@property (nonatomic,strong) NSArray *pureImages;
 @end

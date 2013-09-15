@@ -11,6 +11,7 @@
 #import "MergingProcessorViewController.h"
 #import "AssetsLibrary.h"
 #import <MediaPlayer/MediaPlayer.h>
+#import "FileProcessor.h"
 
 @interface MergingProcessorViewController ()
 @property (nonatomic,strong) ALAssetsLibrary * library;
@@ -88,7 +89,7 @@
 {
     if (self.mergedVideo)
     {
-        [self performSelectorOnMainThread:@selector(displayByURL:) withObject:self.mergedVideo waitUntilDone:NO];
+        [self performSelectorOnMainThread:@selector(displayMovieByURL:) withObject:self.mergedVideo waitUntilDone:NO];
         return TRUE;
     }
     return FALSE;
@@ -99,7 +100,10 @@
     [super viewDidLoad];
     [self changeStatus:@"Started exporting" percent:0.0];
     [self.queue addOperationWithBlock:^{
-        [self executeTask];
+        if (!self.pureImages)
+            [self executeTask];
+        else
+            [self executeTaskForPureImages];
     }];
 }
 
@@ -109,6 +113,15 @@
         self.lblTitle.text = title;
         self.pvProgress.progress = percent;
     });
+}
+
+-(void)executeTaskForPureImages
+{
+    FileProcessor * processor = [FileProcessor new];
+    [processor applyFiltersToArray:self.pureImages withCompletition:^(NSURL *url) {
+        self.mergedVideo = url;
+        [self displayMergedVideo];
+    }];
 }
 
 -(void)executeTask

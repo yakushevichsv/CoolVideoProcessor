@@ -13,17 +13,19 @@
 #import <AVFoundation/AVFoundation.h>
 #import <QuartzCore/QuartzCore.h>
 
+@class AssetItem;
+
 @interface ProcessingImageInfo : NSObject
 
 @property (nonatomic) CMTime timeRange;
 @property (nonatomic,strong) CIFilter *filter;
-@property (nonatomic,strong) UIImage *image;
+@property (nonatomic,strong) AssetItem *item;
 
 @end
 
 
 @interface FileProcessor : NSObject
 
-- (void)applyFiltersToArray:(NSArray *)aray withCompletition:(void (^)(NSURL* url))completitionBlock;
+- (void)applyFiltersToArray:(NSArray *)array withCompletition:(void (^)(NSURL* url))completitionBlock;
 
 @end

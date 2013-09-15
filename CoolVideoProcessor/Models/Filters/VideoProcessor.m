@@ -325,14 +325,8 @@ return [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathCompo
 {
     CVPixelBufferRef imageBuffer = CMSampleBufferGetImageBuffer(buffer);
     
-    CIImage * tempImage = [CIImage imageWithCVPixelBuffer:imageBuffer];
-    ;
-    UIImage *newImg = [UIImage imageWithCIImage:tempImage];
-   //__block UIImage *newImg = nil;
-    /*dispatch_sync(dispatch_get_main_queue(), ^{
-            newImg = [self applyFilter:imageBuffer];
-    });*/
-
+    UIImage *newImg = [self applyFilter:imageBuffer];
+    
     CVPixelBufferRelease(imageBuffer);
     return newImg;
 }
