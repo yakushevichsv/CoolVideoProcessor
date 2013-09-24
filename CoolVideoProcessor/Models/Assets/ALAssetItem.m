@@ -10,11 +10,10 @@
 #import "ALAssetItem.h"
 
 @interface ALAssetItem()
-{
-    BOOL _doneImage,_doneTitle,_doneDuration;
-}
+
 @property(nonatomic, readonly, unsafe_unretained) dispatch_once_t token;
 @property (nonatomic,strong) ALAssetsLibrary *library;
+
 @end
 
 @implementation ALAssetItem
@@ -28,61 +27,43 @@
     return self;
 }
 
--(void)reset
+-(void)flush
 {
     _token = nil;
-    _doneDuration =_doneTitle=_doneTitle = FALSE;
+    self.done = FALSE;
 }
 
 -(void)setup
 {
-    [self reset];
+    [self flush];
     
     self.library =[ALAssetsLibrary new];
 }
 
 - (NSString *)loadTitleWithCompletitionHandler:(completitionBlock)completionHandler
 {
-    if (!_doneTitle && (_doneImage || _doneDuration))
-    {
-        completionHandler();
-        _doneTitle = TRUE;
-    }
-    else
-    [self performActionWithCompletitionBlock:completionHandler ptr:&_doneTitle];
+    [self performActionWithCompletitionBlock:completionHandler];
     return self.title;
 }
 
 -(UIImage*)loadThumbnailWithCompletitionHandler:(completitionBlock)completionHandler
 {
-    if (!_doneImage && (_doneTitle || _doneDuration))
-    {
-        completionHandler();
-        _doneImage = TRUE;
-    }
-    else
-    [self performActionWithCompletitionBlock:completionHandler ptr:&_doneImage];
+    [self performActionWithCompletitionBlock:completionHandler];
     
     return self.image;
 }
 
 -(NSTimeInterval)loadDurationWithCompletitionHandler:(completitionBlock)completionHandler
 {
-    if (!_doneDuration && (_doneImage || _doneTitle))
-    {
-        completionHandler();
-        _doneDuration = TRUE;
-    }
-    else
-    [self performActionWithCompletitionBlock:completionHandler ptr:&_doneDuration];
+    [self performActionWithCompletitionBlock:completionHandler];
     return self.duration;
 }
 
--(void)performActionWithCompletitionBlock:(completitionBlock)completionHandler ptr:(BOOL*)boolPtr
+-(void)performActionWithCompletitionBlock:(completitionBlock)completionHandler
 {
     dispatch_once(&_token, ^{
 		// Load the title from AVMetadataCommonKeyTitle
-		NSLog(@"Loading title...");
+		NSLog(@"Loading Bulk of data...");
 		
         [self.library assetForURL:self.url resultBlock:^(ALAsset *asset) {
             self.image = [[UIImage alloc]initWithCGImage:asset.aspectRatioThumbnail];
@@ -92,11 +73,12 @@
             id durationObj =[asset valueForProperty:ALAssetPropertyDuration] ;
             
             self.duration = [durationObj doubleValue];
-            *boolPtr = TRUE;
+            self.done = TRUE;
             completionHandler();
+            NSLog(@"Done Loading bulk of data ...");
         } failureBlock:^(NSError *error) {
             NSLog(@"error %@",error);
-            [self reset];
+            [self flush];
         }];
     });
 }
@@ -111,5 +93,7 @@
         completitionBlock(nil);
     }];
 }
+
+
 
 @end

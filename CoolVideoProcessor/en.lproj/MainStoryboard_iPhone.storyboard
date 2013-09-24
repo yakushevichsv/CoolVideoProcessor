@@ -9,7 +9,7 @@
             <objects>
                 <viewController id="2" customClass="ViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="3">
-                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hby-v7-jBr">
@@ -43,7 +43,7 @@
             <objects>
                 <viewController id="oL4-BI-c0C" customClass="PlayVideoVC" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="srK-yK-Ix2">
-                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
@@ -58,7 +58,7 @@
             <objects>
                 <viewController id="aH3-DU-K3H" customClass="LogoViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="EVf-9U-caH" customClass="GLKView">
-                        <rect key="frame" x="0.0" y="20" width="320" height="460"/>
+                        <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
@@ -94,20 +94,20 @@
             <objects>
                 <viewController id="Z6R-2s-kVb" customClass="MergeCollectionViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="rbJ-JL-iNf">
-                        <rect key="frame" x="0.0" y="94" width="320" height="386"/>
+                        <rect key="frame" x="0.0" y="94" width="320" height="474"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="1000" alwaysBounceVertical="YES" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="27h-ZN-PhB">
-                                <color key="backgroundColor" red="0.0" green="1" blue="0.32941177490000001" alpha="1" colorSpace="deviceRGB"/>
+                            <collectionView opaque="NO" multipleTouchEnabled="YES" contentMode="scaleAspectFit" horizontalCompressionResistancePriority="760" verticalCompressionResistancePriority="1000" alwaysBounceVertical="YES" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="27h-ZN-PhB">
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="478" id="Cyj-7W-9RP"/>
+                                    <constraint firstAttribute="height" constant="478" id="Ujd-mw-kbw"/>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="458" type="user" id="oy0-Kf-bxB" userLabel="Height (478) - Collection View"/>
                                 </constraints>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="6Hq-lO-812">
                                     <size key="itemSize" width="50" height="50"/>
                                     <size key="headerReferenceSize" width="50" height="50"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="5"/>
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="MergeCell" id="h28-fm-rt8" customClass="MergeVideoViewCell">
@@ -194,7 +194,7 @@
             <objects>
                 <viewController id="z8d-2O-Ltt" customClass="PositionViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="PWd-wc-wlb">
-                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" allowsSelectionDuringEditing="YES" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="Arg-TY-cWt">
@@ -296,7 +296,7 @@
             <objects>
                 <viewController id="yne-Sc-6kV" customClass="MergingProcessorViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="3cE-tF-Zcw">
-                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <progressView opaque="NO" contentMode="scaleToFill" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Ejr-hK-0aW">
@@ -336,7 +336,7 @@
             <objects>
                 <viewController storyboardIdentifier="FilterSettingsControllerID" id="WMH-l0-wnn" customClass="FilterSettingsController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="5RK-PO-pfA">
-                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="52" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="ow6-Ld-FEQ">
@@ -450,7 +450,7 @@
             <objects>
                 <viewController id="Rvs-6V-u8t" customClass="SelectFiltersController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="CJi-L1-ZKe">
-                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="cdf-j8-hW2">
@@ -603,9 +603,117 @@
             <point key="canvasLocation" x="-533" y="521"/>
         </scene>
     </scenes>
+    <classes>
+        <class className="FilterSettingsController" superclassName="UIBaseViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/FilterSettingsController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="tableView" candidateClass="UITableView"/>
+            </relationships>
+        </class>
+        <class className="FilterSettingsImageCell" superclassName="UITableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/FilterSettingsImageCell.h"/>
+            <relationships>
+                <relationship kind="outlet" name="imageView" candidateClass="UIImageView"/>
+            </relationships>
+        </class>
+        <class className="FilterSettingsScalarCell" superclassName="UITableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/FilterSettingsScalarCell.h"/>
+            <relationships>
+                <relationship kind="outlet" name="cellTitle" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="slider" candidateClass="UISlider"/>
+            </relationships>
+        </class>
+        <class className="FilterSettingsVectorCell" superclassName="UITableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/FilterSettingsVectorCell.h"/>
+        </class>
+        <class className="HeaderView" superclassName="UICollectionReusableView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/HeaderView.h"/>
+            <relationships>
+                <relationship kind="outlet" name="headerLabel" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="LogoViewController" superclassName="GLKViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/LogoViewController.h"/>
+        </class>
+        <class className="MergeCollectionViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MergeCollectionViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="files" candidateClass="UICollectionView"/>
+            </relationships>
+        </class>
+        <class className="MergeVideoView" superclassName="UIView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MergeVideoView.h"/>
+        </class>
+        <class className="MergeVideoViewCell" superclassName="UICollectionViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MergeVideoViewCell.h"/>
+            <relationships>
+                <relationship kind="outlet" name="MergeVideo" candidateClass="MergeVideoView"/>
+                <relationship kind="outlet" name="indicator" candidateClass="UIActivityIndicatorView"/>
+            </relationships>
+        </class>
+        <class className="MergingProcessorViewController" superclassName="UIBaseViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MergingProcessorViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="lblTitle" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="pvProgress" candidateClass="UIProgressView"/>
+            </relationships>
+        </class>
+        <class className="NSLayoutConstraint" superclassName="NSObject">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
+        </class>
+        <class className="PlayVideoVC" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/PlayVideoVC.h"/>
+        </class>
+        <class className="PositionCell" superclassName="UITableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/PositionCell.h"/>
+            <relationships>
+                <relationship kind="outlet" name="btnImage" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="lblSubTitle" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="lblTitle" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="PositionViewController" superclassName="UIBaseViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/PositionViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="tableView" candidateClass="UITableView"/>
+            </relationships>
+        </class>
+        <class className="SelectFiltersCell" superclassName="UICollectionViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/SelectFiltersCell.h"/>
+            <relationships>
+                <relationship kind="outlet" name="imageView" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="titleLabel" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="SelectFiltersController" superclassName="UIBaseViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/SelectFiltersController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="collectionView" candidateClass="UICollectionView"/>
+                <relationship kind="outlet" name="cvFilters" candidateClass="UICollectionView"/>
+            </relationships>
+        </class>
+        <class className="UIBaseViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIBaseViewController.h"/>
+        </class>
+        <class className="UICollectionReusableView" superclassName="UIView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionReusableView.h"/>
+        </class>
+        <class className="UICollectionViewCell" superclassName="UICollectionReusableView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewCell.h"/>
+        </class>
+        <class className="UICollectionViewFlowLayout" superclassName="UICollectionViewLayout">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewFlowLayout.h"/>
+        </class>
+        <class className="UICollectionViewLayout" superclassName="NSObject">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewLayout.h"/>
+        </class>
+        <class className="ViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/ViewController.h"/>
+        </class>
+    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
 </document>

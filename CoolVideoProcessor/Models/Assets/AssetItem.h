@@ -39,5 +39,6 @@ typedef void (^completitionBlock)(void);
 @property (nonatomic) NSTimeInterval duration;
 @property (nonatomic,strong) NSString *title;
 @property (nonatomic, strong) UIImage *image;
+@property (nonatomic) BOOL done;
 
 @end

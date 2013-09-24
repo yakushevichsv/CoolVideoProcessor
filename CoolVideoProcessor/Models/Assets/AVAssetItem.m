@@ -16,6 +16,10 @@
 @property(nonatomic, readonly, unsafe_unretained) dispatch_once_t titleToken;
 @property(nonatomic, readonly, unsafe_unretained) dispatch_once_t thumbnailToken;
 
+
+@property (nonatomic) BOOL titleDone;
+@property (nonatomic) BOOL imageDone;
+
 @end
 
 @implementation AVAssetItem
@@ -37,9 +41,12 @@
 - (NSString *)loadTitleWithCompletitionHandler:(completitionBlock)completionHandler
 {
     __unsafe_unretained __block AVAssetItem *weakSelf = (AVAssetItem *)self;
+    
 	dispatch_once(&_titleToken, ^{
 		// Load the title from AVMetadataCommonKeyTitle
-		NSLog(@"Loading title...");
+		dispatch_async(dispatch_get_main_queue(), ^{
+        NSLog(@"Loading title...");
+        });
 		NSArray *key = [[NSArray alloc] initWithObjects:@"commonMetadata", nil];
 		[weakSelf.videoAsset loadValuesAsynchronouslyForKeys:key
                                            completionHandler:^{
@@ -53,7 +60,8 @@
                                                        weakSelf.title = [titleItem stringValue];
                                                        dispatch_async(dispatch_get_main_queue(), ^{
                                                            NSLog(@"Loaded title for %@", weakSelf.title);
-                                                           completionHandler();
+                                                           self.titleDone = TRUE;
+                                                           [self callBlockAndSetDone:completionHandler];
                                                        });
                                                    }
                                                    else
@@ -69,7 +77,8 @@
                                                                weakSelf.title = [[titlesForLocale objectAtIndex:0] stringValue];
                                                                dispatch_async(dispatch_get_main_queue(), ^{
                                                                    NSLog(@"Loaded title for %@", weakSelf.title);
-                                                                   completionHandler();
+                                                                                                                              self.titleDone = TRUE;
+                                                                   [self callBlockAndSetDone:completionHandler];
                                                                });
                                                                break;
                                                            }
@@ -82,11 +91,32 @@
 	return self.title;
 }
 
+-(void)callBlockAndSetDone:(completitionBlock)block
+{
+    if (self.titleDone && self.imageDone)
+        self.done = TRUE;
+    if (block)
+        block();
+}
 - (UIImage *)loadThumbnailWithCompletitionHandler:(completitionBlock)completionHandler
 {
     __unsafe_unretained __block AVAssetItem *weakSelf = (AVAssetItem *)self;
-	dispatch_once(&_thumbnailToken, ^{
-		[weakSelf.imageGenerator generateCGImagesAsynchronouslyForTimes:[NSArray arrayWithObject:[NSValue valueWithCMTime:kCMTimeZero]]
+	
+        dispatch_once(&_thumbnailToken, ^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSLog(@"Loading image...");
+        });
+        NSError *error;
+        CGImageRef imageRef =[weakSelf.imageGenerator copyCGImageAtTime:kCMTimeZero actualTime:nil error:&error];
+        if (error)
+        {
+            NSLog(@"couldn't generate thumbnail, error:%@", error);
+        }
+        weakSelf.image = [UIImage imageWithCGImage:imageRef];
+        CGImageRelease(imageRef);
+            self.imageDone = TRUE;
+            [self callBlockAndSetDone:completionHandler];
+		/*[weakSelf.imageGenerator generateCGImagesAsynchronouslyForTimes:[NSArray arrayWithObject:[NSValue valueWithCMTime:kCMTimeZero]]
 													  completionHandler:^(CMTime requestedTime, CGImageRef image, CMTime actualTime, AVAssetImageGeneratorResult result, NSError *error) {
                                                           if (result == AVAssetImageGeneratorSucceeded)
                                                           {
@@ -100,7 +130,7 @@
                                                           {
                                                               NSLog(@"couldn't generate thumbnail, error:%@", error);
                                                           }
-                                                      }];
+                                                      }];*/
 	});
 	
 	return self.image;
@@ -110,6 +140,9 @@
 {
     _thumbnailToken = nil;
     _titleToken = nil;
+    self.imageDone = FALSE;
+    self.titleDone = FALSE;
+    self.done = FALSE;
     self.image =nil;
     self.title = nil;
 }

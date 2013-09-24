@@ -295,24 +295,9 @@
         return nil;
 }
 
--(UICollectionViewCell*)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+- (AssetItem *)itemAtIndexPath:(NSIndexPath *)indexPath
 {
-    
-    static NSString * cellName = @"MergeCell";
-    MergeVideoViewCell * cell;
-    if (!(cell = (MergeVideoViewCell*)[collectionView dequeueReusableCellWithReuseIdentifier:cellName forIndexPath:indexPath]))
-    {
-        cell = [MergeVideoViewCell new];
-    }
-    
-    if (!cell.MergeVideo.title && !cell.MergeVideo.firstFrame)
-    {
-        cell.isLoading = TRUE;
-        cell.MergeVideo.bulkReDraw = TRUE;
-        cell.MergeVideo.tapped = FALSE;
-    }
-    
-    AssetItem * item;
+    AssetItem * item = nil;
     
     if (indexPath.section == VIDEO_SECTION)
     {
@@ -322,21 +307,51 @@
     {
         item = (AssetItem *)self.library.imageAssetItems[indexPath.row];
     }
-        
-    cell.MergeVideo.title =  [item loadTitleWithCompletitionHandler:^{
-        //[collectionView reloadItemsAtIndexPaths:@[indexPath]];
-        MergeVideoViewCell* retCell = (MergeVideoViewCell*)[collectionView cellForItemAtIndexPath:indexPath];
-        retCell.MergeVideo.title = item.title;
-        retCell.MergeVideo.firstFrame = [item loadThumbnailWithCompletitionHandler:^{
-            MergeVideoViewCell* retCell2 = (MergeVideoViewCell*)[collectionView cellForItemAtIndexPath:indexPath];
-            retCell2.MergeVideo.firstFrame = item.image;
-            retCell2.MergeVideo.bulkReDraw = FALSE;
-            retCell2.isLoading  = FALSE;
-            [retCell2 setNeedsDisplay];
+    return item;
+}
+
+-(UICollectionViewCell*)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+    static NSString * cellName = @"MergeCell";
+    MergeVideoViewCell * cell = (MergeVideoViewCell*)[collectionView dequeueReusableCellWithReuseIdentifier:cellName forIndexPath:indexPath];
+    
+    
+    AssetItem * item = [self itemAtIndexPath:indexPath];
+    
+    if (!item.done)
+    {
+        cell.isLoading = TRUE;
+        cell.MergeVideo.bulkReDraw = TRUE;
+        cell.MergeVideo.tapped = FALSE;
+    }
+    
+        cell.MergeVideo.title =  [item loadTitleWithCompletitionHandler:^{
+            //MergeVideoViewCell * retCell =.MergeVideo.title = item.title;
+            MergeVideoViewCell * retCell = (MergeVideoViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
+            retCell.MergeVideo.title = item.title;
+            
+            retCell.MergeVideo.firstFrame = [item loadThumbnailWithCompletitionHandler:nil];
+            
+            if (item.done)
+            {
+                cell.isLoading = FALSE;
+                cell.MergeVideo.bulkReDraw = FALSE;
+                
+            }
         }];
-    }];
+        
+               
     
     
+    if (item.done)
+    {
+        cell.MergeVideo.title = item.title;
+        cell.MergeVideo.firstFrame = item.image;
+        cell.isLoading = FALSE;
+        cell.MergeVideo.bulkReDraw = FALSE;
+  
+    }
     return cell;
 }
 
