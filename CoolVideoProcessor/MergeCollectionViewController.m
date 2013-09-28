@@ -291,7 +291,6 @@
         
         return headerView;
     }
-    else
         return nil;
 }
 
@@ -331,14 +330,21 @@
             MergeVideoViewCell * retCell = (MergeVideoViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
             retCell.MergeVideo.title = item.title;
             
-            retCell.MergeVideo.firstFrame = [item loadThumbnailWithCompletitionHandler:nil];
             
-            if (item.done)
-            {
-                cell.isLoading = FALSE;
-                cell.MergeVideo.bulkReDraw = FALSE;
-                
-            }
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND,0), ^{
+                UIImage * image = [item loadThumbnailWithCompletitionHandler:nil];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    MergeVideoViewCell * retCell = (MergeVideoViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
+                    retCell.MergeVideo.firstFrame = image;
+                    if (item.done)
+                    {
+                        retCell.isLoading = FALSE;
+                        retCell.MergeVideo.bulkReDraw = FALSE;
+                        
+                    }
+                });
+            });
+            
         }];
         
                
@@ -378,4 +384,80 @@
         controller.items = resArray;
     }
 }
+
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    
+    NSArray * array = [self.files indexPathsForVisibleItems];
+    
+    //NSMutableArray * videoCells = [NSMutableArray array];
+    //NSMutableArray * imageCells = [NSMutableArray array];
+    
+    __block NSInteger minVIndex,minIIndex,maxVIndex,maxIIndex;
+    
+    minVIndex = NSIntegerMax;
+    minIIndex = NSIntegerMax;
+    maxVIndex = NSIntegerMin;
+    maxIIndex = NSIntegerMin;
+    
+    [array enumerateObjectsUsingBlock:^(NSIndexPath* indexPath, NSUInteger idx, BOOL *stop) {
+        const NSInteger rowPath = indexPath.row;
+        
+        if (indexPath.section == VIDEO_SECTION)
+        {
+            if (minVIndex > rowPath)
+            {
+                minVIndex = rowPath;
+            }
+            
+            if (maxVIndex < rowPath)
+            {
+                maxVIndex = rowPath;
+            }
+        }
+        else if (indexPath.section == IMAGES_SECTION)
+        {
+            if (minIIndex > rowPath)
+            {
+                minIIndex = rowPath;
+            }
+            
+            if (maxIIndex < rowPath)
+            {
+                maxIIndex = rowPath;
+            }
+
+        }
+    }];
+    
+    if (minVIndex <= maxVIndex)
+    {
+        for (NSUInteger i=0 ; i <minVIndex;i++)
+        {
+            [self.library.videoAssetItems[i] flush];
+        }
+    
+        for (NSUInteger i=maxVIndex+1 ; i <self.library.videoAssetItems.count;i++)
+        {
+            [self.library.videoAssetItems[i] flush];
+        }
+    }
+    
+    
+    if (minIIndex <= maxIIndex)
+    {
+
+        for (NSUInteger i=0 ; i <minIIndex;i++)
+        {
+            [self.library.imageAssetItems[i] flush];
+        }
+    
+        for (NSUInteger i=maxIIndex+1 ; i <self.library.imageAssetItems.count;i++)
+        {
+            [self.library.imageAssetItems[i] flush];
+        }
+    }
+}
+
 @end

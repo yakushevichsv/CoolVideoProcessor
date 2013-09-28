@@ -39,7 +39,9 @@
 
 -(void)flush
 {
-    
+    self.image = nil;
+    self.done = FALSE;
+    self.title = nil;
 }
 
 @end

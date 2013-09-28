@@ -38,6 +38,15 @@
     self.videoAsset = [[AVURLAsset alloc]initWithURL:self.url options:nil];
 }
 
+- (AVAsset *)videoAsset
+{
+    if (!_videoAsset)
+    {
+        [self setup];
+    }
+    return _videoAsset;
+}
+
 - (NSString *)loadTitleWithCompletitionHandler:(completitionBlock)completionHandler
 {
     __unsafe_unretained __block AVAssetItem *weakSelf = (AVAssetItem *)self;
@@ -91,10 +100,19 @@
 	return self.title;
 }
 
+-(BOOL)done
+{
+    return self.titleDone && self.imageDone;
+}
+
+-(void)setDone:(BOOL)done
+{
+    self.titleDone = done;
+    self.imageDone = done;
+}
+
 -(void)callBlockAndSetDone:(completitionBlock)block
 {
-    if (self.titleDone && self.imageDone)
-        self.done = TRUE;
     if (block)
         block();
 }
@@ -138,13 +156,10 @@
 
 -(void)flush
 {
+    [super flush];
     _thumbnailToken = nil;
     _titleToken = nil;
-    self.imageDone = FALSE;
-    self.titleDone = FALSE;
-    self.done = FALSE;
-    self.image =nil;
-    self.title = nil;
+    self.videoAsset = nil;
 }
 
 

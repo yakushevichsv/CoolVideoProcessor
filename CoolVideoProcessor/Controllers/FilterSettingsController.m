@@ -189,6 +189,9 @@ indexPath withAmount:(NSDictionary*)dic array:(NSArray**)arrayPtr
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    
+
+    
     NSNumber * rowPath = @(indexPath.row);
     id key;
     if (indexPath.section == DIC_SECTION)

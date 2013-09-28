@@ -27,17 +27,21 @@
     return self;
 }
 
--(void)flush
-{
-    _token = nil;
-    self.done = FALSE;
-}
-
 -(void)setup
 {
     [self flush];
     
     self.library =[ALAssetsLibrary new];
+}
+
+- (ALAssetsLibrary *)library
+{
+    if (!_library)
+    {
+        _library =[ALAssetsLibrary new];
+
+    }
+    return _library;
 }
 
 - (NSString *)loadTitleWithCompletitionHandler:(completitionBlock)completionHandler
@@ -94,6 +98,12 @@
     }];
 }
 
+-(void)flush
+{
+    _token = nil;
+    _library = nil;
+    [super flush];
+}
 
 
 @end
