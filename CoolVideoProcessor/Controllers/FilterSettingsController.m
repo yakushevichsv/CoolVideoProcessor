@@ -10,6 +10,7 @@
 #import "FilterSettingsScalarCell.h"
 #import "FilterSettingsVectorCell.h"
 #import "FilterSettingsImageCell.h"
+#import "FilterSettingsBackImageCell.h"
 
 #define NUMBER_OF_SECTIONS 2
 #define DIC_SECTION 1
@@ -22,12 +23,13 @@
 
 static NSDictionary * g_Height;
 
-@interface FilterSettingsController ()<UITableViewDataSource,UITableViewDelegate,FilterSettingsScalarCellDelegate,FilterSettingsVectorCellDelegate>
+@interface FilterSettingsController ()<UITableViewDataSource,UITableViewDelegate,FilterSettingsScalarCellDelegate,FilterSettingsVectorCellDelegate,FilterSettingsBackImageCellDelegate>
 @property (nonatomic,weak) IBOutlet UITableView *tableView;
 @property (nonatomic,strong) NSMutableDictionary *scalarTypes;
 @property (nonatomic,strong) UIBarButtonItem *doneKeyboardBarButtonItem;
 @property (nonatomic,strong) UIBarButtonItem *rightBarButtonItem;
 @property (nonatomic,strong) NSMutableDictionary * vectorTypes;
+@property (nonatomic,strong) NSMutableDictionary *imageTypes;
 @property (nonatomic,strong) UITextField *activeField;
 @end
 
@@ -51,6 +53,7 @@ static NSDictionary * g_Height;
 {
     self.scalarTypes  = [NSMutableDictionary dictionary];
     self.vectorTypes = [NSMutableDictionary dictionary];
+    self.imageTypes = [NSMutableDictionary dictionary];
 }
 
 -(void)processSettings
@@ -67,21 +70,41 @@ static NSDictionary * g_Height;
         {
             NSDictionary * dic = (NSDictionary *)valueObj;
             id scalarType = [dic objectForKey:kCIAttributeClass];
+            BOOL INC_BOOL = FALSE;
+            
             if ([scalarType isEqualToString:@"NSNumber"])
             {
                 [self.scalarTypes setObject:@{key:filterAttributes[key]} forKey:@(index)];
-                 index++;
+                INC_BOOL = TRUE;
             }
             else if ([scalarType isEqualToString:@"CIVector"])
             {
                 CIVector * vector = [dic objectForKey:kCIAttributeDefault];
                 [self.vectorTypes setObject:@{key:filterAttributes[key],@"count":@(vector.count)} forKey:@(index)];
-                index++;
+                INC_BOOL = TRUE;
             }
-            else {
+            else if ([scalarType isEqualToString:@"CIImage"])
+            {
+                [self.imageTypes setObject:@{key:filterAttributes[key]} forKey:@(index)];
+                INC_BOOL = TRUE;
+            }
+            else
                 NSLog(@"Current type is %@",scalarType);
+            
+            NSDictionary * curDic = (NSDictionary *)self.imageTypes[@(index)];
+            
+            index+=INC_BOOL;
+            
+            if (!curDic)
+            {
+                [self.filter setValue:dic[kCIAttributeDefault] forKey:key];
             }
-            [self.filter setValue:dic[kCIAttributeDefault] forKey:key];
+            else
+            {
+                NSString *newKey = curDic.allKeys.lastObject;
+                [self.filter setValue:[self.filter valueForKey:kCIInputImageKey]  forKey:newKey];
+            }
+                
         }
         
     }
@@ -99,6 +122,13 @@ static NSDictionary * g_Height;
 {
     CIImage * ciImage = [CIImage imageWithCGImage:self.originalImage.CGImage];
     [self.filter setValue:ciImage forKey:kCIInputImageKey];
+    
+    for (id key in self.imageTypes.allKeys)
+    {
+        NSDictionary * curDic = self.imageTypes[key];
+        NSString *newKey = curDic.allKeys.lastObject;
+        [self.filter setValue:[self.filter valueForKey:kCIInputImageKey]  forKey:newKey];
+    }
  
 }
 
@@ -134,7 +164,7 @@ static NSDictionary * g_Height;
 {
     if (section == DIC_SECTION)
     {
-        return self.scalarTypes.count+self.vectorTypes.count;
+        return self.scalarTypes.count+self.vectorTypes.count+self.imageTypes.count;
     }
     else if (section == IMAGE_SECTION)
     {
@@ -184,6 +214,16 @@ indexPath withAmount:(NSDictionary*)dic array:(NSArray**)arrayPtr
     {
         cell = [[FilterSettingsImageCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:imageCellId];
     }
+    return cell;
+}
+
+- (FilterSettingsBackImageCell *)backImageCellAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *backImageCellId = @"FilterSettingsBackCell";
+    
+    FilterSettingsBackImageCell * cell = [self.tableView dequeueReusableCellWithIdentifier:backImageCellId forIndexPath:indexPath];
+                                          
+    NSParameterAssert(cell);
     return cell;
 }
 
@@ -263,6 +303,14 @@ indexPath withAmount:(NSDictionary*)dic array:(NSArray**)arrayPtr
             
             return cell;
         }
+        
+        else if ((dic = (NSDictionary *)self.imageTypes[rowPath]))
+        {
+            FilterSettingsBackImageCell *cell = [self backImageCellAtIndexPath:indexPath];
+            cell.parameterName.text = dic.allKeys.lastObject;//dic[dic.allKeys.lastObject];
+            cell.delegate = self;
+            return cell;
+        }
             
     }
     else if (indexPath.section==IMAGE_SECTION)
@@ -298,6 +346,34 @@ indexPath withAmount:(NSDictionary*)dic array:(NSArray**)arrayPtr
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:IMAGE_SECTION]] withRowAnimation:UITableViewRowAnimationNone];
 }
 
+#pragma mark - FilterSettingsImageCellDelegate<NSObject>
+                                          
+-(void)filterSettingsBackImageCell:(FilterSettingsBackImageCell *)cell didSelectImage:(UIImage *)image useTheSameImage:(BOOL)sameImage
+{
+    NSIndexPath *path = [self.tableView indexPathForCell:cell];
+    
+    if (path.section == DIC_SECTION)
+    {
+        NSDictionary *dic = (NSDictionary *)self.imageTypes[@(path.row)];
+        
+        id key;
+        if ((key = dic.allKeys.lastObject))
+        {
+            CIImage * ciImage;
+            if (!sameImage)
+            {
+               ciImage = [CIImage imageWithCGImage:image.CGImage];
+            }
+            else
+            {
+                ciImage = [self.filter valueForKey:@"inputImage"];
+            }
+            [self.filter setValue:ciImage forKey:key];
+            [self setProcessedImage];
+        }
+    }
+}
+    
 #pragma mark - FilterSettingsVectorCellDelegate<NSObject>
 
 -(void)cell:(FilterSettingsVectorCell *)cell didActivateTextField:(UITextField *)field

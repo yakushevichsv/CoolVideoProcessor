@@ -455,6 +455,55 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                     </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="FilterSettingsBackCell" id="2BF-Gc-6PV" customClass="FilterSettingsBackImageCell">
+                                        <rect key="frame" x="0.0" y="340" width="327" height="52"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="2BF-Gc-6PV" id="Nmb-sC-uSi">
+                                            <rect key="frame" x="0.0" y="0.0" width="327" height="51"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dzu-re-WsK">
+                                                    <rect key="frame" x="20" y="11" width="46" height="30"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <state key="normal" title="Press"/>
+                                                    <connections>
+                                                        <action selector="takePicture:" destination="2BF-Gc-6PV" eventType="touchUpInside" id="iTW-76-0AZ"/>
+                                                    </connections>
+                                                </button>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rcF-ta-Rfm">
+                                                    <rect key="frame" x="68" y="20" width="173" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <attributedString key="attributedText">
+                                                        <fragment content="Select an extra image">
+                                                            <attributes>
+                                                                <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                                <font key="NSFont" size="17" name="HelveticaNeue"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                    </attributedString>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Parameter name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zPm-l1-7pI">
+                                                    <rect key="frame" x="74" y="0.0" width="167" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="bottom" secondItem="rcF-ta-Rfm" secondAttribute="bottom" constant="15" id="G1n-c3-DF1"/>
+                                                <constraint firstItem="rcF-ta-Rfm" firstAttribute="top" secondItem="Nmb-sC-uSi" secondAttribute="top" constant="15" id="ey7-bv-VbI"/>
+                                                <constraint firstItem="rcF-ta-Rfm" firstAttribute="leading" secondItem="dzu-re-WsK" secondAttribute="trailing" constant="8" id="lvU-y1-OED"/>
+                                                <constraint firstAttribute="trailing" secondItem="rcF-ta-Rfm" secondAttribute="trailing" constant="100" id="pCH-Ax-6dx"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="parameterName" destination="zPm-l1-7pI" id="use-0w-gbg"/>
+                                            <outlet property="takePicture" destination="dzu-re-WsK" id="gSa-vd-Jaw"/>
+                                        </connections>
+                                    </tableViewCell>
                                 </prototypes>
                                 <connections>
                                     <outlet property="dataSource" destination="WMH-l0-wnn" id="rBc-2q-BwV"/>
