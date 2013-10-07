@@ -10,6 +10,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import <MediaPlayer/MediaPlayer.h>
 #import <CoreMedia/CoreMedia.h>
+#import  <CoreImage/CoreImage.h>
 #import "Constants.h"
 #import "PositionViewController.h"
 #import "PositionCell.h"
@@ -20,9 +21,15 @@
 #import "VideoProcessor.h"
 #import "FilterInfo.h"
 #import "FileProcessor.h"
+#import "FilterSettingsController.h"
+#import "CIFilter+SYExtensions.h"
+#import "FilteringPlayerViewController.h"
 
 @interface PositionViewController ()<UITableViewDataSource,UITableViewDelegate,SelectFiltersDelegate>
-
+{
+    NSMutableDictionary * _filters;
+    NSIndexPath *_selectedItem;
+}
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 -(AssetItem*)assetItem:(NSInteger)index;
 @end
@@ -33,6 +40,7 @@
 {
     if (self = [super initWithCoder:aDecoder])
     {
+        _filters = [NSMutableDictionary dictionary];
     }
     return self;
 }
@@ -217,6 +225,7 @@
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
+    //TODO: figure out what to do here.....
     if ([segue.identifier isEqualToString:@"mergeSegueIdentifier"])
     {
     
@@ -259,8 +268,17 @@
         SelectFiltersController * controller =
         (SelectFiltersController*)segue.destinationViewController;
         NSIndexPath * path = [self.tableView indexPathForSelectedRow];
+        _selectedItem = path;
         controller.item = (AssetItem*)self.items[path.row];
         controller.delegate =self;
+        [self.tableView deselectRowAtIndexPath:path animated:YES];
+    }
+    else if ([segue.identifier isEqualToString:@"videoViewSegue"])
+    {
+        FilteringPlayerViewController * controller = (FilteringPlayerViewController *) segue.destinationViewController;
+     
+        NSIndexPath * path = [self.tableView indexPathForSelectedRow];
+        controller.url = ((AssetItem*)self.items[path.row]).url;
         [self.tableView deselectRowAtIndexPath:path animated:YES];
     }
 }
@@ -269,7 +287,7 @@
 
 - (IBAction)imagePressed:(UIButton *)sender
 {
-    UITableViewCell* cell = (UITableViewCell*)sender.superview.superview;
+    UITableViewCell* cell = (UITableViewCell*)sender.superview.superview.superview;
     NSParameterAssert([cell isKindOfClass:[UITableViewCell class]]);
     NSIndexPath * indexPath = [self.tableView indexPathForCell:cell];
     NSInteger index = indexPath.row;
@@ -288,22 +306,9 @@
             }];
         }
     }
-    else
+    else if (assetItem.mediaType == AssetItemMediaTypeVideo)
     {
-        VideoProcessor * videoProcessor = [VideoProcessor new];
-        FilterInfo * info = [FilterInfo new];
-        info.item = assetItem;
-        
-        CIFilter *filter = [CIFilter filterWithName:@"CISepiaTone"
-                                      keysAndValues: 
-                            @"inputIntensity", [NSNumber numberWithFloat:0.4], nil];
-        
-        info.range = CMTimeRangeMake(kCMTimeZero, CMTimeMakeWithSeconds(assetItem.duration, 1));
-        info.filter = filter;
-        
-        [videoProcessor applyFilter:info withCompletition:^(NSURL *url) {
-            [self displayMovieByURL:url];
-        }];
+        [self performSegueWithIdentifier:@"videoViewSegue" sender:sender];
     }
        // [self displayMovieByURL:[self assetItem:index].url ];
     
@@ -330,5 +335,35 @@
     //TODO: add code here...
 }
 
+#pragma mark - Unwind action
+
+- (IBAction)unwindDoneWithFilterSettings:(UIStoryboardSegue *)sender
+{
+   FilterSettingsController * settingsController = sender.sourceViewController;
+   NSMutableArray *array = [NSMutableArray arrayWithArray:[settingsController.filter inputKeys]];
+    [array removeObject:kCIInputImageKey];
+   id inputImage = [settingsController.filter valueForKey:kCIInputImageKey];
+    CIFilter * filter = [CIFilter filterWithName:[settingsController.filter name]];
+    for (NSString *key in array)
+   {
+       NSInteger index = key.length - @"Image".length;
+      if ([[key substringFromIndex:index] isEqualToString:@"Image"])
+      {
+          if (inputImage == [settingsController.filter valueForKey:key])
+          {
+              [filter addImageParameter:key];
+          }
+          else
+          {
+              [filter setValue:[settingsController.filter valueForKey:key] forKey:key];
+          }
+      }
+      else{
+          [filter setValue:[settingsController.filter valueForKey:key] forKey:key];
+      }
+   }
+    NSParameterAssert(_selectedItem);
+   [_filters setObject:filter forKey:[NSString stringWithFormat:@"%d,%d",_selectedItem.section,_selectedItem.row]];
+}
 
 @end

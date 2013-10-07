@@ -8,13 +8,19 @@
 
 /* Begin PBXBuildFile section */
 		2106D18217A1ABF2008077ED /* SelectFiltersCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2106D18117A1ABF2008077ED /* SelectFiltersCell.m */; };
+		2106E28B18017DB100EEE943 /* FilteringPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2106E28A18017DB100EEE943 /* FilteringPlayerViewController.m */; };
 		2109553517666916007D0C78 /* MergeCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2109553417666916007D0C78 /* MergeCollectionViewController.m */; };
 		2109553917666A34007D0C78 /* MergeVideoViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2109553817666A34007D0C78 /* MergeVideoViewCell.m */; };
 		2109553C17666E21007D0C78 /* MergeVideoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2109553B17666E21007D0C78 /* MergeVideoView.m */; };
 		21095763176BC55C00C7A68A /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21095762176BC55C00C7A68A /* GLKit.framework */; };
 		21095766176BC59D00C7A68A /* LogoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 21095765176BC59D00C7A68A /* LogoViewController.m */; };
 		211D3A4B1782F1C700665A5E /* MergingProcessorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 211D3A4A1782F1C700665A5E /* MergingProcessorViewController.m */; };
+		21201760180330ED001760DC /* RosyWriterPreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2120175A180330ED001760DC /* RosyWriterPreviewView.m */; };
+		21201761180330ED001760DC /* passThrough.fsh in Sources */ = {isa = PBXBuildFile; fileRef = 2120175C180330ED001760DC /* passThrough.fsh */; };
+		21201762180330ED001760DC /* passThrough.vsh in Sources */ = {isa = PBXBuildFile; fileRef = 2120175D180330ED001760DC /* passThrough.vsh */; };
+		21201763180330ED001760DC /* ShaderUtilities.c in Sources */ = {isa = PBXBuildFile; fileRef = 2120175E180330ED001760DC /* ShaderUtilities.c */; };
 		212683AD177F1F4F0018F4CB /* PositionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 212683AC177F1F4E0018F4CB /* PositionCell.m */; };
+		212ED1791800681A0073EF50 /* CIFilter+SYExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 212ED1781800681A0073EF50 /* CIFilter+SYExtensions.m */; };
 		2141094B17D38DD700692678 /* FilterSettingsImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2141094A17D38DD700692678 /* FilterSettingsImageCell.m */; };
 		218F1532174189E600874561 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 218F1531174189E600874561 /* AssetsLibrary.framework */; };
 		218F153417418E7900874561 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 218F153317418E7900874561 /* AVFoundation.framework */; };
@@ -60,6 +66,8 @@
 /* Begin PBXFileReference section */
 		2106D18017A1ABF2008077ED /* SelectFiltersCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SelectFiltersCell.h; path = Filters/SelectFiltersCell.h; sourceTree = "<group>"; };
 		2106D18117A1ABF2008077ED /* SelectFiltersCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SelectFiltersCell.m; path = Filters/SelectFiltersCell.m; sourceTree = "<group>"; };
+		2106E28918017DB100EEE943 /* FilteringPlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FilteringPlayerViewController.h; path = Controllers/Playback/FilteringPlayerViewController.h; sourceTree = "<group>"; };
+		2106E28A18017DB100EEE943 /* FilteringPlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FilteringPlayerViewController.m; path = Controllers/Playback/FilteringPlayerViewController.m; sourceTree = "<group>"; };
 		2109553317666916007D0C78 /* MergeCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MergeCollectionViewController.h; sourceTree = "<group>"; };
 		2109553417666916007D0C78 /* MergeCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MergeCollectionViewController.m; sourceTree = "<group>"; };
 		2109553717666A34007D0C78 /* MergeVideoViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MergeVideoViewCell.h; sourceTree = "<group>"; };
@@ -71,9 +79,17 @@
 		21095765176BC59D00C7A68A /* LogoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LogoViewController.m; path = Loggo/LogoViewController.m; sourceTree = "<group>"; };
 		211D3A491782F1C700665A5E /* MergingProcessorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MergingProcessorViewController.h; sourceTree = "<group>"; };
 		211D3A4A1782F1C700665A5E /* MergingProcessorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MergingProcessorViewController.m; sourceTree = "<group>"; };
+		21201759180330ED001760DC /* RosyWriterPreviewView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RosyWriterPreviewView.h; path = View/Playback/RosyWriterPreviewView.h; sourceTree = "<group>"; };
+		2120175A180330ED001760DC /* RosyWriterPreviewView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RosyWriterPreviewView.m; path = View/Playback/RosyWriterPreviewView.m; sourceTree = "<group>"; };
+		2120175C180330ED001760DC /* passThrough.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = passThrough.fsh; sourceTree = "<group>"; };
+		2120175D180330ED001760DC /* passThrough.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = passThrough.vsh; sourceTree = "<group>"; };
+		2120175E180330ED001760DC /* ShaderUtilities.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ShaderUtilities.c; path = View/Playback/ShaderUtilities.c; sourceTree = "<group>"; };
+		2120175F180330ED001760DC /* ShaderUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShaderUtilities.h; path = View/Playback/ShaderUtilities.h; sourceTree = "<group>"; };
 		212683AA177F12430018F4CB /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		212683AB177F1F4E0018F4CB /* PositionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PositionCell.h; sourceTree = "<group>"; };
 		212683AC177F1F4E0018F4CB /* PositionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PositionCell.m; sourceTree = "<group>"; };
+		212ED1771800681A0073EF50 /* CIFilter+SYExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CIFilter+SYExtensions.h"; path = "Common/CIFilter+SYExtensions.h"; sourceTree = "<group>"; };
+		212ED1781800681A0073EF50 /* CIFilter+SYExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CIFilter+SYExtensions.m"; path = "Common/CIFilter+SYExtensions.m"; sourceTree = "<group>"; };
 		2141094917D38DD700692678 /* FilterSettingsImageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FilterSettingsImageCell.h; path = Filters/FilterSettingsImageCell.h; sourceTree = "<group>"; };
 		2141094A17D38DD700692678 /* FilterSettingsImageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FilterSettingsImageCell.m; path = Filters/FilterSettingsImageCell.m; sourceTree = "<group>"; };
 		218F1531174189E600874561 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
@@ -186,6 +202,18 @@
 			name = Filters;
 			sourceTree = "<group>";
 		};
+		2106E28C1801C1A800EEE943 /* Playback */ = {
+			isa = PBXGroup;
+			children = (
+				21201759180330ED001760DC /* RosyWriterPreviewView.h */,
+				2120175A180330ED001760DC /* RosyWriterPreviewView.m */,
+				2120175B180330ED001760DC /* Shaders */,
+				2120175E180330ED001760DC /* ShaderUtilities.c */,
+				2120175F180330ED001760DC /* ShaderUtilities.h */,
+			);
+			name = Playback;
+			sourceTree = "<group>";
+		};
 		2109553617666925007D0C78 /* Merge */ = {
 			isa = PBXGroup;
 			children = (
@@ -212,6 +240,25 @@
 				21095765176BC59D00C7A68A /* LogoViewController.m */,
 			);
 			name = FunnyLogo;
+			sourceTree = "<group>";
+		};
+		2120175B180330ED001760DC /* Shaders */ = {
+			isa = PBXGroup;
+			children = (
+				2120175C180330ED001760DC /* passThrough.fsh */,
+				2120175D180330ED001760DC /* passThrough.vsh */,
+			);
+			name = Shaders;
+			path = View/Playback/Shaders;
+			sourceTree = "<group>";
+		};
+		212ED17A18009CBD0073EF50 /* Playback */ = {
+			isa = PBXGroup;
+			children = (
+				2106E28918017DB100EEE943 /* FilteringPlayerViewController.h */,
+				2106E28A18017DB100EEE943 /* FilteringPlayerViewController.m */,
+			);
+			name = Playback;
 			sourceTree = "<group>";
 		};
 		2190EA221789E56600D747C9 /* Models */ = {
@@ -241,6 +288,7 @@
 		21AE4BAC1785E8E900A92DE7 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				2106E28C1801C1A800EEE943 /* Playback */,
 				212683AB177F1F4E0018F4CB /* PositionCell.h */,
 				212683AC177F1F4E0018F4CB /* PositionCell.m */,
 				2106D18317A1ABF7008077ED /* Filters */,
@@ -251,6 +299,7 @@
 		21AE4BB01785EE2C00A92DE7 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				212ED17A18009CBD0073EF50 /* Playback */,
 				21DFBE7D179C7A9B00BCE33B /* UIBaseViewController.h */,
 				21DFBE7E179C7A9B00BCE33B /* UIBaseViewController.m */,
 				21BB537E179ED9CF00E6B639 /* SelectFiltersController.h */,
@@ -287,6 +336,8 @@
 			children = (
 				21E878A317B7BBE400258095 /* UIImage+Scale.h */,
 				21E878A417B7BBE400258095 /* UIImage+Scale.m */,
+				212ED1771800681A0073EF50 /* CIFilter+SYExtensions.h */,
+				212ED1781800681A0073EF50 /* CIFilter+SYExtensions.m */,
 			);
 			name = Common;
 			sourceTree = "<group>";
@@ -449,6 +500,7 @@
 			files = (
 				21ECB9C717401A96002C8851 /* main.m in Sources */,
 				21ECB9CB17401A96002C8851 /* AppDelegate.m in Sources */,
+				2106E28B18017DB100EEE943 /* FilteringPlayerViewController.m in Sources */,
 				21ECB9DA17401A96002C8851 /* ViewController.m in Sources */,
 				21FCE9D717416FD20020E973 /* PlayVideoVC.m in Sources */,
 				2109553517666916007D0C78 /* MergeCollectionViewController.m in Sources */,
@@ -456,17 +508,22 @@
 				2109553C17666E21007D0C78 /* MergeVideoView.m in Sources */,
 				21095766176BC59D00C7A68A /* LogoViewController.m in Sources */,
 				21E2FA5A177777A200784CC5 /* HeaderView.m in Sources */,
+				212ED1791800681A0073EF50 /* CIFilter+SYExtensions.m in Sources */,
 				21F211FE177E16B600D9835F /* PositionViewController.m in Sources */,
 				212683AD177F1F4F0018F4CB /* PositionCell.m in Sources */,
 				211D3A4B1782F1C700665A5E /* MergingProcessorViewController.m in Sources */,
 				2190EA261789E75900D747C9 /* AssetItem.m in Sources */,
 				2190EA291789EA9D00D747C9 /* AVAssetItem.m in Sources */,
+				21201760180330ED001760DC /* RosyWriterPreviewView.m in Sources */,
 				2190EA2C1789F35600D747C9 /* AssetsLibrary.m in Sources */,
 				21FC31691792CE4600D98A05 /* ALAssetItem.m in Sources */,
 				21DFBE7F179C7A9B00BCE33B /* UIBaseViewController.m in Sources */,
 				21BB5380179ED9CF00E6B639 /* SelectFiltersController.m in Sources */,
+				21201762180330ED001760DC /* passThrough.vsh in Sources */,
 				2106D18217A1ABF2008077ED /* SelectFiltersCell.m in Sources */,
+				21201761180330ED001760DC /* passThrough.fsh in Sources */,
 				21E3213D17F8A4CF0087E8E6 /* FilterSettingsBackImageCell.m in Sources */,
+				21201763180330ED001760DC /* ShaderUtilities.c in Sources */,
 				21D51ED017A5762700E18AFF /* FilterSettingsController.m in Sources */,
 				21D51ED317A58B8D00E18AFF /* FilterSettingsScalarCell.m in Sources */,
 				21E878A517B7BBE400258095 /* UIImage+Scale.m in Sources */,

@@ -307,11 +307,12 @@
                     </navigationItem>
                     <connections>
                         <outlet property="tableView" destination="Arg-TY-cWt" id="xQ3-vo-elP"/>
+                        <segue destination="Qfn-id-OFo" kind="custom" identifier="videoViewSegue" id="PjE-Rl-YbC"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ofD-gc-6c4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="421" y="501"/>
+            <point key="canvasLocation" x="461" y="501"/>
         </scene>
         <!--Merging Processor View Controller-->
         <scene sceneID="X56-pq-g42">
@@ -358,6 +359,73 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7f8-QB-YmY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="908" y="716"/>
+        </scene>
+        <!--Filtering Player View Controller-->
+        <scene sceneID="QxX-2T-SdS">
+            <objects>
+                <viewController id="Qfn-id-OFo" customClass="FilteringPlayerViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="bDD-Q9-pCX"/>
+                        <viewControllerLayoutGuide type="bottom" id="RnP-cd-NvC"/>
+                    </layoutGuides>
+                    <view key="view" multipleTouchEnabled="YES" contentMode="scaleToFill" id="EN5-TA-ZJS">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vjM-8g-NEX" customClass="RosyWriterPreviewView">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nku-rw-AcU">
+                                <rect key="frame" x="0.0" y="438" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                <items>
+                                    <barButtonItem systemItem="play" id="QD7-SV-jul">
+                                        <connections>
+                                            <action selector="barButtonPressed:" destination="Qfn-id-OFo" id="Ucy-3C-dNN"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem systemItem="pause" id="wUR-Om-97L">
+                                        <connections>
+                                            <action selector="barButtonPressed:" destination="Qfn-id-OFo" id="jGk-t5-eHr"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" id="ikM-xw-Vo5">
+                                        <slider key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" id="cPj-1D-U3T">
+                                            <rect key="frame" x="67" y="5" width="236" height="35"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        </slider>
+                                    </barButtonItem>
+                                </items>
+                            </toolbar>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                        <gestureRecognizers/>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="tai-cO-K8b" appends="YES" id="qRi-5S-nhF"/>
+                        </connections>
+                    </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
+                    <connections>
+                        <outlet property="pauseItem" destination="wUR-Om-97L" id="SfV-TR-96K"/>
+                        <outlet property="playItem" destination="QD7-SV-jul" id="zSp-9R-qX0"/>
+                        <outlet property="playerView" destination="EN5-TA-ZJS" id="mbL-FX-KzO"/>
+                        <outlet property="toolbar" destination="nku-rw-AcU" id="2XZ-dU-Ys0"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="OJH-cC-Ul4" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" id="fJi-6h-3f2">
+                    <rect key="frame" x="0.0" y="0.0" width="118" height="29"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                </slider>
+                <tapGestureRecognizer id="tai-cO-K8b">
+                    <connections>
+                        <action selector="handleTapGesture:" destination="Qfn-id-OFo" id="y9V-Rt-hgJ"/>
+                    </connections>
+                </tapGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="678" y="1405"/>
         </scene>
         <!--Filter Settings Controller-->
         <scene sceneID="plM-Ek-8o9">
@@ -518,12 +586,20 @@
                             <constraint firstItem="ow6-Ld-FEQ" firstAttribute="top" secondItem="5RK-PO-pfA" secondAttribute="top" id="oQx-A7-D8M"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="py4-cM-j2z"/>
+                    <navigationItem key="navigationItem" id="cwx-h5-5NX">
+                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="done" id="YGZ-rG-2eG">
+                            <connections>
+                                <action selector="pressedDoneItem:" destination="WMH-l0-wnn" id="3j3-On-HWg"/>
+                                <segue destination="2Wq-d0-O4x" kind="unwind" unwindAction="unwindDoneWithFilterSettings:" id="dQU-75-u5E"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="tableView" destination="ow6-Ld-FEQ" id="dRG-ew-Cod"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XNl-M6-Fiy" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="2Wq-d0-O4x" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="1666" y="205"/>
         </scene>
@@ -691,7 +767,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fH7-79-jO1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-533" y="521"/>
+            <point key="canvasLocation" x="-744" y="501"/>
         </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

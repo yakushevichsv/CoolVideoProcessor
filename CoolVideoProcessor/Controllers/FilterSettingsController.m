@@ -450,6 +450,15 @@ indexPath withAmount:(NSDictionary*)dic array:(NSArray**)arrayPtr
     if (self.scalarTypes.count)
         [self deregisterForKeyboardNotifications];
 }
+
+- (IBAction)pressedDoneItem:(UIBarButtonItem *)sender
+{
+   //use parameters of the filter here....
+    
+    
+}
+
+
 #pragma mark Keyboard code
 
 - (void)deregisterForKeyboardNotifications
