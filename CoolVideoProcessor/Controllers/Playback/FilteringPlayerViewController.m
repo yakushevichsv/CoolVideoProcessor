@@ -249,45 +249,15 @@ static void *AVPlayerItemStatusContext = &AVPlayerItemStatusContext;
 {
     CIImage * tempImage = [CIImage imageWithCVPixelBuffer:beginImage];
     
-    CVPixelBufferRelease(beginImage);
+    //CVPixelBufferRelease(beginImage);
     CIFilter * filter = [CIFilter filterWithName:@"CISepiaTone" keysAndValues: kCIInputImageKey, tempImage, nil];
+    
+    [filter setValue:@(0.8) forKey:@"InputIntensity"];
     
     CIImage *outputImage = filter.outputImage;
     UIImage * newImg = [UIImage imageWithCIImage:outputImage];
+    
     return newImg;
-}
-
-- (CVPixelBufferRef) pixelBufferFromCGImage: (CGImageRef) image
-{
-    CGSize frameSize = CGSizeMake(CGImageGetWidth(image), CGImageGetHeight(image));
-    NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
-                             [NSNumber numberWithBool:YES], kCVPixelBufferCGImageCompatibilityKey,
-                             [NSNumber numberWithBool:YES], kCVPixelBufferCGBitmapContextCompatibilityKey,
-                             @(YES),kCVPixelBufferOpenGLESCompatibilityKey,
-                             nil];
-    CVPixelBufferRef pxbuffer = NULL;
-    CVReturn status = CVPixelBufferCreate(kCFAllocatorDefault, frameSize.width,
-                                          frameSize.height,  kCVPixelFormatType_32BGRA, (__bridge CFDictionaryRef) options,
-                                          &pxbuffer);
-    NSParameterAssert(status == kCVReturnSuccess && pxbuffer != NULL);
-    
-    CVPixelBufferLockBaseAddress(pxbuffer, 0);
-    void *pxdata = CVPixelBufferGetBaseAddress(pxbuffer);
-    
-    
-    CGColorSpaceRef rgbColorSpace = CGColorSpaceCreateDeviceRGB();
-    CGContextRef context = CGBitmapContextCreate(pxdata, frameSize.width,
-                                                 frameSize.height, 8, 4*frameSize.width, rgbColorSpace,
-                                                 kCGImageAlphaNoneSkipLast);
-    
-    CGContextDrawImage(context, CGRectMake(0, 0, CGImageGetWidth(image),
-                                           CGImageGetHeight(image)), image);
-    CGColorSpaceRelease(rgbColorSpace);
-    CGContextRelease(context);
-    
-    CVPixelBufferUnlockBaseAddress(pxbuffer, 0);
-    
-    return pxbuffer;
 }
 
 #pragma mark - CADisplayLink Callback
@@ -307,29 +277,23 @@ static void *AVPlayerItemStatusContext = &AVPlayerItemStatusContext;
 	outputItemTime = [[self videoOutput] itemTimeForHostTime:nextVSync];
 	
 	if ([[self videoOutput] hasNewPixelBufferForItemTime:outputItemTime]) {
-		CVPixelBufferRef pixelBuffer = NULL;
-		pixelBuffer = [[self videoOutput] copyPixelBufferForItemTime:outputItemTime itemTimeForDisplay:NULL];
+		CVPixelBufferRef pixelBuffer = [[self videoOutput] copyPixelBufferForItemTime:outputItemTime itemTimeForDisplay:NULL];
+        NSLog(@"%d",(NSUInteger)CVPixelBufferGetPixelFormatType(pixelBuffer));
         UIImage * image = [self applyFilter:pixelBuffer];
         
         if (!g_context)
         {
-            CIContext *context = [CIContext contextWithOptions:nil];
-            g_context = context;
+            EAGLContext *myEAGLContext = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
+            NSMutableDictionary *options = [[NSMutableDictionary alloc] init];
+            [options setObject: [NSNull null] forKey: kCIContextWorkingColorSpace];
+            g_context = [CIContext contextWithEAGLContext:myEAGLContext options:options];
         }
         NSParameterAssert(image.CIImage);
         
-        CGImageRef ref = [g_context createCGImage:image.CIImage fromRect:image.CIImage.extent];
-        
-        pixelBuffer = [self pixelBufferFromCGImage:ref];
-		CGImageRelease(ref);
-        
-        size_t h = CVPixelBufferGetHeight(pixelBuffer);
-        NSLog(@"%d",h);
+        [g_context render:image.CIImage toCVPixelBuffer:pixelBuffer];
+        image = nil;
         
         [[self playerView] displayPixelBuffer:pixelBuffer];
-        
-        
-        //CVPixelBufferRelease(pixelBuffer);
 	}
 }
 
