@@ -1,7 +1,7 @@
 /*
-     File: passThrough.fsh
- Abstract: Fragment shader that simply renders the passed-in texture.
-  Version: 1.2
+ File: Shader.fsh
+ Abstract:  Fragment shader that adjusts the luminance value based on the input sliders and renders the input texture.
+ Version: 1.1
  
  Disclaimer: IMPORTANT:  This Apple software is supplied to you by Apple
  Inc. ("Apple") in consideration of your agreement to the following
@@ -41,16 +41,29 @@
  STRICT LIABILITY OR OTHERWISE, EVEN IF APPLE HAS BEEN ADVISED OF THE
  POSSIBILITY OF SUCH DAMAGE.
  
- Copyright (C) 2011 Apple Inc. All Rights Reserved.
+ Copyright (C) 2013 Apple Inc. All Rights Reserved.
  
  */
 
-varying highp vec2 coordinate;
-uniform sampler2D videoframe;
+varying highp vec2 texCoordVarying;
+precision mediump float;
+
+uniform float lumaThreshold;
+uniform float chromaThreshold;
+uniform sampler2D SamplerY;
+uniform sampler2D SamplerUV;
+uniform mat3 colorConversionMatrix;
 
 void main()
 {
-	gl_FragColor = texture2D(videoframe, coordinate);
+	mediump vec3 yuv;
+	lowp vec3 rgb;
+	
+	// Subtract constants to map the video range start at 0
+	yuv.x = (texture2D(SamplerY, texCoordVarying).r - (16.0/255.0))* lumaThreshold;
+	yuv.yz = (texture2D(SamplerUV, texCoordVarying).rg - vec2(0.5, 0.5))* chromaThreshold;
+	
+	rgb = colorConversionMatrix * yuv;
+    
+	gl_FragColor = vec4(rgb,1);
 }
-
-

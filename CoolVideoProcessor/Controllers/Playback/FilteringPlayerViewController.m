@@ -16,18 +16,17 @@ static void *AVPlayerItemStatusContext = &AVPlayerItemStatusContext;
 
 @interface FilteringPlayerViewController ()<AVPlayerItemOutputPullDelegate>
 {
-    AVPlayer *_player;
-    dispatch_queue_t _myVideoOutputQueue;
-    id _notificationToken;
+	AVPlayer *_player;
+	dispatch_queue_t _myVideoOutputQueue;
+	id _notificationToken;
     id _timeObserver;
+    BOOL _playing;
+    CIContext *g_context;
 }
 
 @property (nonatomic, weak) IBOutlet RosyWriterPreviewView *playerView;
 @property (nonatomic, weak) IBOutlet UILabel *currentTime;
 @property (nonatomic, weak) IBOutlet UIView *timeView;
-@property (nonatomic, weak) IBOutlet UIToolbar *toolbar;
-@property (nonatomic, weak) IBOutlet UIBarButtonItem *playItem;
-@property (nonatomic, weak) IBOutlet UIBarButtonItem *pauseItem;
 
 @property CADisplayLink *displayLink;
 @property AVPlayerItemVideoOutput *videoOutput;
@@ -36,33 +35,25 @@ static void *AVPlayerItemStatusContext = &AVPlayerItemStatusContext;
 
 @implementation FilteringPlayerViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
+#pragma mark -
 
 - (void)viewDidLoad
 {
-    [super viewDidLoad];
-	// Do any additional setup after loading the view.
-    _player = [AVPlayer new];
+	[super viewDidLoad];
+	
+	_player = [[AVPlayer alloc] init];
     [self addTimeObserverToPlayer];
-    
-    // Setup CADisplayLink which will callback displayPixelBuffer: at every vsync.
+	
+	// Setup CADisplayLink which will callback displayPixelBuffer: at every vsync.
 	self.displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(displayLinkCallback:)];
 	[[self displayLink] addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
 	[[self displayLink] setPaused:YES];
-    
-    // Setup AVPlayerItemVideoOutput with the required pixelbuffer attributes.
-	NSDictionary *pixBuffAttributes = @{(id)kCVPixelBufferPixelFormatTypeKey: @(kCVPixelFormatType_32RGBA)};
+	
+	// Setup AVPlayerItemVideoOutput with the required pixelbuffer attributes.
+	NSDictionary *pixBuffAttributes = @{(id)kCVPixelBufferPixelFormatTypeKey: @(kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange)};
 	self.videoOutput = [[AVPlayerItemVideoOutput alloc] initWithPixelBufferAttributes:pixBuffAttributes];
 	_myVideoOutputQueue = dispatch_queue_create("myVideoOutputQueue", DISPATCH_QUEUE_SERIAL);
 	[[self videoOutput] setDelegate:self queue:_myVideoOutputQueue];
-    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -82,29 +73,37 @@ static void *AVPlayerItemStatusContext = &AVPlayerItemStatusContext;
 	}
 }
 
+
 #pragma mark - Bar Button action
 
 -(IBAction)barButtonPressed:(id)sender
 {
-    UIBarButtonItem * curBarItem = (UIBarButtonItem *)sender;
-    [curBarItem setEnabled:NO];
-    
-    [self.pauseItem setEnabled:curBarItem != self.playItem];
-    [self.playItem setEnabled:curBarItem != self.pauseItem];
-    
-    if (curBarItem == self.pauseItem)
+    _playing =!_playing;
+    NSMutableArray * items = [NSMutableArray arrayWithArray:self.toolbarItems];
+    if (_playing)
     {
-        [_player pause];
-    }
-    else if (curBarItem == self.playItem)
-    {
-        if (CMTIME_COMPARE_INLINE(kCMTimeZero,!=,_player.currentTime))
+        CMTimeShow(_player.currentTime);
+        if (CMTIME_IS_INVALID(_player.currentTime)  || CMTIME_COMPARE_INLINE(kCMTimeZero, ==, _player.currentTime))
         {
+            [self.playerView setupGL];
+            
             [self setupPlaybackForURL:self.url];
         }
         else
+        {
+            [items replaceObjectAtIndex:0 withObject:[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemPlay target:self action:@selector(barButtonPressed:)]];
+            self.navigationController.toolbar.items = items;
             [_player play];
+        }
     }
+    else
+    {
+        [items replaceObjectAtIndex:0 withObject:[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemPause target:self action:@selector(barButtonPressed:)]];
+        self.navigationController.toolbar.items = items;
+        [_player pause];
+    }
+
+   
 }
 
 #pragma mark - Playback setup
@@ -117,7 +116,6 @@ static void *AVPlayerItemStatusContext = &AVPlayerItemStatusContext;
 	 After adding the video output, we request a notification of media change in order to restart the CADisplayLink.
 	 */
 	
-	// Remove video output from old item, if any.
 	[[_player currentItem] removeOutput:self.videoOutput];
     
 	AVPlayerItem *item = [AVPlayerItem playerItemWithURL:URL];
@@ -138,7 +136,7 @@ static void *AVPlayerItemStatusContext = &AVPlayerItemStatusContext;
 						/*
                          The orientation of the camera while recording affects the orientation of the images received from an AVPlayerItemVideoOutput. Here we compute a rotation that is used to correctly orientate the video.
                          */
-						//self.playerView.preferredRotation = -1 * atan2(preferredTransform.b, preferredTransform.a);
+						self.playerView.preferredRotation = -1 * atan2(preferredTransform.b, preferredTransform.a);
 						
 						[self addDidPlayToEndTimeNotificationForPlayerItem:item];
 						
@@ -177,7 +175,7 @@ static void *AVPlayerItemStatusContext = &AVPlayerItemStatusContext;
 			case AVPlayerItemStatusUnknown:
 				break;
 			case AVPlayerItemStatusReadyToPlay:
-				//self.playerView.presentationRect = [[_player currentItem] presentationSize];
+				self.playerView.presentationRect = [[_player currentItem] presentationSize];
 				break;
 			case AVPlayerItemStatusFailed:
 				[self stopLoadingAnimationAndHandleError:[[_player currentItem] error]];
@@ -188,7 +186,6 @@ static void *AVPlayerItemStatusContext = &AVPlayerItemStatusContext;
 		[super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 	}
 }
-
 
 - (void)addDidPlayToEndTimeNotificationForPlayerItem:(AVPlayerItem *)item
 {
@@ -224,15 +221,19 @@ static void *AVPlayerItemStatusContext = &AVPlayerItemStatusContext;
 
 - (void)addTimeObserverToPlayer
 {
+	/*
+	 Adds a time observer to the player to periodically refresh the time label to reflect current time.
+	 */
     if (_timeObserver)
         return;
-    
+    /*
+     Use __weak reference to self to ensure that a strong reference cycle is not formed between the view controller, player and notification block.
+     */
     __weak FilteringPlayerViewController* weakSelf = self;
     _timeObserver = [_player addPeriodicTimeObserverForInterval:CMTimeMakeWithSeconds(1, 10) queue:dispatch_get_main_queue() usingBlock:
                      ^(CMTime time) {
                          [weakSelf syncTimeLabel];
                      }];
-    
 }
 
 - (void)removeTimeObserverFromPlayer
@@ -242,6 +243,51 @@ static void *AVPlayerItemStatusContext = &AVPlayerItemStatusContext;
         [_player removeTimeObserver:_timeObserver];
         _timeObserver = nil;
     }
+}
+
+-(UIImage *)applyFilter:(CVPixelBufferRef)beginImage
+{
+    CIImage * tempImage = [CIImage imageWithCVPixelBuffer:beginImage];
+    
+    CVPixelBufferRelease(beginImage);
+    CIFilter * filter = [CIFilter filterWithName:@"CISepiaTone" keysAndValues: kCIInputImageKey, tempImage, nil];
+    
+    CIImage *outputImage = filter.outputImage;
+    UIImage * newImg = [UIImage imageWithCIImage:outputImage];
+    return newImg;
+}
+
+- (CVPixelBufferRef) pixelBufferFromCGImage: (CGImageRef) image
+{
+    CGSize frameSize = CGSizeMake(CGImageGetWidth(image), CGImageGetHeight(image));
+    NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
+                             [NSNumber numberWithBool:YES], kCVPixelBufferCGImageCompatibilityKey,
+                             [NSNumber numberWithBool:YES], kCVPixelBufferCGBitmapContextCompatibilityKey,
+                             @(YES),kCVPixelBufferOpenGLESCompatibilityKey,
+                             nil];
+    CVPixelBufferRef pxbuffer = NULL;
+    CVReturn status = CVPixelBufferCreate(kCFAllocatorDefault, frameSize.width,
+                                          frameSize.height,  kCVPixelFormatType_32BGRA, (__bridge CFDictionaryRef) options,
+                                          &pxbuffer);
+    NSParameterAssert(status == kCVReturnSuccess && pxbuffer != NULL);
+    
+    CVPixelBufferLockBaseAddress(pxbuffer, 0);
+    void *pxdata = CVPixelBufferGetBaseAddress(pxbuffer);
+    
+    
+    CGColorSpaceRef rgbColorSpace = CGColorSpaceCreateDeviceRGB();
+    CGContextRef context = CGBitmapContextCreate(pxdata, frameSize.width,
+                                                 frameSize.height, 8, 4*frameSize.width, rgbColorSpace,
+                                                 kCGImageAlphaNoneSkipLast);
+    
+    CGContextDrawImage(context, CGRectMake(0, 0, CGImageGetWidth(image),
+                                           CGImageGetHeight(image)), image);
+    CGColorSpaceRelease(rgbColorSpace);
+    CGContextRelease(context);
+    
+    CVPixelBufferUnlockBaseAddress(pxbuffer, 0);
+    
+    return pxbuffer;
 }
 
 #pragma mark - CADisplayLink Callback
@@ -260,64 +306,32 @@ static void *AVPlayerItemStatusContext = &AVPlayerItemStatusContext;
 	
 	outputItemTime = [[self videoOutput] itemTimeForHostTime:nextVSync];
 	
-	if ([[self videoOutput] hasNewPixelBufferForItemTime:outputItemTime])
-    {
-		CVPixelBufferRef pixelBuffer = [[self videoOutput] copyPixelBufferForItemTime:outputItemTime itemTimeForDisplay:NULL];
-
-        [[self playerView] displayPixelBuffer:pixelBuffer];
-	}
-}
-
-- (IBAction)handleTapGesture:(UITapGestureRecognizer *)tapGestureRecognizer
-{
-	if (self.toolbar.hidden)
-    {
-        self.toolbar.hidden = FALSE;
-    }
-    else
-    {
-#warning "Correct here"
-        CGPoint point = [tapGestureRecognizer locationInView:self.view];
-        BOOL hide = TRUE;
-        if (CGRectContainsPoint(self.toolbar.frame,point))
-        {
-            point = [self.toolbar convertPoint:point fromView:self.view];
-            
-            if (CGRectContainsPoint(self.playItem.customView.frame, point))
-            {
-                [self barButtonPressed:self.playItem];
-                hide = FALSE;
-            }
-            else if (CGRectContainsPoint(self.pauseItem.customView.frame, point))
-            {
-                hide = FALSE;
-                [self barButtonPressed:self.pauseItem];
-            }
-            else
-            {
-                [self barButtonPressed:self.playItem];
-                hide = FALSE;
-            }
-        }
+	if ([[self videoOutput] hasNewPixelBufferForItemTime:outputItemTime]) {
+		CVPixelBufferRef pixelBuffer = NULL;
+		pixelBuffer = [[self videoOutput] copyPixelBufferForItemTime:outputItemTime itemTimeForDisplay:NULL];
+        UIImage * image = [self applyFilter:pixelBuffer];
         
-        if (hide)
-            self.toolbar.hidden = TRUE;
-    }
-    
-    
-}
-
-#pragma mark - Gesture recognizer delegate
-
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
-{
-	if (touch.view != self.view) {
-		// Ignore touch on toolbar.
-		return NO;
+        if (!g_context)
+        {
+            CIContext *context = [CIContext contextWithOptions:nil];
+            g_context = context;
+        }
+        NSParameterAssert(image.CIImage);
+        
+        CGImageRef ref = [g_context createCGImage:image.CIImage fromRect:image.CIImage.extent];
+        
+        pixelBuffer = [self pixelBufferFromCGImage:ref];
+		CGImageRelease(ref);
+        
+        size_t h = CVPixelBufferGetHeight(pixelBuffer);
+        NSLog(@"%d",h);
+        
+        [[self playerView] displayPixelBuffer:pixelBuffer];
+        
+        
+        //CVPixelBufferRelease(pixelBuffer);
 	}
-	return YES;
 }
-
 
 #pragma mark - AVPlayerItemOutputPullDelegate
 
@@ -326,5 +340,26 @@ static void *AVPlayerItemStatusContext = &AVPlayerItemStatusContext;
 	// Restart display link.
 	[[self displayLink] setPaused:NO];
 }
+
+
+- (IBAction)handleTapGesture:(UITapGestureRecognizer *)tapGestureRecognizer
+{
+    self.navigationController.navigationBar.hidden =!self.navigationController.navigationBar.isHidden;
+    self.navigationController.toolbar.hidden = !self.navigationController.toolbar.isHidden;
+    
+    if (self.navigationController.navigationBar.isHidden)
+        [self barButtonPressed:nil];
+}
+
+#pragma mark - Gesture recognizer delegate
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{
+    CGPoint point = [touch locationInView:self.view];
+    
+    return !CGRectContainsPoint(self.navigationController.toolbar.frame,point);
+    
+}
+
 
 @end

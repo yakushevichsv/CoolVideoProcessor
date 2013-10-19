@@ -369,36 +369,20 @@
                         <viewControllerLayoutGuide type="bottom" id="RnP-cd-NvC"/>
                     </layoutGuides>
                     <view key="view" multipleTouchEnabled="YES" contentMode="scaleToFill" id="EN5-TA-ZJS">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vjM-8g-NEX" customClass="RosyWriterPreviewView">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="437"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <subviews>
+                                    <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="66T-zW-iQm">
+                                        <rect key="frame" x="47" y="527" width="247" height="34"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </slider>
+                                </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
-                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nku-rw-AcU">
-                                <rect key="frame" x="0.0" y="437" width="320" height="44"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                <items>
-                                    <barButtonItem systemItem="play" id="QD7-SV-jul">
-                                        <connections>
-                                            <action selector="barButtonPressed:" destination="Qfn-id-OFo" id="Ucy-3C-dNN"/>
-                                        </connections>
-                                    </barButtonItem>
-                                    <barButtonItem systemItem="pause" id="wUR-Om-97L">
-                                        <connections>
-                                            <action selector="barButtonPressed:" destination="Qfn-id-OFo" id="jGk-t5-eHr"/>
-                                        </connections>
-                                    </barButtonItem>
-                                    <barButtonItem style="plain" id="ikM-xw-Vo5">
-                                        <slider key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" id="cPj-1D-U3T">
-                                            <rect key="frame" x="67" y="5" width="236" height="35"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        </slider>
-                                    </barButtonItem>
-                                </items>
-                            </toolbar>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <gestureRecognizers/>
@@ -406,12 +390,17 @@
                             <outletCollection property="gestureRecognizers" destination="tai-cO-K8b" appends="YES" id="qRi-5S-nhF"/>
                         </connections>
                     </view>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
+                    <toolbarItems>
+                        <barButtonItem systemItem="play" id="iLE-xp-psB">
+                            <connections>
+                                <action selector="barButtonPressed:" destination="Qfn-id-OFo" id="wEW-Rp-IWy"/>
+                            </connections>
+                        </barButtonItem>
+                    </toolbarItems>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
-                        <outlet property="pauseItem" destination="wUR-Om-97L" id="SfV-TR-96K"/>
-                        <outlet property="playItem" destination="QD7-SV-jul" id="zSp-9R-qX0"/>
-                        <outlet property="playerView" destination="EN5-TA-ZJS" id="mbL-FX-KzO"/>
-                        <outlet property="toolbar" destination="nku-rw-AcU" id="2XZ-dU-Ys0"/>
+                        <outlet property="playerView" destination="vjM-8g-NEX" id="yK9-VJ-HX1"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OJH-cC-Ul4" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -422,6 +411,7 @@
                 <tapGestureRecognizer id="tai-cO-K8b">
                     <connections>
                         <action selector="handleTapGesture:" destination="Qfn-id-OFo" id="y9V-Rt-hgJ"/>
+                        <outlet property="delegate" destination="Qfn-id-OFo" id="vG2-E7-xhr"/>
                     </connections>
                 </tapGestureRecognizer>
             </objects>

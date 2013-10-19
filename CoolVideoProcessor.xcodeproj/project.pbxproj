@@ -16,9 +16,8 @@
 		21095766176BC59D00C7A68A /* LogoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 21095765176BC59D00C7A68A /* LogoViewController.m */; };
 		211D3A4B1782F1C700665A5E /* MergingProcessorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 211D3A4A1782F1C700665A5E /* MergingProcessorViewController.m */; };
 		21201760180330ED001760DC /* RosyWriterPreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2120175A180330ED001760DC /* RosyWriterPreviewView.m */; };
-		21201761180330ED001760DC /* passThrough.fsh in Sources */ = {isa = PBXBuildFile; fileRef = 2120175C180330ED001760DC /* passThrough.fsh */; };
-		21201762180330ED001760DC /* passThrough.vsh in Sources */ = {isa = PBXBuildFile; fileRef = 2120175D180330ED001760DC /* passThrough.vsh */; };
-		21201763180330ED001760DC /* ShaderUtilities.c in Sources */ = {isa = PBXBuildFile; fileRef = 2120175E180330ED001760DC /* ShaderUtilities.c */; };
+		21201761180330ED001760DC /* passThrough.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 2120175C180330ED001760DC /* passThrough.fsh */; };
+		21201762180330ED001760DC /* passThrough.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 2120175D180330ED001760DC /* passThrough.vsh */; };
 		212683AD177F1F4F0018F4CB /* PositionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 212683AC177F1F4E0018F4CB /* PositionCell.m */; };
 		212ED1791800681A0073EF50 /* CIFilter+SYExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 212ED1781800681A0073EF50 /* CIFilter+SYExtensions.m */; };
 		213662FD180AEAD000DE500F /* FilteringProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 213662FC180AEAD000DE500F /* FilteringProcessor.m */; };
@@ -84,10 +83,8 @@
 		211D3A4A1782F1C700665A5E /* MergingProcessorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MergingProcessorViewController.m; sourceTree = "<group>"; };
 		21201759180330ED001760DC /* RosyWriterPreviewView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RosyWriterPreviewView.h; path = View/Playback/RosyWriterPreviewView.h; sourceTree = "<group>"; };
 		2120175A180330ED001760DC /* RosyWriterPreviewView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RosyWriterPreviewView.m; path = View/Playback/RosyWriterPreviewView.m; sourceTree = "<group>"; };
-		2120175C180330ED001760DC /* passThrough.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = passThrough.fsh; sourceTree = "<group>"; };
-		2120175D180330ED001760DC /* passThrough.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = passThrough.vsh; sourceTree = "<group>"; };
-		2120175E180330ED001760DC /* ShaderUtilities.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ShaderUtilities.c; path = View/Playback/ShaderUtilities.c; sourceTree = "<group>"; };
-		2120175F180330ED001760DC /* ShaderUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShaderUtilities.h; path = View/Playback/ShaderUtilities.h; sourceTree = "<group>"; };
+		2120175C180330ED001760DC /* passThrough.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = passThrough.fsh; path = View/Playback/Shaders/passThrough.fsh; sourceTree = "<group>"; };
+		2120175D180330ED001760DC /* passThrough.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = passThrough.vsh; path = View/Playback/Shaders/passThrough.vsh; sourceTree = "<group>"; };
 		212683AA177F12430018F4CB /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		212683AB177F1F4E0018F4CB /* PositionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PositionCell.h; sourceTree = "<group>"; };
 		212683AC177F1F4E0018F4CB /* PositionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PositionCell.m; sourceTree = "<group>"; };
@@ -214,11 +211,9 @@
 		2106E28C1801C1A800EEE943 /* Playback */ = {
 			isa = PBXGroup;
 			children = (
+				21D5E8481812F14200EFAF4C /* Shaders */,
 				21201759180330ED001760DC /* RosyWriterPreviewView.h */,
 				2120175A180330ED001760DC /* RosyWriterPreviewView.m */,
-				2120175B180330ED001760DC /* Shaders */,
-				2120175E180330ED001760DC /* ShaderUtilities.c */,
-				2120175F180330ED001760DC /* ShaderUtilities.h */,
 			);
 			name = Playback;
 			sourceTree = "<group>";
@@ -249,16 +244,6 @@
 				21095765176BC59D00C7A68A /* LogoViewController.m */,
 			);
 			name = FunnyLogo;
-			sourceTree = "<group>";
-		};
-		2120175B180330ED001760DC /* Shaders */ = {
-			isa = PBXGroup;
-			children = (
-				2120175C180330ED001760DC /* passThrough.fsh */,
-				2120175D180330ED001760DC /* passThrough.vsh */,
-			);
-			name = Shaders;
-			path = View/Playback/Shaders;
 			sourceTree = "<group>";
 		};
 		212ED17A18009CBD0073EF50 /* Playback */ = {
@@ -340,6 +325,15 @@
 			);
 			name = FWTPopoverView;
 			path = External/FWTPopoverView;
+			sourceTree = "<group>";
+		};
+		21D5E8481812F14200EFAF4C /* Shaders */ = {
+			isa = PBXGroup;
+			children = (
+				2120175C180330ED001760DC /* passThrough.fsh */,
+				2120175D180330ED001760DC /* passThrough.vsh */,
+			);
+			name = Shaders;
 			sourceTree = "<group>";
 		};
 		21E878A217B7BBBC00258095 /* Common */ = {
@@ -497,6 +491,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				21201762180330ED001760DC /* passThrough.vsh in Resources */,
+				21201761180330ED001760DC /* passThrough.fsh in Resources */,
 				21ECB9C517401A96002C8851 /* InfoPlist.strings in Resources */,
 				21ECB9CD17401A96002C8851 /* Default.png in Resources */,
 				21ECB9CF17401A96002C8851 /* Default@2x.png in Resources */,
@@ -536,12 +532,9 @@
 				21FC31691792CE4600D98A05 /* ALAssetItem.m in Sources */,
 				21DFBE7F179C7A9B00BCE33B /* UIBaseViewController.m in Sources */,
 				21BB5380179ED9CF00E6B639 /* SelectFiltersController.m in Sources */,
-				21201762180330ED001760DC /* passThrough.vsh in Sources */,
 				2106D18217A1ABF2008077ED /* SelectFiltersCell.m in Sources */,
 				213662FD180AEAD000DE500F /* FilteringProcessor.m in Sources */,
-				21201761180330ED001760DC /* passThrough.fsh in Sources */,
 				21E3213D17F8A4CF0087E8E6 /* FilterSettingsBackImageCell.m in Sources */,
-				21201763180330ED001760DC /* ShaderUtilities.c in Sources */,
 				21D51ED017A5762700E18AFF /* FilterSettingsController.m in Sources */,
 				21D51ED317A58B8D00E18AFF /* FilterSettingsScalarCell.m in Sources */,
 				21E878A517B7BBE400258095 /* UIImage+Scale.m in Sources */,

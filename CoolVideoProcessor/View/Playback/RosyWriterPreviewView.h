@@ -1,7 +1,7 @@
 /*
-     File: RosyWriterPreviewView.h
- Abstract: The OpenGL ES view, responsible for creating a CVOpenGLESTexture from each CVImageBuffer and displaying the texture on the screen.
-  Version: 1.2
+ File: APLEAGLView.h
+ Abstract:  This class contains an UIView backed by a CAEAGLLayer. It handles rendering input textures to the view. The object loads, compiles and links the fragment and vertex shader to be used during rendering.
+ Version: 1.1
  
  Disclaimer: IMPORTANT:  This Apple software is supplied to you by Apple
  Inc. ("Apple") in consideration of your agreement to the following
@@ -41,31 +41,18 @@
  STRICT LIABILITY OR OTHERWISE, EVEN IF APPLE HAS BEEN ADVISED OF THE
  POSSIBILITY OF SUCH DAMAGE.
  
- Copyright (C) 2011 Apple Inc. All Rights Reserved.
+ Copyright (C) 2013 Apple Inc. All Rights Reserved.
  
  */
 
 #import <UIKit/UIKit.h>
-#import <OpenGLES/EAGL.h>
-#import <OpenGLES/EAGLDrawable.h>
-#import <OpenGLES/ES2/glext.h>
-#import <CoreVideo/CVOpenGLESTextureCache.h>
 
-@interface RosyWriterPreviewView : UIView 
-{
-	int renderBufferWidth;
-	int renderBufferHeight;
-    
-	CVOpenGLESTextureCacheRef videoTextureCache;    
+@interface RosyWriterPreviewView : UIView
 
-	EAGLContext* oglContext;
-	GLuint frameBufferHandle;
-	GLuint colorBufferHandle;
-    GLuint passThroughProgram;
-}
+@property GLfloat preferredRotation;
+@property CGSize presentationRect;
 
-- (void)displayPixelBuffer:(CVImageBufferRef)pixelBuffer;
+- (void)setupGL;
+- (void)displayPixelBuffer:(CVPixelBufferRef)pixelBuffer;
 
 @end
-
-
