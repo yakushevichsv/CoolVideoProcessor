@@ -21,6 +21,7 @@
 		21201763180330ED001760DC /* ShaderUtilities.c in Sources */ = {isa = PBXBuildFile; fileRef = 2120175E180330ED001760DC /* ShaderUtilities.c */; };
 		212683AD177F1F4F0018F4CB /* PositionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 212683AC177F1F4E0018F4CB /* PositionCell.m */; };
 		212ED1791800681A0073EF50 /* CIFilter+SYExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 212ED1781800681A0073EF50 /* CIFilter+SYExtensions.m */; };
+		213662FD180AEAD000DE500F /* FilteringProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 213662FC180AEAD000DE500F /* FilteringProcessor.m */; };
 		2141094B17D38DD700692678 /* FilterSettingsImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2141094A17D38DD700692678 /* FilterSettingsImageCell.m */; };
 		218F1532174189E600874561 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 218F1531174189E600874561 /* AssetsLibrary.framework */; };
 		218F153417418E7900874561 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 218F153317418E7900874561 /* AVFoundation.framework */; };
@@ -40,6 +41,8 @@
 		21E1DA3317E4EF8D00B47328 /* FileProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 21E1DA3217E4EF8D00B47328 /* FileProcessor.m */; };
 		21E2FA5A177777A200784CC5 /* HeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 21E2FA59177777A200784CC5 /* HeaderView.m */; };
 		21E3213D17F8A4CF0087E8E6 /* FilterSettingsBackImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 21E3213C17F8A4CF0087E8E6 /* FilterSettingsBackImageCell.m */; };
+		21E74B2E180AB1470066E3DD /* FilterRepresentation.m in Sources */ = {isa = PBXBuildFile; fileRef = 21E74B2D180AB1470066E3DD /* FilterRepresentation.m */; };
+		21E74B31180AB52C0066E3DD /* AssetFiltration.m in Sources */ = {isa = PBXBuildFile; fileRef = 21E74B30180AB52C0066E3DD /* AssetFiltration.m */; };
 		21E878A517B7BBE400258095 /* UIImage+Scale.m in Sources */ = {isa = PBXBuildFile; fileRef = 21E878A417B7BBE400258095 /* UIImage+Scale.m */; };
 		21E878A917B7E8B900258095 /* VideoProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 21E878A817B7E8B900258095 /* VideoProcessor.m */; };
 		21ECB9BB17401A96002C8851 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21ECB9BA17401A96002C8851 /* UIKit.framework */; };
@@ -90,6 +93,8 @@
 		212683AC177F1F4E0018F4CB /* PositionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PositionCell.m; sourceTree = "<group>"; };
 		212ED1771800681A0073EF50 /* CIFilter+SYExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CIFilter+SYExtensions.h"; path = "Common/CIFilter+SYExtensions.h"; sourceTree = "<group>"; };
 		212ED1781800681A0073EF50 /* CIFilter+SYExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CIFilter+SYExtensions.m"; path = "Common/CIFilter+SYExtensions.m"; sourceTree = "<group>"; };
+		213662FB180AEAD000DE500F /* FilteringProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FilteringProcessor.h; path = Filters/FilteringProcessor.h; sourceTree = "<group>"; };
+		213662FC180AEAD000DE500F /* FilteringProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FilteringProcessor.m; path = Filters/FilteringProcessor.m; sourceTree = "<group>"; };
 		2141094917D38DD700692678 /* FilterSettingsImageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FilterSettingsImageCell.h; path = Filters/FilterSettingsImageCell.h; sourceTree = "<group>"; };
 		2141094A17D38DD700692678 /* FilterSettingsImageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FilterSettingsImageCell.m; path = Filters/FilterSettingsImageCell.m; sourceTree = "<group>"; };
 		218F1531174189E600874561 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
@@ -127,6 +132,10 @@
 		21E2FA59177777A200784CC5 /* HeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeaderView.m; sourceTree = "<group>"; };
 		21E3213B17F8A4CF0087E8E6 /* FilterSettingsBackImageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FilterSettingsBackImageCell.h; path = Filters/FilterSettingsBackImageCell.h; sourceTree = "<group>"; };
 		21E3213C17F8A4CF0087E8E6 /* FilterSettingsBackImageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FilterSettingsBackImageCell.m; path = Filters/FilterSettingsBackImageCell.m; sourceTree = "<group>"; };
+		21E74B2C180AB1470066E3DD /* FilterRepresentation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FilterRepresentation.h; path = Models/Filters/FilterRepresentation.h; sourceTree = "<group>"; };
+		21E74B2D180AB1470066E3DD /* FilterRepresentation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FilterRepresentation.m; path = Models/Filters/FilterRepresentation.m; sourceTree = "<group>"; };
+		21E74B2F180AB52C0066E3DD /* AssetFiltration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AssetFiltration.h; path = Models/Assets/AssetFiltration.h; sourceTree = "<group>"; };
+		21E74B30180AB52C0066E3DD /* AssetFiltration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AssetFiltration.m; path = Models/Assets/AssetFiltration.m; sourceTree = "<group>"; };
 		21E878A317B7BBE400258095 /* UIImage+Scale.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+Scale.h"; path = "Common/UIImage+Scale.h"; sourceTree = "<group>"; };
 		21E878A417B7BBE400258095 /* UIImage+Scale.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+Scale.m"; path = "Common/UIImage+Scale.m"; sourceTree = "<group>"; };
 		21E878A717B7E8B900258095 /* VideoProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VideoProcessor.h; path = Models/Filters/VideoProcessor.h; sourceTree = "<group>"; };
@@ -281,6 +290,8 @@
 				2190EA2B1789F35600D747C9 /* AssetsLibrary.m */,
 				21FC31671792CE4600D98A05 /* ALAssetItem.h */,
 				21FC31681792CE4600D98A05 /* ALAssetItem.m */,
+				21E74B2F180AB52C0066E3DD /* AssetFiltration.h */,
+				21E74B30180AB52C0066E3DD /* AssetFiltration.m */,
 			);
 			name = Assets;
 			sourceTree = "<group>";
@@ -351,6 +362,10 @@
 				21E1DA3217E4EF8D00B47328 /* FileProcessor.m */,
 				21BE238D17B81B5300E2073B /* FilterInfo.h */,
 				21BE238E17B81B5300E2073B /* FilterInfo.m */,
+				21E74B2C180AB1470066E3DD /* FilterRepresentation.h */,
+				21E74B2D180AB1470066E3DD /* FilterRepresentation.m */,
+				213662FB180AEAD000DE500F /* FilteringProcessor.h */,
+				213662FC180AEAD000DE500F /* FilteringProcessor.m */,
 			);
 			name = Filters;
 			sourceTree = "<group>";
@@ -502,7 +517,9 @@
 				21ECB9CB17401A96002C8851 /* AppDelegate.m in Sources */,
 				2106E28B18017DB100EEE943 /* FilteringPlayerViewController.m in Sources */,
 				21ECB9DA17401A96002C8851 /* ViewController.m in Sources */,
+				21E74B31180AB52C0066E3DD /* AssetFiltration.m in Sources */,
 				21FCE9D717416FD20020E973 /* PlayVideoVC.m in Sources */,
+				21E74B2E180AB1470066E3DD /* FilterRepresentation.m in Sources */,
 				2109553517666916007D0C78 /* MergeCollectionViewController.m in Sources */,
 				2109553917666A34007D0C78 /* MergeVideoViewCell.m in Sources */,
 				2109553C17666E21007D0C78 /* MergeVideoView.m in Sources */,
@@ -521,6 +538,7 @@
 				21BB5380179ED9CF00E6B639 /* SelectFiltersController.m in Sources */,
 				21201762180330ED001760DC /* passThrough.vsh in Sources */,
 				2106D18217A1ABF2008077ED /* SelectFiltersCell.m in Sources */,
+				213662FD180AEAD000DE500F /* FilteringProcessor.m in Sources */,
 				21201761180330ED001760DC /* passThrough.fsh in Sources */,
 				21E3213D17F8A4CF0087E8E6 /* FilterSettingsBackImageCell.m in Sources */,
 				21201763180330ED001760DC /* ShaderUtilities.c in Sources */,

@@ -16,6 +16,8 @@
 #import "AssetsLibrary.h"
 #import "AssetItem.h"
 #import "External/FWTPopoverView/FWTPopoverView.h"
+#import "FilteringProcessor.h"
+#import "AssetFiltration.h"
 
 #define NUMBER_OF_SECTIONS 2
 
@@ -159,6 +161,8 @@
     return FWTPopoverArrowDirectionUp;
 }
 
+static id g_object = nil;
+
 -(void)buttonPressed:(UIButton*)sender
 {
     FWTPopoverView * popoverView = (FWTPopoverView*) sender.superview.superview;
@@ -172,6 +176,22 @@
     {
         mergedCell.MergeVideo.tapped = TRUE;
         dismiss = TRUE;
+        
+        /*
+        //HACK:
+        FilteringProcessor *processor = [FilteringProcessor new];
+        AssetFiltration *filtration = [AssetFiltration new];
+        filtration.asset = self.library.videoAssetItems[0];
+        processor.filtration = filtration;
+        
+        g_object = processor;
+        
+        [processor processAssetWithCompletitionBlock:^{
+            NSLog(@"Done playing audio!");
+            g_object = nil;
+        }];
+         */
+        
     }
     else if (sender.tag == 1)
     {

@@ -16,3 +16,4 @@
 @property (nonatomic,strong) CIFilter* filter;
 @property (nonatomic) CMTimeRange range;
 @end
+
