@@ -51,7 +51,7 @@
 
 @property GLfloat preferredRotation;
 @property CGSize presentationRect;
-
+@property (nonatomic,weak) EAGLContext * glContext;
 - (void)setupGL;
 - (void)displayPixelBuffer:(CVPixelBufferRef)pixelBuffer;
 

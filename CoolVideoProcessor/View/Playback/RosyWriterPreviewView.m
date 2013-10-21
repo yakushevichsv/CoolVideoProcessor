@@ -55,8 +55,6 @@ enum
 {
 	UNIFORM_Y,
 	UNIFORM_UV,
-	UNIFORM_LUMA_THRESHOLD,
-	UNIFORM_CHROMA_THRESHOLD,
 	UNIFORM_ROTATION_ANGLE,
 	UNIFORM_COLOR_CONVERSION_MATRIX,
 	NUM_UNIFORMS
@@ -123,6 +121,11 @@ static const GLfloat kColorConversion709[] = {
 	return [CAEAGLLayer class];
 }
 
+-(EAGLContext*)glContext
+{
+    return _context;
+}
+
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
 	if ((self = [super initWithCoder:aDecoder]))
@@ -163,8 +166,6 @@ static const GLfloat kColorConversion709[] = {
 	// 0 and 1 are the texture IDs of _lumaTexture and _chromaTexture respectively.
 	glUniform1i(uniforms[UNIFORM_Y], 0);
 	glUniform1i(uniforms[UNIFORM_UV], 1);
-	glUniform1f(uniforms[UNIFORM_LUMA_THRESHOLD], 1.0);
-	glUniform1f(uniforms[UNIFORM_CHROMA_THRESHOLD], 1.0);
 	glUniform1f(uniforms[UNIFORM_ROTATION_ANGLE], self.preferredRotation);
 	glUniformMatrix3fv(uniforms[UNIFORM_COLOR_CONVERSION_MATRIX], 1, GL_FALSE, _preferredConversion);
 	
@@ -327,8 +328,6 @@ static const GLfloat kColorConversion709[] = {
 	
 	// Use shader program.
 	glUseProgram(self.program);
-	glUniform1f(uniforms[UNIFORM_LUMA_THRESHOLD], 1.0);
-	glUniform1f(uniforms[UNIFORM_CHROMA_THRESHOLD], 1.0);
 	glUniform1f(uniforms[UNIFORM_ROTATION_ANGLE], self.preferredRotation);
 	glUniformMatrix3fv(uniforms[UNIFORM_COLOR_CONVERSION_MATRIX], 1, GL_FALSE, _preferredConversion);
 	
@@ -445,8 +444,6 @@ static const GLfloat kColorConversion709[] = {
 	// Get uniform locations.
 	uniforms[UNIFORM_Y] = glGetUniformLocation(self.program, "SamplerY");
 	uniforms[UNIFORM_UV] = glGetUniformLocation(self.program, "SamplerUV");
-	uniforms[UNIFORM_LUMA_THRESHOLD] = glGetUniformLocation(self.program, "lumaThreshold");
-	uniforms[UNIFORM_CHROMA_THRESHOLD] = glGetUniformLocation(self.program, "chromaThreshold");
 	uniforms[UNIFORM_ROTATION_ANGLE] = glGetUniformLocation(self.program, "preferredRotation");
 	uniforms[UNIFORM_COLOR_CONVERSION_MATRIX] = glGetUniformLocation(self.program, "colorConversionMatrix");
 	

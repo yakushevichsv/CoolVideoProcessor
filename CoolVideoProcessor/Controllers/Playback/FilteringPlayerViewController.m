@@ -12,7 +12,7 @@
 
 static void *AVPlayerItemStatusContext = &AVPlayerItemStatusContext;
 
-# define ONE_FRAME_DURATION 0.03
+//# define ONE_FRAME_DURATION 0.03
 
 @interface FilteringPlayerViewController ()<AVPlayerItemOutputPullDelegate>
 {
@@ -54,6 +54,24 @@ static void *AVPlayerItemStatusContext = &AVPlayerItemStatusContext;
 	self.videoOutput = [[AVPlayerItemVideoOutput alloc] initWithPixelBufferAttributes:pixBuffAttributes];
 	_myVideoOutputQueue = dispatch_queue_create("myVideoOutputQueue", DISPATCH_QUEUE_SERIAL);
 	[[self videoOutput] setDelegate:self queue:_myVideoOutputQueue];
+    UISlider* custView = (UISlider*)[self.playerView viewWithTag:222];
+    custView.hidden = FALSE;
+    [custView removeFromSuperview];
+    
+    self.navigationController.toolbarHidden = NO;
+    
+    CGFloat yValue = CGRectGetMidY(self.navigationController.toolbar.frame) - CGRectGetMidY(custView.bounds);
+    CGRect frame = custView.frame;
+    frame.origin.y = yValue;
+    [custView setFrame:frame];
+    
+    [self.view addSubview:custView];
+
+}
+
+- (IBAction)valueChanged:(UISlider *)sender {
+#warning TODO implement navigation...
+    NSParameterAssert(FALSE);
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -119,7 +137,7 @@ static void *AVPlayerItemStatusContext = &AVPlayerItemStatusContext;
 	[[_player currentItem] removeOutput:self.videoOutput];
     
 	AVPlayerItem *item = [AVPlayerItem playerItemWithURL:URL];
-	AVAsset *asset = [item asset];
+	AVURLAsset *asset = (AVURLAsset *)[item asset];
 	
 	[asset loadValuesAsynchronouslyForKeys:@[@"tracks"] completionHandler:^{
         
@@ -143,7 +161,7 @@ static void *AVPlayerItemStatusContext = &AVPlayerItemStatusContext;
 						dispatch_async(dispatch_get_main_queue(), ^{
 							[item addOutput:self.videoOutput];
 							[_player replaceCurrentItemWithPlayerItem:item];
-							[self.videoOutput requestNotificationOfMediaDataChangeWithAdvanceInterval:ONE_FRAME_DURATION];
+							[self.videoOutput requestNotificationOfMediaDataChangeWithAdvanceInterval:1/videoTrack.nominalFrameRate];
 							[_player play];
 						});
 						
@@ -245,9 +263,9 @@ static void *AVPlayerItemStatusContext = &AVPlayerItemStatusContext;
     }
 }
 
--(UIImage *)applyFilter:(CVPixelBufferRef)beginImage
+-(void)applyFilter:(CVPixelBufferRef*)beginImage
 {
-    CIImage * tempImage = [CIImage imageWithCVPixelBuffer:beginImage];
+    CIImage * tempImage = [CIImage imageWithCVPixelBuffer:*beginImage];
     
     //CVPixelBufferRelease(beginImage);
     CIFilter * filter = [CIFilter filterWithName:@"CISepiaTone" keysAndValues: kCIInputImageKey, tempImage, nil];
@@ -255,9 +273,10 @@ static void *AVPlayerItemStatusContext = &AVPlayerItemStatusContext;
     [filter setValue:@(0.8) forKey:@"InputIntensity"];
     
     CIImage *outputImage = filter.outputImage;
-    UIImage * newImg = [UIImage imageWithCIImage:outputImage];
+    filter = nil;
     
-    return newImg;
+    [g_context render:outputImage toCVPixelBuffer:*beginImage];
+    
 }
 
 #pragma mark - CADisplayLink Callback
@@ -275,25 +294,34 @@ static void *AVPlayerItemStatusContext = &AVPlayerItemStatusContext;
 	CFTimeInterval nextVSync = ([sender timestamp] + [sender duration]);
 	
 	outputItemTime = [[self videoOutput] itemTimeForHostTime:nextVSync];
-	
-	if ([[self videoOutput] hasNewPixelBufferForItemTime:outputItemTime]) {
-		CVPixelBufferRef pixelBuffer = [[self videoOutput] copyPixelBufferForItemTime:outputItemTime itemTimeForDisplay:NULL];
-        NSLog(@"%d",(NSUInteger)CVPixelBufferGetPixelFormatType(pixelBuffer));
-        UIImage * image = [self applyFilter:pixelBuffer];
+	__weak typeof(self) weakSelf = self;
+    
+	if ([[weakSelf videoOutput] hasNewPixelBufferForItemTime:outputItemTime]) {
         
-        if (!g_context)
-        {
-            EAGLContext *myEAGLContext = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
-            NSMutableDictionary *options = [[NSMutableDictionary alloc] init];
-            [options setObject: [NSNull null] forKey: kCIContextWorkingColorSpace];
-            g_context = [CIContext contextWithEAGLContext:myEAGLContext options:options];
-        }
-        NSParameterAssert(image.CIImage);
+        CVPixelBufferRef pixelBuffer = [[weakSelf videoOutput] copyPixelBufferForItemTime:outputItemTime itemTimeForDisplay:NULL];
         
-        [g_context render:image.CIImage toCVPixelBuffer:pixelBuffer];
-        image = nil;
+        //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+            
+            NSUInteger h = CVPixelBufferGetHeight(pixelBuffer);
+            NSUInteger w = CVPixelBufferGetWidth(pixelBuffer);
+            
+            NSLog(@" %d %d",h,w);
+            
+            
+            NSLog(@"%d",(NSUInteger)CVPixelBufferGetPixelFormatType(pixelBuffer));
+            [weakSelf applyFilter:&pixelBuffer];
+            
+            
+            h = CVPixelBufferGetHeight(pixelBuffer);
+            w = CVPixelBufferGetWidth(pixelBuffer);
+            
+            NSLog(@"After filtration %d %d",h,w);
+            
+            //dispatch_sync(dispatch_get_main_queue(), ^{
+                [[weakSelf playerView] displayPixelBuffer:pixelBuffer];
+            //});
+        //});
         
-        [[self playerView] displayPixelBuffer:pixelBuffer];
 	}
 }
 
@@ -302,6 +330,16 @@ static void *AVPlayerItemStatusContext = &AVPlayerItemStatusContext;
 - (void)outputMediaDataWillChange:(AVPlayerItemOutput *)sender
 {
 	// Restart display link.
+    
+    if (!g_context)
+    {
+        //EAGLContext *myEAGLContext = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
+        NSMutableDictionary *options = [[NSMutableDictionary alloc] init];
+        [options setObject: [NSNull null] forKey: kCIContextWorkingColorSpace];
+        g_context = [CIContext contextWithEAGLContext:self.playerView.glContext options:options];
+        //g_context = [CIContext contextWithOptions:@{kCIContextUseSoftwareRenderer:@(NO)}];
+    }
+    
 	[[self displayLink] setPaused:NO];
 }
 
