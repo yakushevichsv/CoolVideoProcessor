@@ -20,6 +20,21 @@
 
 @implementation FilteringProcessor
 
+
++ (void)correctFilter:(CIFilter **)filterPtr withInputImage:(CIImage *)image
+{
+    CIFilter *filter = *filterPtr;
+    
+    for (NSString *attribute in filter.attributes)
+    {
+        NSDictionary *params = (NSDictionary *)filter.attributes[attribute];
+        if ([params isKindOfClass:[NSDictionary class]] &&  [params[@"CIAttributeClass"] isEqualToString:@"CIImage"])
+        {
+            [filter setValue:image forKey:attribute];
+        }
+    }
+}
+
 - (void)processAssetWithCompletitionBlock:(filteringProcessorCompletitionBlock)completitionBlock
 {
     CMTimeRange range =  CMTimeRangeMake(kCMTimeZero, CMTimeMakeWithSeconds(self.filtration.asset.duration, 1));

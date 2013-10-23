@@ -25,6 +25,8 @@ typedef void (^filteringProcessorCompletitionBlock)(void);
 
 @property (nonatomic, strong) AssetFiltration *filtration;
 
++ (void)correctFilter:(CIFilter **)filterPtr withInputImage:(CIImage *)image;
+
 - (void)processAssetWithTimeRange:(CMTimeRange)range completitionBlock:(filteringProcessorCompletitionBlock)completitionBlock;
 
 - (void)processAssetWithCompletitionBlock:(filteringProcessorCompletitionBlock)completitionBlock;

@@ -11,6 +11,7 @@
 #import "AssetItem.h"
 #import "HeaderView.h"
 #import "FilterSettingsController.h"
+#import "FilteringProcessor.h"
 
 @interface SelectFiltersController ()
 @property (nonatomic,strong) CIContext * context;
@@ -29,14 +30,16 @@ static NSString  * kSectionHeaderIdentifier=@"TitleHeader";
     NSArray * names =@[kCICategoryDistortionEffect,
                        kCICategoryGeometryAdjustment,
                        kCICategoryCompositeOperation,
-                       kCICategoryBlur
+                       kCICategoryBlur,
+                       kCICategorySharpen
                        ];
     
     NSArray * visibleText = @[
                               @"Distortion effect",
                               @"Geometry adjustment",
                               @"Composite Operation",
-                              @"Blur"
+                              @"Blur",
+                              @"Sharpen"
                               ];
     
     NSParameterAssert(visibleText.count == names.count);
@@ -145,15 +148,33 @@ static NSString  * kSectionHeaderIdentifier=@"TitleHeader";
     
     CIImage * image = [CIImage imageWithCGImage:self.item.image.CGImage];
     CIFilter * filter = [ CIFilter filterWithName:title];
-    [filter setValue:image forKey:kCIInputImageKey];
+    
+    NSDictionary *centerDic = (NSDictionary *)[filter.attributes objectForKey:@"inputCenter"];
+    
+    if (centerDic)
+    {
+        [filter setValue:centerDic[@"CIAttributeDefault"] forKey:@"inputCenter"];
+    }
+    
+    NSLog(@"Attributes %@",filter.inputKeys);
+    
+    
+    [FilteringProcessor correctFilter:&filter withInputImage:image];
+    
     CIImage * result = [filter valueForKey:kCIOutputImageKey];
     UIImage * resImage = [UIImage imageWithCIImage:result];
     cell.imageView.image = resImage;
-    cell.titleLabel.frame= cell.frame;
+    CGSize size = [title sizeWithFont: [UIFont systemFontOfSize:[UIFont systemFontSize]]];
+    CGRect cellRect = cell.frame;
+    cellRect.size.width  = MAX(CGRectGetWidth(cellRect),size.width);
+    cellRect.size.height = MAX(CGRectGetHeight(cellRect),size.height);
+    cell.titleLabel.frame= cellRect;
     cell.titleLabel.attributedText = mutableString;
     return cell;
 
 }
+
+
 
 #pragma mark - Segue
 
