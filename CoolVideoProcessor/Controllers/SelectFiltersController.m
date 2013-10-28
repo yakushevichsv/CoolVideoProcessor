@@ -15,13 +15,13 @@
 
 @interface SelectFiltersController ()
 @property (nonatomic,strong) CIContext * context;
-@property (weak, nonatomic) IBOutlet UICollectionView *cvFilters;
 @end
 
 static NSDictionary * g_FilterMap;
 
-static NSString * kCellIdentifier =@"selectFilterCell";
-static NSString  * kSectionHeaderIdentifier=@"TitleHeader";
+static NSString *kCellIdentifier           = @"selectFilterCell";
+static NSString *kSectionHeaderIdentifier  = @"TitleHeader";
+static NSString *kSectionFooterIdentifier  = @"FooterHeader";
 @implementation SelectFiltersController
 
 
@@ -108,12 +108,11 @@ static NSString  * kSectionHeaderIdentifier=@"TitleHeader";
 {
     if (kind == UICollectionElementKindSectionHeader)
     {
-        UICollectionReusableView * headerView =[collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:(NSString*)kSectionHeaderIdentifier forIndexPath:indexPath];
+        UICollectionReusableView * headerView =[collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:(NSString*)kSectionHeaderIdentifier forIndexPath:indexPath];
         
-      HeaderView* contentView = (HeaderView*)  [headerView viewWithTag:2];
+      HeaderView* contentView = (HeaderView*)headerView ;
         
         NSString * title;
-        contentView.frame = headerView.frame;
        title = g_FilterMap.allKeys[indexPath.section];
         
         NSMutableAttributedString * mutableString =[[NSMutableAttributedString alloc]initWithString:title];
@@ -126,17 +125,19 @@ static NSString  * kSectionHeaderIdentifier=@"TitleHeader";
         
         return headerView;
     }
-    else
-        return nil;
+    else if (kind == UICollectionElementKindSectionFooter)
+    {
+        UICollectionReusableView * footerView =[collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:(NSString*)kSectionFooterIdentifier forIndexPath:indexPath];
+        return footerView;
+        
+    }else
+    return nil;
 }
 
 -(UICollectionViewCell*)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    SelectFiltersCell * cell;
-    if (!(cell = (SelectFiltersCell*)[collectionView dequeueReusableCellWithReuseIdentifier:kCellIdentifier forIndexPath:indexPath]))
-    {
-        cell = [SelectFiltersCell new];
-    }
+    SelectFiltersCell * cell = (SelectFiltersCell*)[collectionView dequeueReusableCellWithReuseIdentifier:kCellIdentifier forIndexPath:indexPath];
+   
     NSString * title;
     
     title =[g_FilterMap valueForKey:g_FilterMap.allKeys[indexPath.section]][indexPath.row];
