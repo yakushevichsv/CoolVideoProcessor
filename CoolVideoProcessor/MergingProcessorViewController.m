@@ -12,6 +12,7 @@
 #import "AssetsLibrary.h"
 #import <MediaPlayer/MediaPlayer.h>
 #import "FileProcessor.h"
+#import "AssetItem.h"
 
 @interface MergingProcessorViewController ()
 @property (nonatomic,strong) ALAssetsLibrary * library;
@@ -124,8 +125,142 @@
     }];
 }
 
+static AVPlayer * g_player = nil;
+
+- (void)start
+{
+    
+    AVMutableComposition *composition = [AVMutableComposition composition];
+    
+    AVMutableCompositionTrack* audioTrack = [composition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
+    
+    [self startInternal:0 compositionTrack:audioTrack completition:^{
+       
+        AVPlayerItem *playerItem = [[AVPlayerItem alloc]initWithAsset:composition];
+        
+        g_player = [[AVPlayer alloc]initWithPlayerItem:playerItem];
+        AVPlayerLayer *layerVideo = [AVPlayerLayer playerLayerWithPlayer:g_player];
+        layerVideo.frame = self.view.layer.bounds;
+        layerVideo.backgroundColor = [UIColor orangeColor].CGColor;
+        
+        [self.view.layer addSublayer:layerVideo];
+        [g_player play];
+    }];
+    
+}
+
+
+- (void)startInternal:(NSUInteger)index compositionTrack:(AVMutableCompositionTrack *)audioTrack completition:(void (^)(void))completition
+{
+        NSArray * items = self.dictionary[self.dictionary.allKeys[index]];
+    
+        AssetItem * assetItem = items[0];
+    
+        AVURLAsset * asset = [AVURLAsset assetWithURL:assetItem.url];
+    
+        [self appendAudioTrackFromAsset:asset toCompositionTrack:audioTrack completition:^{
+            if (index+1 == self.dictionary.count)
+            {
+                if (completition)
+                    completition();
+            }
+            else
+                [self startInternal:index+1 compositionTrack:audioTrack completition:completition];
+        }];
+    
+}
+
+
+- (NSUInteger)allKeysAreLoadedForAsset:(AVAsset *)asset keys:(NSArray *)keys
+{
+    NSUInteger subIndex = 0;
+    
+    for (NSString *key in keys)
+    {
+        NSError *error = nil;
+        
+        AVKeyValueStatus status = [asset statusOfValueForKey:key error:&error];
+    
+        if (status != AVKeyValueStatusLoaded)
+        {
+            if (error)
+                NSLog(@"Error loading key (%@) : %@",key,error);
+            break;
+        }
+        subIndex++;
+    }
+    
+    return subIndex;
+}
+
+- (BOOL)appendAudioTrackAfterLoadingFromAsset:(AVAsset *)asset toCompositionTrack:(AVMutableCompositionTrack *)compositionTrack
+{
+    AVAssetTrack *audioTrack = [[asset tracksWithMediaType:AVMediaTypeAudio]lastObject];
+    
+    if (audioTrack)
+    {
+        return [self appendTrack:audioTrack toCompositionTrack:compositionTrack];
+    }
+    return TRUE;
+}
+
+- (BOOL)appendTrack:(AVAssetTrack *)audioTrack toCompositionTrack:(AVMutableCompositionTrack *)compositionTrack
+{
+    NSError *error = nil;
+    CMTimeRange range = compositionTrack.timeRange;
+    CMTime endTime = CMTimeAdd(range.start, range.duration);
+    
+    BOOL result = [compositionTrack insertTimeRange:audioTrack.timeRange ofTrack:audioTrack atTime:endTime error:&error];
+    if (!result) {
+        if (error)
+            NSLog(@"Error %@",error);
+    }
+    
+    return result;
+}
+
+- (void)appendAudioTrackFromAsset:(AVAsset *)asset toCompositionTrack:(AVMutableCompositionTrack *)compositionTrack completition:(void (^)(void))completition
+{
+    NSArray *keys = @[@"tracks",@"duration"];
+    
+    NSUInteger subIndex = [self allKeysAreLoadedForAsset:asset keys:keys];
+    
+    if (subIndex == keys.count)
+    {
+        if ([self appendAudioTrackAfterLoadingFromAsset:asset toCompositionTrack:compositionTrack])
+        {
+            if (completition)
+                completition();
+        }
+    }
+    
+    NSArray *subKeys = [keys subarrayWithRange:NSMakeRange(subIndex, keys.count - subIndex)];
+    
+    [asset loadValuesAsynchronouslyForKeys:subKeys  completionHandler:^{
+        
+        NSUInteger subIndex = [self allKeysAreLoadedForAsset:asset keys:keys];
+        
+        if (subIndex == keys.count) {
+            
+            BOOL result = [self appendAudioTrackAfterLoadingFromAsset:asset toCompositionTrack:compositionTrack];
+            
+            if (result) {
+                
+                if (completition)
+                    completition();
+            }
+        }
+        
+    }];
+}
+
+
 -(void)executeTask
 {
+    //HACK:
+    [self start];
+    return;
+    
     if ([self displayMergedVideo]) return;
     
     AVMutableComposition * composition = [AVMutableComposition composition];
