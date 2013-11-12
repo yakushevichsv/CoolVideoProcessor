@@ -132,41 +132,325 @@ static AVPlayer * g_player = nil;
     
     AVMutableComposition *composition = [AVMutableComposition composition];
     
-    AVMutableCompositionTrack* audioTrack = [composition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
+    [composition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
     
-    [self startInternal:0 compositionTrack:audioTrack completition:^{
-       
-        AVPlayerItem *playerItem = [[AVPlayerItem alloc]initWithAsset:composition];
-        
-        g_player = [[AVPlayer alloc]initWithPlayerItem:playerItem];
-        AVPlayerLayer *layerVideo = [AVPlayerLayer playerLayerWithPlayer:g_player];
-        layerVideo.frame = self.view.layer.bounds;
-        layerVideo.backgroundColor = [UIColor orangeColor].CGColor;
-        
-        [self.view.layer addSublayer:layerVideo];
-        [g_player play];
+    [composition addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];
+    
+    [self startInternal:0 composition:composition completition:^
+    {
+        [self readSamples:composition];
     }];
     
 }
 
-
-- (void)startInternal:(NSUInteger)index compositionTrack:(AVMutableCompositionTrack *)audioTrack completition:(void (^)(void))completition
+- (AVURLAsset *)getAssetAtIndex:(NSUInteger)index
 {
-        NSArray * items = self.dictionary[self.dictionary.allKeys[index]];
+    NSArray * items = self.dictionary[self.dictionary.allKeys[index]];
     
-        AssetItem * assetItem = items[0];
+    AssetItem * assetItem = items[0];
     
-        AVURLAsset * asset = [AVURLAsset assetWithURL:assetItem.url];
+    AVURLAsset * asset = [AVURLAsset assetWithURL:assetItem.url];
     
-        [self appendAudioTrackFromAsset:asset toCompositionTrack:audioTrack completition:^{
-            if (index+1 == self.dictionary.count)
+    return asset;
+}
+
+- (BOOL)exportComposition:(AVMutableComposition *)composition filePath:(NSString* )path block:(void(^)(void))block
+{
+    AVAssetExportSession *exportSession = [AVAssetExportSession
+                                           exportSessionWithAsset:composition
+                                           presetName:AVAssetExportPresetMediumQuality];
+    if (nil == exportSession) return NO;
+    
+    // create trim time range - 20 seconds starting from 30 seconds into the asset
+    CMTime startTime = kCMTimeZero;
+    CMTime stopTime = composition.duration;
+    CMTimeRange exportTimeRange = CMTimeRangeFromTimeToTime(startTime, stopTime);
+
+    
+    // configure export session  output with all our parameters
+    exportSession.outputURL = [NSURL fileURLWithPath:path]; // output path
+    //.exportSession.outputFileType = AVFileTypeAppleM4A; // output file type
+    exportSession.timeRange = exportTimeRange; // trim time range
+    exportSession.outputFileType = AVFileTypeQuickTimeMovie;
+    // perform the export
+    [exportSession exportAsynchronouslyWithCompletionHandler:^{
+        
+        if (AVAssetExportSessionStatusCompleted == exportSession.status) {
+            NSLog(@"AVAssetExportSessionStatusCompleted");
+            block();
+        } else if (AVAssetExportSessionStatusFailed == exportSession.status) {
+            // a failure may happen because of an event out of your control
+            // for example, an interruption like a phone call comming in
+            // make sure and handle this case appropriately
+            NSLog(@"AVAssetExportSessionStatusFailed %@",     exportSession.error);
+        } else {
+            NSLog(@"Export Session Status: %d", exportSession.status);
+        }
+    }];
+    return TRUE;
+}
+
+- (void)readSamples:(AVMutableComposition *)composition
+{
+    NSArray * tracks = [composition tracksWithMediaType:AVMediaTypeVideo];
+    
+    NSString* key = (NSString*)kCVPixelBufferPixelFormatTypeKey;
+    NSNumber* value = [NSNumber numberWithUnsignedInt:kCVPixelFormatType_32BGRA];
+    NSDictionary* videoSettings =
+    [NSDictionary dictionaryWithObject:value forKey:key];
+ 
+    NSMutableDictionary* audioSettings = [NSMutableDictionary dictionary];
+    [audioSettings setValue:[NSNumber numberWithInt:kAudioFormatLinearPCM]
+                         forKey:AVFormatIDKey];
+    
+    AVAssetReaderVideoCompositionOutput *videoOutput = [[AVAssetReaderVideoCompositionOutput alloc]initWithVideoTracks:tracks  videoSettings:nil];
+    AVMutableVideoComposition *videoComposition = [AVMutableVideoComposition videoCompositionWithPropertiesOfAsset:composition];
+    videoOutput.videoComposition = videoComposition;
+    
+    NSError *error = nil;
+    NSURL * url = [[self class]pathForResultVideo];
+    
+    AVAssetWriter *videoWriter = [[AVAssetWriter alloc] initWithURL:url
+                                                           fileType:AVFileTypeQuickTimeMovie
+                                                              error:&error];
+    CGSize  size =  composition.naturalSize;
+    
+    if (error)
+        NSLog(@"Error %@",error);
+    
+    NSParameterAssert(videoWriter);
+    
+    videoSettings = [NSDictionary dictionaryWithObjectsAndKeys:
+                                   AVVideoCodecH264, AVVideoCodecKey,
+                                   @(size.width), AVVideoWidthKey,
+                                   @(size.height), AVVideoHeightKey,
+                                   nil];
+    
+    AVAssetWriterInput* videoWriterInput = [AVAssetWriterInput
+                                            assetWriterInputWithMediaType:AVMediaTypeVideo
+                                            outputSettings:videoSettings];
+    
+    
+    AVAssetWriterInputPixelBufferAdaptor *adaptor = [AVAssetWriterInputPixelBufferAdaptor
+                                                     assetWriterInputPixelBufferAdaptorWithAssetWriterInput:videoWriterInput
+                                                     sourcePixelBufferAttributes:nil];
+    
+    NSParameterAssert(videoWriterInput);
+    NSParameterAssert([videoWriter canAddInput:videoWriterInput]);
+    videoWriterInput.expectsMediaDataInRealTime = YES;
+    [videoWriter addInput:videoWriterInput];
+    
+    //Start a session:
+    [videoWriter startWriting];
+    [videoWriter startSessionAtSourceTime:kCMTimeZero];
+    
+    
+    
+    AVAssetReader * reader = [[AVAssetReader alloc]initWithAsset:composition error:nil];
+    
+    if ([reader canAddOutput:videoOutput])
+        [reader addOutput:videoOutput];
+    
+    /*if ([reader canAddOutput:audioOutput])
+        [reader addOutput:audioOutput];*/
+    
+    reader.timeRange = CMTimeRangeMake(kCMTimeZero, composition.duration);
+    
+    BOOL status = [reader startReading];
+    
+    if (!status)
+        NSLog(@" Status %d",reader.status);
+    
+        dispatch_queue_t queue = dispatch_queue_create("coolvideoprocessor.processvideo.queue", nil);
+    
+    [adaptor.assetWriterInput requestMediaDataWhenReadyOnQueue:queue usingBlock:^
+    {
+        while (adaptor.assetWriterInput.readyForMoreMediaData)
+        {
+            //CMTime presentTime = nextPTS;
+            //nextPTS = CMTimeAdd(frameDuration, nextPTS);
+            
+            CMSampleBufferRef sampleBuffer = [videoOutput copyNextSampleBuffer];
+            
+            if (sampleBuffer)
             {
-                if (completition)
-                    completition();
+                CMTime presentationTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer);
+                
+                CVPixelBufferRef buffer = [self applyFilter:sampleBuffer poolRef:adaptor.pixelBufferPool];
+                
+                CMTimeShow(presentationTime);
+                
+                BOOL result = buffer && [adaptor appendPixelBuffer:buffer withPresentationTime:presentationTime];
+                
+                CVPixelBufferRelease(buffer);
+                
+                if (result == NO) //failes on 3GS, but works on iphone 4
+                {
+                    NSLog(@"failed to append buffer");
+                    NSLog(@"The error is %@", [videoWriter error]);
+                }
             }
             else
-                [self startInternal:index+1 compositionTrack:audioTrack completition:completition];
-        }];
+            {
+                if (reader.status == AVAssetReaderStatusCompleted)
+                {
+                    //[reader cancelReading];
+                    [adaptor.assetWriterInput markAsFinished];
+                    
+                    [videoWriter finishWritingWithCompletionHandler:^
+                     {
+                         if (videoWriter.status != AVAssetWriterStatusCompleted)
+                         {
+                             NSLog(@"Error %@",videoWriter.error);
+                         }
+                         
+                         NSURL * url = videoWriter.outputURL;
+                         AVURLAsset * asset2 = [[AVURLAsset alloc]initWithURL:url  options:nil];
+                         
+                         static NSString * tracks = @"tracks";
+                         [asset2 loadValuesAsynchronouslyForKeys:@[tracks] completionHandler:^
+                         {
+                            NSError *error = nil;
+                             if ([asset2 statusOfValueForKey:tracks error:&error] == AVKeyValueStatusLoaded)
+                             {
+                                 
+                                 AVMutableCompositionTrack *videoTrack = [composition tracksWithMediaType:AVMediaTypeVideo].lastObject;
+                                 
+                                 [composition removeTrack:videoTrack];
+                                 
+                                 videoTrack = [composition addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];
+                                 
+                                 if (![videoTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, asset2.duration) ofTrack:[[asset2 tracksWithMediaType:AVMediaTypeVideo]lastObject] atTime:kCMTimeZero error:&error])
+                                 {
+                                     NSLog(@"Error %@",error);
+                                 }
+                                 
+                                 [self exportComposition:composition filePath:[[[self class]pathForResultVideo] path] block:^{
+                                     [[NSFileManager defaultManager]removeItemAtURL:url error:nil];
+                                 }];
+                             }
+                         }];
+                     }];
+                }
+                break;
+            }
+            
+            
+            
+        }
+    }];
+    
+    //[self exportComposition:composition filePath:[[[self class]pathForResultVideo]path]];
+    
+}
+
+
+- (CVPixelBufferRef) pixelBufferFromCGImage: (CGImageRef) image poolRef:(CVPixelBufferPoolRef)poolRef
+{
+    /*NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
+     [NSNumber numberWithBool:YES], kCVPixelBufferCGImageCompatibilityKey,
+     [NSNumber numberWithBool:YES], kCVPixelBufferCGBitmapContextCompatibilityKey,
+     nil];*/
+    CVPixelBufferRef pxbuffer = NULL;
+    
+    if (CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, poolRef, &pxbuffer)!=kCVReturnSuccess)
+    {
+        return NULL;
+    }
+    
+    
+    
+    CVPixelBufferGetWidth(pxbuffer);
+    /*
+     CVPixelBufferCreate(kCFAllocatorDefault, CGImageGetWidth(image),
+     CGImageGetHeight(image), kCVPixelFormatType_32ARGB, (__bridge CFDictionaryRef) options,
+     &pxbuffer);*/
+    
+    CVPixelBufferLockBaseAddress(pxbuffer, 0);
+    void *pxdata = CVPixelBufferGetBaseAddress(pxbuffer);
+    
+    CGColorSpaceRef rgbColorSpace = CGColorSpaceCreateDeviceRGB();
+    CGContextRef context = CGBitmapContextCreate(pxdata, CVPixelBufferGetWidth(pxbuffer),
+                                                 CVPixelBufferGetHeight(pxbuffer), 8, 4*CVPixelBufferGetWidth(pxbuffer), rgbColorSpace,
+                                                 kCGImageAlphaNoneSkipFirst);
+    
+    CGContextConcatCTM(context, CGAffineTransformMakeRotation(0));
+    
+    CGAffineTransform flipVertical = CGAffineTransformMake(
+                                                           1, 0, 0, -1, 0, CVPixelBufferGetWidth(pxbuffer)
+                                                           );
+    CGContextConcatCTM(context, flipVertical);
+    
+    CGAffineTransform flipHorizontal = CGAffineTransformMake(
+                                                             -1.0, 0.0, 0.0, 1.0, CVPixelBufferGetHeight(pxbuffer), 0.0
+                                                             );
+    
+    CGContextConcatCTM(context, flipHorizontal);
+    CGSize size = CGSizeMake(MIN(CVPixelBufferGetWidth(pxbuffer),CGImageGetWidth(image)), MIN(CVPixelBufferGetHeight(pxbuffer),CGImageGetHeight(image)));
+    CGContextDrawImage(context, CGRectMake(0, 0, size.width,
+                                           size.height), image);
+    CGColorSpaceRelease(rgbColorSpace);
+    CGContextRelease(context);
+    
+    CVPixelBufferUnlockBaseAddress(pxbuffer, 0);
+    
+    return pxbuffer;
+}
+
+
+- (CVPixelBufferRef) pixelBufferFromCGImage: (CGImageRef) image size:(CGSize)size
+{
+    
+        NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
+                                 [NSNumber numberWithBool:YES], kCVPixelBufferCGImageCompatibilityKey,
+                                 [NSNumber numberWithBool:YES], kCVPixelBufferCGBitmapContextCompatibilityKey,
+                                 nil];
+        CVPixelBufferRef pxbuffer = NULL;
+        
+        CVReturn status = CVPixelBufferCreate(kCFAllocatorDefault,
+                                              size.width,
+                                              size.height,
+                                              kCVPixelFormatType_32ARGB,
+                                              (__bridge CFDictionaryRef) options,
+                                              &pxbuffer);
+        if (status != kCVReturnSuccess){
+            NSLog(@"Failed to create pixel buffer");
+        }
+        
+        CVPixelBufferLockBaseAddress(pxbuffer, 0);
+        void *pxdata = CVPixelBufferGetBaseAddress(pxbuffer);
+        
+        CGColorSpaceRef rgbColorSpace = CGColorSpaceCreateDeviceRGB();
+        CGContextRef context = CGBitmapContextCreate(pxdata, size.width,
+                                                     size.height, 8, 4*size.width, rgbColorSpace,
+                                                     kCGImageAlphaPremultipliedFirst);
+        //kCGImageAlphaNoneSkipFirst);
+        CGContextConcatCTM(context, CGAffineTransformMakeRotation(0));
+        CGContextDrawImage(context, CGRectMake(0, 0, size.width,
+                                               size.height), image);
+        CGColorSpaceRelease(rgbColorSpace);
+        CGContextRelease(context);
+        
+        CVPixelBufferUnlockBaseAddress(pxbuffer, 0);
+        
+        return pxbuffer;
+}
+
+
+- (void)startInternal:(NSUInteger)index composition:(AVMutableComposition *)composition completition:(void (^)(void))completition
+{
+    AVURLAsset *asset = [self getAssetAtIndex:index];
+    
+    [self appendTracksFromAsset:asset toComposition:composition completition:^
+    {
+        if (index+1 == self.dictionary.count)
+        {
+            if (completition)
+                completition();
+        }
+        else
+            [self startInternal:index+1 composition:composition completition:completition];
+    }];
     
 }
 
@@ -204,13 +488,36 @@ static AVPlayer * g_player = nil;
     return TRUE;
 }
 
-- (BOOL)appendTrack:(AVAssetTrack *)audioTrack toCompositionTrack:(AVMutableCompositionTrack *)compositionTrack
+- (BOOL)appendTracksAfterLoadingFromAsset:(AVAsset *)asset toComposition:(AVMutableComposition *)composition
+{
+    AVAssetTrack *audioTrack = [[asset tracksWithMediaType:AVMediaTypeAudio]lastObject];
+    AVMutableCompositionTrack * compositionTrack = [[composition tracksWithMediaType:AVMediaTypeAudio] lastObject];
+    
+    if (audioTrack)
+    {
+        if(![self appendTrack:audioTrack toCompositionTrack:compositionTrack])
+            return NO;
+    }
+    
+    AVAssetTrack *videoTrack = [[asset tracksWithMediaType:AVMediaTypeVideo]lastObject];
+    compositionTrack = [[composition tracksWithMediaType:AVMediaTypeVideo] lastObject];
+    
+    if (videoTrack)
+    {
+        if(![self appendTrack:videoTrack toCompositionTrack:compositionTrack])
+            return NO;
+    }
+    
+    return TRUE;
+}
+
+- (BOOL)appendTrack:(AVAssetTrack * )track toCompositionTrack:(AVMutableCompositionTrack *)compositionTrack
 {
     NSError *error = nil;
     CMTimeRange range = compositionTrack.timeRange;
     CMTime endTime = CMTimeAdd(range.start, range.duration);
     
-    BOOL result = [compositionTrack insertTimeRange:audioTrack.timeRange ofTrack:audioTrack atTime:endTime error:&error];
+    BOOL result = [compositionTrack insertTimeRange:track.timeRange ofTrack:track atTime:endTime error:&error];
     if (!result) {
         if (error)
             NSLog(@"Error %@",error);
@@ -218,6 +525,7 @@ static AVPlayer * g_player = nil;
     
     return result;
 }
+
 
 - (void)appendAudioTrackFromAsset:(AVAsset *)asset toCompositionTrack:(AVMutableCompositionTrack *)compositionTrack completition:(void (^)(void))completition
 {
@@ -254,6 +562,45 @@ static AVPlayer * g_player = nil;
     }];
 }
 
+
+- (void)appendTracksFromAsset:(AVAsset *)asset
+                toComposition:(AVMutableComposition *)composition
+                 completition:(void (^)(void))completition
+{
+    NSArray *keys = @[@"tracks",@"duration"];
+    
+    NSUInteger subIndex = [self allKeysAreLoadedForAsset:asset keys:keys];
+    
+    if (subIndex == keys.count)
+    {
+        if ([self appendTracksAfterLoadingFromAsset:asset toComposition:composition])
+        {
+            if (completition)
+                completition();
+        }
+    }
+    
+    NSArray *subKeys = [keys subarrayWithRange:NSMakeRange(subIndex, keys.count - subIndex)];
+    
+    [asset loadValuesAsynchronouslyForKeys:subKeys  completionHandler:^
+    {
+        
+        NSUInteger subIndex = [self allKeysAreLoadedForAsset:asset keys:keys];
+        
+        if (subIndex == keys.count)
+        {
+            BOOL result = [self appendTracksAfterLoadingFromAsset:asset toComposition:composition];
+            
+            if (result)
+            {
+                
+                if (completition)
+                    completition();
+            }
+        }
+        
+    }];
+}
 
 -(void)executeTask
 {
@@ -407,7 +754,7 @@ static AVAssetReader* g_movieReader = nil;
                             NSLog(@"Image %@",inImage);
                         }
                         
-                        UIImage * newImg = [self applyFilter:beginImage];
+                        UIImage * newImg = nil;//[self applyFilter:beginImage];
                         // Unlock the image buffer
                         CVPixelBufferUnlockBaseAddress(imageBuffer,0);
                         //CMSampleBufferInvalidate(sampleBuffer);
@@ -530,19 +877,37 @@ static AVAssetReader* g_movieReader = nil;
     return postpone;
 }
 
--(UIImage*)applyFilter:(CGImageRef)beginImage
+static CIContext *g_Context = nil;
+
+- (CVPixelBufferRef)applyFilter:(CMSampleBufferRef)beginImage poolRef:(CVPixelBufferPoolRef)poolRef
 {
-    CIImage * inputImage = [CIImage imageWithCGImage:beginImage options:nil];
+    CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(beginImage);
+    CIImage * inputImage = [CIImage imageWithCVPixelBuffer:imageBuffer];//[CIImage imageWithCGImage:beginImage options:nil];
+    CFRelease(beginImage);
     CIFilter *filter = [CIFilter filterWithName:@"CISepiaTone"
                                   keysAndValues: kCIInputImageKey,  inputImage,
-                        @"inputIntensity", [NSNumber numberWithFloat:0.4], nil];
-    
-    CGImageRelease(beginImage);
+                        @"inputIntensity", @(0.9), nil];
     
     
     CIImage *outputImage = [filter outputImage];
+    filter = nil;
     
-    return [UIImage imageWithCIImage:outputImage];
+    if (!g_Context)
+        g_Context = [CIContext contextWithOptions:@{kCIContextUseSoftwareRenderer:@(YES)}];
+    
+    //CIContext * context = [CIContext contextWithOptions:nil];
+    
+    CVPixelBufferRef pxbuffer = NULL;
+    
+    if (CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, poolRef, &pxbuffer)!=kCVReturnSuccess)
+    {
+        return NULL;
+    }
+    
+    
+    [g_Context render:outputImage toCVPixelBuffer:pxbuffer];
+    
+    return pxbuffer;
 }
 
 -(BOOL)appendToComposition:(AVMutableComposition*)composition key:(id)key
