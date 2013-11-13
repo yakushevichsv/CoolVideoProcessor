@@ -156,10 +156,15 @@ static AVPlayer * g_player = nil;
 
 - (BOOL)exportComposition:(AVMutableComposition *)composition filePath:(NSString* )path block:(void(^)(void))block
 {
+    
+    [AVAssetExportSession determineCompatibilityOfExportPreset:AVAssetExportPresetMediumQuality withAsset:composition outputFileType:AVFileTypeQuickTimeMovie completionHandler:^(BOOL compatible) {
+        
+        if (!compatible) return;
+    
     AVAssetExportSession *exportSession = [AVAssetExportSession
                                            exportSessionWithAsset:composition
                                            presetName:AVAssetExportPresetMediumQuality];
-    if (nil == exportSession) return NO;
+    if (nil == exportSession) return ;
     
     // create trim time range - 20 seconds starting from 30 seconds into the asset
     CMTime startTime = kCMTimeZero;
@@ -177,6 +182,7 @@ static AVPlayer * g_player = nil;
         
         if (AVAssetExportSessionStatusCompleted == exportSession.status) {
             NSLog(@"AVAssetExportSessionStatusCompleted");
+            [exportSession cancelExport];
             block();
         } else if (AVAssetExportSessionStatusFailed == exportSession.status) {
             // a failure may happen because of an event out of your control
@@ -187,6 +193,9 @@ static AVPlayer * g_player = nil;
             NSLog(@"Export Session Status: %d", exportSession.status);
         }
     }];
+    
+    }];
+    
     return TRUE;
 }
 
@@ -324,8 +333,10 @@ static AVPlayer * g_player = nil;
                                  {
                                      NSLog(@"Error %@",error);
                                  }
-                                 
-                                 [self exportComposition:composition filePath:[[[self class]pathForResultVideo] path] block:^{
+                                 NSURL * url2 = [[self class]pathForResultVideo];
+                                 [self exportComposition:composition filePath:url2.path block:^
+                                 {
+                                     [self displayMovieByURL:url2];
                                      [[NSFileManager defaultManager]removeItemAtURL:url error:nil];
                                  }];
                              }
