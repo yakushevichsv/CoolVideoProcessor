@@ -16,16 +16,25 @@
 
 -(void)displayMovieByURL:(NSURL*)url
 {
-    MPMoviePlayerViewController * controller= [[MPMoviePlayerViewController alloc]initWithContentURL:url];
-    controller.moviePlayer.shouldAutoplay = YES;
-    
-    [[NSNotificationCenter defaultCenter]removeObserver:controller name:MPMoviePlayerPlaybackDidFinishNotification object:controller.moviePlayer];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playerPlaybackDidFinish:) name:MPMoviePlayerPlaybackDidFinishNotification object:controller.moviePlayer];
-    controller.moviePlayer.controlStyle = MPMovieControlStyleFullscreen;
-    [controller.moviePlayer prepareToPlay];
-    
-    [self presentMoviePlayerViewControllerAnimated:controller];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        if (url.isFileURL)
+        {
+            NSParameterAssert([[NSFileManager defaultManager] fileExistsAtPath:url.path]);
+        }
+        
+        MPMoviePlayerViewController * controller= [[MPMoviePlayerViewController alloc]initWithContentURL:url];
+        controller.wantsFullScreenLayout = YES;
+        
+        /*[[NSNotificationCenter defaultCenter]removeObserver:controller name:MPMoviePlayerPlaybackDidFinishNotification object:controller.moviePlayer];*/
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playerPlaybackDidFinish:) name:MPMoviePlayerPlaybackDidFinishNotification object:controller.moviePlayer];
+        controller.moviePlayer.controlStyle = MPMovieControlStyleFullscreen;
+        [controller.moviePlayer prepareToPlay];
+        
+        [self presentMoviePlayerViewControllerAnimated:controller];
+        
+    });
 }
 
 #pragma mark - MPMoviePlayer Delegate
