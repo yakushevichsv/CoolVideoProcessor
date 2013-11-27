@@ -343,41 +343,39 @@ static id g_object = nil;
         cell.isLoading = TRUE;
         cell.MergeVideo.bulkReDraw = TRUE;
         cell.MergeVideo.tapped = FALSE;
-    }
-    
-        cell.MergeVideo.title =  [item loadTitleWithCompletitionHandler:^{
-            //MergeVideoViewCell * retCell =.MergeVideo.title = item.title;
-            MergeVideoViewCell * retCell = (MergeVideoViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
-            retCell.MergeVideo.title = item.title;
-            
-            
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND,0), ^{
-                UIImage * image = [item loadThumbnailWithCompletitionHandler:nil];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    MergeVideoViewCell * retCell = (MergeVideoViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
-                    retCell.MergeVideo.firstFrame = image;
-                    if (item.done)
-                    {
-                        retCell.isLoading = FALSE;
-                        retCell.MergeVideo.bulkReDraw = FALSE;
-                        
-                    }
-                });
-            });
-            
-        }];
         
-               
-    
-    
-    if (item.done)
+        cell.MergeVideo.title =  [item loadTitleWithCompletitionHandler:^
+                                  {
+                                      
+                                      MergeVideoViewCell * retCell = (MergeVideoViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
+                                      retCell.MergeVideo.title = item.title;
+                                      
+                                      
+                                      dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND,0), ^{
+                                          UIImage * image = [item loadThumbnailWithCompletitionHandler:nil];
+                                          dispatch_async(dispatch_get_main_queue(), ^{
+                                              MergeVideoViewCell * retCell = (MergeVideoViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
+                                              retCell.MergeVideo.firstFrame = image;
+                                              if (item.done)
+                                              {
+                                                  retCell.isLoading = FALSE;
+                                                  retCell.MergeVideo.bulkReDraw = FALSE;
+                                                  
+                                              }
+                                          });
+                                      });
+                                      
+                                  }];
+    }
+    else
     {
         cell.MergeVideo.title = item.title;
         cell.MergeVideo.firstFrame = item.image;
         cell.isLoading = FALSE;
         cell.MergeVideo.bulkReDraw = FALSE;
-  
     }
+    
+    
     return cell;
 }
 

@@ -8,6 +8,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import <AssetsLibrary/AssetsLibrary.h>
 #import <CoreMedia/CoreMedia.h>
+#import <CoreVideo/CoreVideo.h>
 #import "MergingProcessorViewController.h"
 #import "AssetsLibrary.h"
 #import <MediaPlayer/MediaPlayer.h>
@@ -18,6 +19,7 @@
 @property (nonatomic,strong) ALAssetsLibrary * library;
 @property (nonatomic,strong) NSOperationQueue * queue;
 @property (nonatomic,strong) NSURL * mergedVideo;
+@property (nonatomic) NSUInteger count;
 @end
 
 @implementation MergingProcessorViewController
@@ -125,20 +127,17 @@
     }];
 }
 
-static AVPlayer * g_player = nil;
-
 - (void)start
 {
-    
     AVMutableComposition *composition = [AVMutableComposition composition];
     
     [composition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
     
     [composition addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];
     
-    [self startInternal:0 composition:composition completition:^
+    [self startInternal:0 composition:composition completition:^(AVAsset * asset)
     {
-        [self readSamples:composition];
+       [self readSamples:asset];
     }];
     
 }
@@ -199,33 +198,70 @@ static AVPlayer * g_player = nil;
     return TRUE;
 }
 
-- (void)readSamples:(AVMutableComposition *)composition
+- (AVAssetWriterInput *)appendAudioInputForWriter:(AVAssetWriter *)writer
+{
+    NSDictionary *audioSettings = [NSDictionary dictionaryWithObjectsAndKeys:
+                [ NSNumber numberWithInt: kAudioFormatMPEG4AAC], AVFormatIDKey,
+                [ NSNumber numberWithInt: 1], AVNumberOfChannelsKey,
+                [ NSNumber numberWithFloat: 44100], AVSampleRateKey,
+                [ NSNumber numberWithInt: 64000 ], AVEncoderBitRateKey,
+                nil];
+    
+   /* NSMutableDictionary* audioSettings = [NSMutableDictionary dictionary];
+    [audioSettings setValue:[NSNumber numberWithInt:kAudioFormatLinearPCM]
+                     forKey:AVFormatIDKey];*/
+    
+    AVAssetWriterInput * audioInput = [AVAssetWriterInput assetWriterInputWithMediaType:AVMediaTypeAudio outputSettings:audioSettings];
+    audioInput.expectsMediaDataInRealTime = YES;
+    BOOL res = [writer canAddInput:audioInput];
+    if (res)
+    {
+        [writer addInput:audioInput];
+        
+        return audioInput;
+    }
+    else
+        return NULL;
+}
+
+- (void)readSamples:(AVAsset *)composition
 {
     NSArray * tracks = [composition tracksWithMediaType:AVMediaTypeVideo];
     
-    NSString* key = (NSString*)kCVPixelBufferPixelFormatTypeKey;
-    NSNumber* value = [NSNumber numberWithUnsignedInt:kCVPixelFormatType_32BGRA];
-    NSDictionary* videoSettings =
-    [NSDictionary dictionaryWithObject:value forKey:key];
- 
-    NSMutableDictionary* audioSettings = [NSMutableDictionary dictionary];
-    [audioSettings setValue:[NSNumber numberWithInt:kAudioFormatLinearPCM]
-                         forKey:AVFormatIDKey];
-    
-    AVAssetReaderVideoCompositionOutput *videoOutput = [[AVAssetReaderVideoCompositionOutput alloc]initWithVideoTracks:tracks  videoSettings:nil];
-    AVMutableVideoComposition *videoComposition = [AVMutableVideoComposition videoCompositionWithPropertiesOfAsset:composition];
-    videoOutput.videoComposition = videoComposition;
-    
     NSError *error = nil;
+    AVAssetReader * reader = [[AVAssetReader alloc]initWithAsset:composition error:&error];
+    
+    if (error)
+        NSLog(@"Error %@",error);
+    
+    AVAssetWriterInputPixelBufferAdaptor *adaptor    = nil;
+    AVAssetReaderVideoCompositionOutput *videoOutput = nil;
+    
     NSURL * url = [[self class]pathForResultVideo];
     
     AVAssetWriter *videoWriter = [[AVAssetWriter alloc] initWithURL:url
                                                            fileType:AVFileTypeQuickTimeMovie
                                                               error:&error];
-    CGSize  size =  composition.naturalSize;
-    
     if (error)
         NSLog(@"Error %@",error);
+    
+    if (tracks)
+    {
+    NSString* key = (NSString*)kCVPixelBufferPixelFormatTypeKey;
+    NSNumber* value = [NSNumber numberWithUnsignedInt:kCVPixelFormatType_32BGRA];
+    NSDictionary* videoSettings =
+    [NSDictionary dictionaryWithObject:value forKey:key];
+ 
+    
+        videoOutput = [[AVAssetReaderVideoCompositionOutput alloc]initWithVideoTracks:tracks  videoSettings:videoSettings];
+    AVMutableVideoComposition *videoComposition = [AVMutableVideoComposition videoCompositionWithPropertiesOfAsset:composition];
+    videoOutput.videoComposition = videoComposition;
+    
+    
+    
+    
+    CGSize  size =  [tracks.lastObject naturalSize];
+    
     
     NSParameterAssert(videoWriter);
     
@@ -239,38 +275,155 @@ static AVPlayer * g_player = nil;
                                             assetWriterInputWithMediaType:AVMediaTypeVideo
                                             outputSettings:videoSettings];
     
+    NSDictionary *pixelBufferAttributes = @{
+                                            (NSString*)kCVPixelBufferCGImageCompatibilityKey : [NSNumber numberWithBool:YES],
+                                            (NSString*)kCVPixelBufferCGBitmapContextCompatibilityKey : [NSNumber numberWithBool:YES],
+                                            (NSString*)kCVPixelBufferPixelFormatTypeKey : [NSNumber numberWithInt:kCVPixelFormatType_32BGRA]
+                                            };
+    adaptor = [AVAssetWriterInputPixelBufferAdaptor assetWriterInputPixelBufferAdaptorWithAssetWriterInput:videoWriterInput sourcePixelBufferAttributes:pixelBufferAttributes];
     
-    AVAssetWriterInputPixelBufferAdaptor *adaptor = [AVAssetWriterInputPixelBufferAdaptor
-                                                     assetWriterInputPixelBufferAdaptorWithAssetWriterInput:videoWriterInput
-                                                     sourcePixelBufferAttributes:nil];
+    videoWriterInput.transform = [tracks.lastObject preferredTransform];
     
+    
+        AVMutableVideoCompositionInstruction *passThroughInstruction = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
+        passThroughInstruction.timeRange = CMTimeRangeMake(kCMTimeZero, [composition duration]);
+        
+        AVAssetTrack *videoTrack = [composition tracksWithMediaType:AVMediaTypeVideo][0];
+        AVMutableVideoCompositionLayerInstruction *passThroughLayer = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:videoTrack];
+        
+        passThroughInstruction.layerInstructions = @[passThroughLayer];
+        videoComposition.instructions = @[passThroughInstruction];
+        
     NSParameterAssert(videoWriterInput);
     NSParameterAssert([videoWriter canAddInput:videoWriterInput]);
     videoWriterInput.expectsMediaDataInRealTime = YES;
     [videoWriter addInput:videoWriterInput];
     
-    //Start a session:
-    [videoWriter startWriting];
-    [videoWriter startSessionAtSourceTime:kCMTimeZero];
-    
-    
-    
-    AVAssetReader * reader = [[AVAssetReader alloc]initWithAsset:composition error:nil];
     
     if ([reader canAddOutput:videoOutput])
         [reader addOutput:videoOutput];
+    }
     
-    /*if ([reader canAddOutput:audioOutput])
-        [reader addOutput:audioOutput];*/
+    NSArray * audioTracks = [composition tracksWithMediaType:AVMediaTypeAudio];
     
-    reader.timeRange = CMTimeRangeMake(kCMTimeZero, composition.duration);
+    AVAssetReaderAudioMixOutput * audioOutput = nil;
+    AVAssetWriterInput * audioWriterInput = nil;
+    
+    if (audioTracks)
+    {
+        audioWriterInput =[self appendAudioInputForWriter:videoWriter];
+        
+        audioOutput = [AVAssetReaderAudioMixOutput assetReaderAudioMixOutputWithAudioTracks:audioTracks audioSettings:nil];
+    
+        if ([reader canAddOutput:audioOutput])
+            [reader addOutput:audioOutput];
+    }
+    
+    CMTime duration = composition.duration;//CMTimeMakeWithSeconds(1.5, 1);//composition.duration;
+    
+    reader.timeRange = CMTimeRangeMake(kCMTimeZero, duration);
+    
+    
+    dispatch_queue_t queue = dispatch_queue_create("coolvideoprocessor.processvideo.queue", nil);
+    
+    dispatch_queue_t audioQueue =  dispatch_queue_create("coolvideoprocessor.processaudio.queue", nil);
+    
     
     BOOL status = [reader startReading];
     
     if (!status)
         NSLog(@" Status %d",reader.status);
     
-        dispatch_queue_t queue = dispatch_queue_create("coolvideoprocessor.processvideo.queue", nil);
+    status = [videoWriter startWriting];
+    [videoWriter startSessionAtSourceTime:kCMTimeZero];
+    
+    if (!status)
+        NSLog(@" Status %d",videoWriter.status);
+
+    
+    void (^terminationBlock)(AVAssetWriterInput*)  = ^(AVAssetWriterInput * writerInput)
+    {
+        if (reader.status == AVAssetReaderStatusCompleted)
+        {
+            [writerInput markAsFinished];
+            
+            @synchronized(self)
+            {
+                self.count+=1;
+                
+                if (self.count == 2)
+                {
+                    [videoWriter finishWritingWithCompletionHandler:^
+                     {
+                         if (videoWriter.status != AVAssetWriterStatusCompleted)
+                         {
+                             NSLog(@"Error %@",videoWriter.error);
+                         }
+                         
+                         NSURL * url = videoWriter.outputURL;
+                         
+                         self.mergedVideo = url;
+                         
+                         [self displayMergedVideo];
+                     }];
+                }
+            }
+        }
+    };
+    
+    
+    __block CGFloat audioPercent,videoPercent;
+    
+    if (!audioWriterInput)
+    {
+        audioPercent = 100;
+    }
+    
+    if (!adaptor)
+    {
+        videoPercent = 100;
+    }
+    
+    CGFloat totalTimeFloat = (CGFloat)duration.value/duration.timescale;
+    
+    [audioWriterInput requestMediaDataWhenReadyOnQueue:audioQueue usingBlock:^
+    {
+        while (audioWriterInput.readyForMoreMediaData)
+        {
+            CMSampleBufferRef sampleBuffer = [audioOutput copyNextSampleBuffer];
+            
+            if (sampleBuffer)
+            {
+#if DEBUG
+                CMTime presentationTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer);
+                CMTimeShow(presentationTime);
+                
+#endif
+                
+                CGFloat presentationTimeFloat = (CGFloat)presentationTime.value/presentationTime.timescale;
+                audioPercent = presentationTimeFloat/totalTimeFloat;
+                
+                [self notifyAboutCurrentProgress:MIN(audioPercent,videoPercent)*100];
+                
+                BOOL result = [audioWriterInput appendSampleBuffer:sampleBuffer];
+                
+                if (result == NO) //failes on 3GS, but works on iphone 4
+                {
+                    NSLog(@"failed to append buffer");
+                    NSLog(@"The error is %@", [videoWriter error]);
+                }
+            }
+            else
+            {
+                terminationBlock(audioWriterInput);
+                break;
+            }
+            
+            
+            
+        }
+    }];
+
     
     [adaptor.assetWriterInput requestMediaDataWhenReadyOnQueue:queue usingBlock:^
     {
@@ -289,6 +442,14 @@ static AVPlayer * g_player = nil;
                 
                 CMTimeShow(presentationTime);
                 
+                
+                
+                CGFloat presentationTimeFloat = (CGFloat)presentationTime.value/presentationTime.timescale;
+                
+                videoPercent = presentationTimeFloat/totalTimeFloat;
+                
+                [self notifyAboutCurrentProgress:MIN(audioPercent,videoPercent)*100];
+                
                 BOOL result = buffer && [adaptor appendPixelBuffer:buffer withPresentationTime:presentationTime];
                 
                 CVPixelBufferRelease(buffer);
@@ -301,154 +462,25 @@ static AVPlayer * g_player = nil;
             }
             else
             {
-                if (reader.status == AVAssetReaderStatusCompleted)
-                {
-                    //[reader cancelReading];
-                    [adaptor.assetWriterInput markAsFinished];
-                    
-                    [videoWriter finishWritingWithCompletionHandler:^
-                     {
-                         if (videoWriter.status != AVAssetWriterStatusCompleted)
-                         {
-                             NSLog(@"Error %@",videoWriter.error);
-                         }
-                         
-                         NSURL * url = videoWriter.outputURL;
-                         AVURLAsset * asset2 = [[AVURLAsset alloc]initWithURL:url  options:nil];
-                         
-                         static NSString * tracks = @"tracks";
-                         [asset2 loadValuesAsynchronouslyForKeys:@[tracks] completionHandler:^
-                         {
-                            NSError *error = nil;
-                             if ([asset2 statusOfValueForKey:tracks error:&error] == AVKeyValueStatusLoaded)
-                             {
-                                 
-                                 AVMutableCompositionTrack *videoTrack = [composition tracksWithMediaType:AVMediaTypeVideo].lastObject;
-                                 
-                                 [composition removeTrack:videoTrack];
-                                 
-                                 videoTrack = [composition addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];
-                                 
-                                 if (![videoTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, asset2.duration) ofTrack:[[asset2 tracksWithMediaType:AVMediaTypeVideo]lastObject] atTime:kCMTimeZero error:&error])
-                                 {
-                                     NSLog(@"Error %@",error);
-                                 }
-                                 NSURL * url2 = [[self class]pathForResultVideo];
-                                 [self exportComposition:composition filePath:url2.path block:^
-                                 {
-                                     [self displayMovieByURL:url2];
-                                     [[NSFileManager defaultManager]removeItemAtURL:url error:nil];
-                                 }];
-                             }
-                         }];
-                     }];
-                }
+                terminationBlock(adaptor.assetWriterInput);
                 break;
             }
-            
-            
-            
         }
     }];
     
-    //[self exportComposition:composition filePath:[[[self class]pathForResultVideo]path]];
-    
 }
 
-
-- (CVPixelBufferRef) pixelBufferFromCGImage: (CGImageRef) image poolRef:(CVPixelBufferPoolRef)poolRef
+- (void)notifyAboutCurrentProgress:(NSUInteger)percentage
 {
-    /*NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
-     [NSNumber numberWithBool:YES], kCVPixelBufferCGImageCompatibilityKey,
-     [NSNumber numberWithBool:YES], kCVPixelBufferCGBitmapContextCompatibilityKey,
-     nil];*/
-    CVPixelBufferRef pxbuffer = NULL;
+    NSLog(@"Current percentage %d",percentage);
     
-    if (CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, poolRef, &pxbuffer)!=kCVReturnSuccess)
+    dispatch_async(dispatch_get_main_queue(), ^
     {
-        return NULL;
-    }
-    
-    
-    
-    CVPixelBufferGetWidth(pxbuffer);
-    /*
-     CVPixelBufferCreate(kCFAllocatorDefault, CGImageGetWidth(image),
-     CGImageGetHeight(image), kCVPixelFormatType_32ARGB, (__bridge CFDictionaryRef) options,
-     &pxbuffer);*/
-    
-    CVPixelBufferLockBaseAddress(pxbuffer, 0);
-    void *pxdata = CVPixelBufferGetBaseAddress(pxbuffer);
-    
-    CGColorSpaceRef rgbColorSpace = CGColorSpaceCreateDeviceRGB();
-    CGContextRef context = CGBitmapContextCreate(pxdata, CVPixelBufferGetWidth(pxbuffer),
-                                                 CVPixelBufferGetHeight(pxbuffer), 8, 4*CVPixelBufferGetWidth(pxbuffer), rgbColorSpace,
-                                                 kCGImageAlphaNoneSkipFirst);
-    
-    CGContextConcatCTM(context, CGAffineTransformMakeRotation(0));
-    
-    CGAffineTransform flipVertical = CGAffineTransformMake(
-                                                           1, 0, 0, -1, 0, CVPixelBufferGetWidth(pxbuffer)
-                                                           );
-    CGContextConcatCTM(context, flipVertical);
-    
-    CGAffineTransform flipHorizontal = CGAffineTransformMake(
-                                                             -1.0, 0.0, 0.0, 1.0, CVPixelBufferGetHeight(pxbuffer), 0.0
-                                                             );
-    
-    CGContextConcatCTM(context, flipHorizontal);
-    CGSize size = CGSizeMake(MIN(CVPixelBufferGetWidth(pxbuffer),CGImageGetWidth(image)), MIN(CVPixelBufferGetHeight(pxbuffer),CGImageGetHeight(image)));
-    CGContextDrawImage(context, CGRectMake(0, 0, size.width,
-                                           size.height), image);
-    CGColorSpaceRelease(rgbColorSpace);
-    CGContextRelease(context);
-    
-    CVPixelBufferUnlockBaseAddress(pxbuffer, 0);
-    
-    return pxbuffer;
+        self.pvProgress.progress = percentage/100.0;
+    });
 }
 
-
-- (CVPixelBufferRef) pixelBufferFromCGImage: (CGImageRef) image size:(CGSize)size
-{
-    
-        NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
-                                 [NSNumber numberWithBool:YES], kCVPixelBufferCGImageCompatibilityKey,
-                                 [NSNumber numberWithBool:YES], kCVPixelBufferCGBitmapContextCompatibilityKey,
-                                 nil];
-        CVPixelBufferRef pxbuffer = NULL;
-        
-        CVReturn status = CVPixelBufferCreate(kCFAllocatorDefault,
-                                              size.width,
-                                              size.height,
-                                              kCVPixelFormatType_32ARGB,
-                                              (__bridge CFDictionaryRef) options,
-                                              &pxbuffer);
-        if (status != kCVReturnSuccess){
-            NSLog(@"Failed to create pixel buffer");
-        }
-        
-        CVPixelBufferLockBaseAddress(pxbuffer, 0);
-        void *pxdata = CVPixelBufferGetBaseAddress(pxbuffer);
-        
-        CGColorSpaceRef rgbColorSpace = CGColorSpaceCreateDeviceRGB();
-        CGContextRef context = CGBitmapContextCreate(pxdata, size.width,
-                                                     size.height, 8, 4*size.width, rgbColorSpace,
-                                                     kCGImageAlphaPremultipliedFirst);
-        //kCGImageAlphaNoneSkipFirst);
-        CGContextConcatCTM(context, CGAffineTransformMakeRotation(0));
-        CGContextDrawImage(context, CGRectMake(0, 0, size.width,
-                                               size.height), image);
-        CGColorSpaceRelease(rgbColorSpace);
-        CGContextRelease(context);
-        
-        CVPixelBufferUnlockBaseAddress(pxbuffer, 0);
-        
-        return pxbuffer;
-}
-
-
-- (void)startInternal:(NSUInteger)index composition:(AVMutableComposition *)composition completition:(void (^)(void))completition
+- (void)startInternal:(NSUInteger)index composition:(AVMutableComposition *)composition completition:(void (^)(AVAsset *))completition
 {
     AVURLAsset *asset = [self getAssetAtIndex:index];
     
@@ -457,7 +489,7 @@ static AVPlayer * g_player = nil;
         if (index+1 == self.dictionary.count)
         {
             if (completition)
-                completition();
+                completition(composition);
         }
         else
             [self startInternal:index+1 composition:composition completition:completition];
@@ -488,48 +520,36 @@ static AVPlayer * g_player = nil;
     return subIndex;
 }
 
-- (BOOL)appendAudioTrackAfterLoadingFromAsset:(AVAsset *)asset toCompositionTrack:(AVMutableCompositionTrack *)compositionTrack
+- (BOOL)appendAudioTrackAfterLoadingFromAsset:(AVAsset *)asset toComposition:(AVMutableComposition *)composition
 {
-    AVAssetTrack *audioTrack = [[asset tracksWithMediaType:AVMediaTypeAudio]lastObject];
-    
-    if (audioTrack)
-    {
-        return [self appendTrack:audioTrack toCompositionTrack:compositionTrack];
-    }
-    return TRUE;
+    return [self appendTrack:asset toComposition:composition mediaType:AVMediaTypeAudio];
 }
 
 - (BOOL)appendTracksAfterLoadingFromAsset:(AVAsset *)asset toComposition:(AVMutableComposition *)composition
 {
-    AVAssetTrack *audioTrack = [[asset tracksWithMediaType:AVMediaTypeAudio]lastObject];
-    AVMutableCompositionTrack * compositionTrack = [[composition tracksWithMediaType:AVMediaTypeAudio] lastObject];
+    if(![self appendTrack:asset toComposition:composition mediaType:AVMediaTypeAudio])
+        return NO;
     
-    if (audioTrack)
-    {
-        if(![self appendTrack:audioTrack toCompositionTrack:compositionTrack])
-            return NO;
-    }
     
-    AVAssetTrack *videoTrack = [[asset tracksWithMediaType:AVMediaTypeVideo]lastObject];
-    compositionTrack = [[composition tracksWithMediaType:AVMediaTypeVideo] lastObject];
+    if(![self appendTrack:asset toComposition:composition mediaType:AVMediaTypeVideo])
+        return NO;
     
-    if (videoTrack)
-    {
-        if(![self appendTrack:videoTrack toCompositionTrack:compositionTrack])
-            return NO;
-    }
+    NSLog(@"Composition duration ");
+    CMTimeShow(composition.duration);
     
     return TRUE;
 }
 
-- (BOOL)appendTrack:(AVAssetTrack * )track toCompositionTrack:(AVMutableCompositionTrack *)compositionTrack
+- (BOOL)appendTrack:(AVAsset *)asset toComposition:(AVMutableComposition *)composition mediaType:(NSString *const)type
 {
     NSError *error = nil;
-    CMTimeRange range = compositionTrack.timeRange;
-    CMTime endTime = CMTimeAdd(range.start, range.duration);
+    AVAssetTrack *track = [[asset tracksWithMediaType:type]lastObject];
+    AVMutableCompositionTrack * compositionTrack = [[composition tracksWithMediaType:type] lastObject];
     
-    BOOL result = [compositionTrack insertTimeRange:track.timeRange ofTrack:track atTime:endTime error:&error];
-    if (!result) {
+    BOOL result = [compositionTrack insertTimeRange:track.timeRange ofTrack:track atTime:CMTimeAdd(compositionTrack.timeRange.start, compositionTrack.timeRange.duration) error:&error];
+    
+    if (!result)
+    {
         if (error)
             NSLog(@"Error %@",error);
     }
@@ -538,15 +558,15 @@ static AVPlayer * g_player = nil;
 }
 
 
-- (void)appendAudioTrackFromAsset:(AVAsset *)asset toCompositionTrack:(AVMutableCompositionTrack *)compositionTrack completition:(void (^)(void))completition
+- (void)appendAudioTrackFromAsset:(AVAsset *)asset toCompositionTrack:(AVMutableComposition *)composition completition:(void (^)(void))completition
 {
-    NSArray *keys = @[@"tracks",@"duration"];
+    NSArray *keys = @[@"tracks",@"duration",@"composable"];
     
     NSUInteger subIndex = [self allKeysAreLoadedForAsset:asset keys:keys];
     
     if (subIndex == keys.count)
     {
-        if ([self appendAudioTrackAfterLoadingFromAsset:asset toCompositionTrack:compositionTrack])
+        if ([self appendAudioTrackAfterLoadingFromAsset:asset toComposition:composition])
         {
             if (completition)
                 completition();
@@ -557,11 +577,14 @@ static AVPlayer * g_player = nil;
     
     [asset loadValuesAsynchronouslyForKeys:subKeys  completionHandler:^{
         
+        NSParameterAssert(asset.isComposable);
+        
+
         NSUInteger subIndex = [self allKeysAreLoadedForAsset:asset keys:keys];
         
         if (subIndex == keys.count) {
             
-            BOOL result = [self appendAudioTrackAfterLoadingFromAsset:asset toCompositionTrack:compositionTrack];
+            BOOL result = [self appendAudioTrackAfterLoadingFromAsset:asset toComposition:composition];
             
             if (result) {
                 
@@ -578,7 +601,7 @@ static AVPlayer * g_player = nil;
                 toComposition:(AVMutableComposition *)composition
                  completition:(void (^)(void))completition
 {
-    NSArray *keys = @[@"tracks",@"duration"];
+    NSArray *keys = @[@"tracks",@"duration",@"composable"];
     
     NSUInteger subIndex = [self allKeysAreLoadedForAsset:asset keys:keys];
     
@@ -595,7 +618,6 @@ static AVPlayer * g_player = nil;
     
     [asset loadValuesAsynchronouslyForKeys:subKeys  completionHandler:^
     {
-        
         NSUInteger subIndex = [self allKeysAreLoadedForAsset:asset keys:keys];
         
         if (subIndex == keys.count)

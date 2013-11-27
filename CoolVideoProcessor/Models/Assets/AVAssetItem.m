@@ -36,6 +36,7 @@
 -(void)setup
 {
     self.videoAsset = [[AVURLAsset alloc]initWithURL:self.url options:nil];
+    self.imageGenerator = [AVAssetImageGenerator assetImageGeneratorWithAsset:self.videoAsset];
 }
 
 - (AVAsset *)videoAsset
@@ -45,6 +46,15 @@
         [self setup];
     }
     return _videoAsset;
+}
+
+- (AVAssetImageGenerator *)imageGenerator
+{
+    if (!_imageGenerator)
+    {
+        [self setup];
+    }
+    return _imageGenerator;
 }
 
 - (NSString *)loadTitleWithCompletitionHandler:(completitionBlock)completionHandler
@@ -113,6 +123,7 @@
 
 -(void)callBlockAndSetDone:(completitionBlock)block
 {
+    self.done = TRUE;
     if (block)
         block();
 }
@@ -130,6 +141,7 @@
         {
             NSLog(@"couldn't generate thumbnail, error:%@", error);
         }
+            if (!imageRef) NSLog(@"Image is nil");
         weakSelf.image = [UIImage imageWithCGImage:imageRef];
         CGImageRelease(imageRef);
             self.imageDone = TRUE;
@@ -160,6 +172,7 @@
     _thumbnailToken = nil;
     _titleToken = nil;
     self.videoAsset = nil;
+    self.imageGenerator = nil;
 }
 
 

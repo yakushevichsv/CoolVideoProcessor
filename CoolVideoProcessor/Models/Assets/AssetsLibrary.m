@@ -15,6 +15,8 @@
 #import "AVAssetItem.h"
 #import "ALAssetItem.h"
 
+#warning @"Create IPOD specific asset item!"
+
 const char * alQueueName = "coolvideoprocessor.s.assetslibrary.queue";
 
 @interface AssetsLibrary ()
@@ -60,6 +62,11 @@ const char * alQueueName = "coolvideoprocessor.s.assetslibrary.queue";
 
 -(void)addURL:(NSURL*)url type:(AssetItemType)type mediaType:(AssetItemMediaType)mediaType
 {
+    [self addURL:url type:type mediaType:mediaType item:nil];
+}
+
+-(void)addURL:(NSURL*)url type:(AssetItemType)type mediaType:(AssetItemMediaType)mediaType item:(MPMediaItem*)mediaItem
+{
     if (!url) return;
     
     dispatch_async(self.assetItemsQueue, ^{
@@ -77,7 +84,47 @@ const char * alQueueName = "coolvideoprocessor.s.assetslibrary.queue";
         if (assetItemClass)
         {
             NSMutableArray * assetItems = mediaType == AssetItemMediaTypeVideo ? self.videoAssetItems : self.imageAssetItems;
-            [assetItems addObject:[assetItemClass initWithURL:url mediaType:mediaType]];
+            AssetItem *item =[assetItemClass initWithURL:url mediaType:mediaType];
+            
+            if (mediaItem)
+            {
+                MPMediaType mediaType = (MPMediaType)[[mediaItem valueForKey:MPMediaItemPropertyMediaType] unsignedIntegerValue];
+                if ((mediaType & MPMediaTypeAnyVideo) == 0)
+                {
+                    return;
+                }
+                item.duration = [[mediaItem valueForKey:MPMediaItemPropertyPlaybackDuration] doubleValue];
+                MPMediaItemArtwork * artWork = [mediaItem valueForKey:MPMediaItemPropertyArtwork];
+                if (artWork)
+                {
+                    CGSize boundsSize = [artWork imageCropRect].size;
+                    if (CGSizeEqualToSize(boundsSize, CGSizeZero))
+                    {
+                        boundsSize = [artWork bounds].size;
+                    }
+                    
+                    item.image = [artWork imageWithSize:boundsSize];
+                }
+                
+                NSString * title = [mediaItem valueForKey:MPMediaItemPropertyTitle];
+                
+                if (!title)
+                    title = [mediaItem valueForKey:MPMediaItemPropertyPodcastTitle];
+                
+                if (!title)
+                    title = [mediaItem valueForKey:MPMediaItemPropertyAlbumTitle];
+                
+                item.title = title;
+                
+                if (item.image && item.duration && item.title)
+                {
+                    item.done = true;
+                }
+            }
+            
+            [assetItems addObject:item];
+            
+            
         }
     });
 }
@@ -121,7 +168,7 @@ const char * alQueueName = "coolvideoprocessor.s.assetslibrary.queue";
 		NSArray *items = [videoQuery items];
 		
 		for (MPMediaItem *mediaItem in items)
-			[self addURL:[mediaItem valueForProperty:MPMediaItemPropertyAssetURL] type:AssetItemTypeAV mediaType:mediaType];
+			[self addURL:[mediaItem valueForProperty:MPMediaItemPropertyAssetURL] type:AssetItemTypeAV mediaType:mediaType item:mediaItem];
 		
 		NSLog(@"done building media library...");
 	});
