@@ -15,11 +15,14 @@
 #import "FileProcessor.h"
 #import "AssetItem.h"
 
+
 @interface MergingProcessorViewController ()
 @property (nonatomic,strong) ALAssetsLibrary * library;
 @property (nonatomic,strong) NSOperationQueue * queue;
 @property (nonatomic,strong) NSURL * mergedVideo;
 @property (nonatomic) NSUInteger count;
+@property (nonatomic) UIBackgroundTaskIdentifier taskId;
+@property (nonatomic) BOOL movedToBG;
 @end
 
 @implementation MergingProcessorViewController
@@ -42,7 +45,34 @@
 {
     self.library = [ALAssetsLibrary new];
     self.queue = [NSOperationQueue new];
+    self.taskId = UIBackgroundTaskInvalid;
+    
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(enterBGMode) name:UIApplicationDidEnterBackgroundNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(leaveBGMode) name:UIApplicationWillEnterForegroundNotification object:nil];
 }
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter]removeObserver:self];
+}
+
+- (void)enterBGMode
+{
+  if (!self.movedToBG)
+      self.movedToBG = TRUE;
+}
+
+- (void)leaveBGMode
+{
+    if (self.movedToBG)
+    {
+        self.movedToBG = FALSE;
+        [self displayMergedVideo];
+    }
+}
+
+
 
 -(NSTimeInterval)startTime:(id)key
 {
@@ -90,7 +120,7 @@
 
 -(BOOL)displayMergedVideo
 {
-    if (self.mergedVideo)
+    if (self.mergedVideo && !self.movedToBG)
     {
         [self performSelectorOnMainThread:@selector(displayMovieByURL:) withObject:self.mergedVideo waitUntilDone:NO];
         return TRUE;
@@ -224,6 +254,7 @@
         return NULL;
 }
 
+
 - (void)readSamples:(AVAsset *)composition
 {
     NSArray * tracks = [composition tracksWithMediaType:AVMediaTypeVideo];
@@ -328,6 +359,13 @@
     
     dispatch_queue_t audioQueue =  dispatch_queue_create("coolvideoprocessor.processaudio.queue", nil);
     
+    NSParameterAssert(self.taskId == UIBackgroundTaskInvalid);
+    
+    self.taskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^
+    {
+        [[UIApplication sharedApplication]endBackgroundTask:self.taskId];
+    }];
+    
     
     BOOL status = [reader startReading];
     
@@ -364,7 +402,19 @@
                          
                          self.mergedVideo = url;
                          
-                         [self displayMergedVideo];
+                         if (self.taskId != UIBackgroundTaskInvalid)
+                         {
+                             [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
+                             self.taskId = UIBackgroundTaskInvalid;
+                         }
+                         if ([[UIApplication sharedApplication] applicationState ] == UIApplicationStateActive)
+                         {
+                             self.movedToBG = FALSE;
+                             [[NSNotificationCenter defaultCenter]removeObserver:self];
+                             [self displayMergedVideo];
+                         }
+                         else
+                             self.movedToBG = [UIApplication sharedApplication].applicationState == UIApplicationStateBackground;
                      }];
                 }
             }
@@ -474,10 +524,13 @@
 {
     NSLog(@"Current percentage %d",percentage);
     
-    dispatch_async(dispatch_get_main_queue(), ^
+    if (UIApplication.sharedApplication.applicationState == UIApplicationStateActive)
     {
-        self.pvProgress.progress = percentage/100.0;
-    });
+        dispatch_async(dispatch_get_main_queue(), ^
+        {
+            self.pvProgress.progress = percentage/100.0;
+        });
+    }
 }
 
 - (void)startInternal:(NSUInteger)index composition:(AVMutableComposition *)composition completition:(void (^)(AVAsset *))completition
