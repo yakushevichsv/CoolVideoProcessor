@@ -7,13 +7,36 @@
 //
 
 #import "AppDelegate.h"
+#import <AudioToolbox/AudioToolbox.h>
+#import <AVFoundation/AVFoundation.h>
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    [self setupAudioSession];
     return YES;
+}
+
+- (void)setupAudioSession
+{
+    AVAudioSession *session = [AVAudioSession sharedInstance];
+    NSError *error = nil;
+    
+    BOOL success = [session setCategory:AVAudioSessionCategoryPlayback error:&error];
+    if (!success)
+    {
+        NSLog(@"Error %@",error);
+        return;
+    }
+    
+    success = [session setActive:YES error:&error];
+    if (!success)
+    {
+        NSLog(@"Error %@",error);
+        return;
+    }
 }
 							
 - (void)applicationWillResignActive:(UIApplication *)application

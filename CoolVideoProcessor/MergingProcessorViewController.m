@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 Siarhei Yakushevich. All rights reserved.
 //
 #import <AVFoundation/AVFoundation.h>
+#import <AudioToolbox/AudioToolbox.h>
 #import <AssetsLibrary/AssetsLibrary.h>
 #import <CoreMedia/CoreMedia.h>
 #import <CoreVideo/CoreVideo.h>
@@ -22,7 +23,9 @@
 @property (nonatomic,strong) NSURL * mergedVideo;
 @property (nonatomic) NSUInteger count;
 @property (nonatomic) UIBackgroundTaskIdentifier taskId;
-@property (nonatomic) BOOL movedToBG;
+@property (nonatomic) NSTimeInterval startTime;
+@property (nonatomic) UInt32 soundID;
+@property (nonatomic) NSUInteger percentage;
 @end
 
 @implementation MergingProcessorViewController
@@ -46,29 +49,114 @@
     self.library = [ALAssetsLibrary new];
     self.queue = [NSOperationQueue new];
     self.taskId = UIBackgroundTaskInvalid;
+    self.soundID = -1;
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(enterBGMode:) name:UIApplicationDidEnterBackgroundNotification object:nil];
     
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(enterBGMode) name:UIApplicationDidEnterBackgroundNotification object:nil];
-    
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(leaveBGMode) name:UIApplicationWillEnterForegroundNotification object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(leaveBGMode:) name:UIApplicationWillEnterForegroundNotification object:nil];
 }
 
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter]removeObserver:self];
+    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+    [self disposeSystemSound:TRUE];
 }
 
-- (void)enterBGMode
+- (void)disposeSystemSound:(BOOL)dispose
 {
-  if (!self.movedToBG)
-      self.movedToBG = TRUE;
+    if (self.soundID !=-1)
+    {
+        if (dispose)
+        {
+            AudioServicesDisposeSystemSoundID(self.soundID);
+            AudioServicesRemoveSystemSoundCompletion(self.soundID);
+        }
+        self.soundID = -1;
+    }
+}
+
+- (void)enterBGMode:(NSNotification *)aNotification
+{
+    if (aNotification)
+    {
+        [UIApplication sharedApplication].applicationIconBadgeNumber = self.pvProgress.progress*100;
+    }
+    if (self.taskId != UIBackgroundTaskInvalid)
+    {
+        UIBackgroundTaskIdentifier ident = self.taskId;
+        if (ident != UIBackgroundTaskInvalid)
+        {
+            self.taskId = UIBackgroundTaskInvalid;
+         
+            NSLog(@"Scheduling, begining BG task");
+            self.taskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^
+                           {
+                               NSLog(@"Expired BG time!");
+                               //We shouldn't be here.....
+                               //TODO: think about restoration & conservation state...
+                               [self leaveBGMode];
+                           }];
+            NSLog(@"Leaving BG mode");
+            [[UIApplication sharedApplication]endBackgroundTask:ident];
+            NSLog(@"BG task has started");
+            [self disposeSystemSound:YES];
+            self.startTime = [UIApplication sharedApplication].backgroundTimeRemaining;
+            NSLog(@"Left task");
+        }
+    }
+    else
+    {
+        [self _enterBGMode];
+    }
+}
+
+- (void)_enterBGMode
+{
+    NSParameterAssert(self.taskId == UIBackgroundTaskInvalid);
+    
+    
+    NSLog(@"Scheduling, begining BG task");
+    self.taskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^
+                   {
+                       NSLog(@"Expired BG time!");
+                       //We shouldn't be here.....
+                       //TODO: think about restoration & conservation state...
+                       [self leaveBGMode];
+                   }];
+    
+    NSLog(@"BG task has started");
+    self.startTime = [UIApplication sharedApplication].backgroundTimeRemaining;
 }
 
 - (void)leaveBGMode
 {
-    if (self.movedToBG)
+    [self leaveBGMode:NULL];
+}
+- (void)leaveBGMode:(NSNotification *)aNotification
+{
+    if (aNotification)
     {
-        self.movedToBG = FALSE;
-        [self displayMergedVideo];
+        [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+        
+        if (self.percentage)
+        {
+            [self notifyAboutCurrentProgress:self.percentage];
+            if (self.percentage == 100)
+            {
+                [self displayMergedVideo];
+                return;
+            }
+        }
+    }
+    UIBackgroundTaskIdentifier ident = self.taskId;
+    
+    if (ident != UIBackgroundTaskInvalid)
+    {
+        self.taskId = UIBackgroundTaskInvalid;
+        [[UIApplication sharedApplication]endBackgroundTask:ident];
+        NSLog(@"Leaving BG mode");
+        [self disposeSystemSound:YES];
+        NSLog(@"Left task");
     }
 }
 
@@ -87,6 +175,35 @@
         if (dictionary)
             [self processDictionary];
     }
+}
+
+- (void) playSystemSound
+{
+    NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"Sound12" ofType:@"aif"];
+    if (!soundPath || self.soundID != -1 ) return;
+    
+    SystemSoundID soundID;
+    OSStatus status = AudioServicesCreateSystemSoundID((__bridge CFURLRef)[NSURL fileURLWithPath: soundPath], &soundID);
+    if (status == 0)
+    {
+        AudioServicesAddSystemSoundCompletion(soundID,NULL,NULL,&MyAudioServicesSystemSoundCompletionProc, (__bridge void *)(self));
+        AudioServicesPlaySystemSound (soundID);
+        self.soundID = soundID;
+    }
+}
+
+void MyAudioServicesSystemSoundCompletionProc (
+                                               SystemSoundID  ssID,
+                                               void           *clientData
+                                               )
+{
+    __weak typeof(MergingProcessorViewController *) vc = (__bridge MergingProcessorViewController *)clientData;
+    
+    AudioServicesDisposeSystemSoundID(ssID);
+    AudioServicesRemoveSystemSoundCompletion(ssID);
+    
+    [vc disposeSystemSound:FALSE];
+    
 }
 
 -(void)processDictionary
@@ -120,7 +237,7 @@
 
 -(BOOL)displayMergedVideo
 {
-    if (self.mergedVideo && !self.movedToBG)
+    if (self.mergedVideo && self.taskId == UIBackgroundTaskInvalid)
     {
         [self performSelectorOnMainThread:@selector(displayMovieByURL:) withObject:self.mergedVideo waitUntilDone:NO];
         return TRUE;
@@ -255,6 +372,15 @@
 }
 
 
+- (void)prolongBGTask
+{
+    if (self.taskId != UIBackgroundTaskInvalid && [UIApplication sharedApplication].backgroundTimeRemaining < MAX(30, 0.02*self.startTime))
+    {
+        NSLog(@"Need to extend task!");
+        [self enterBGMode:NULL];
+    }
+}
+
 - (void)readSamples:(AVAsset *)composition
 {
     NSArray * tracks = [composition tracksWithMediaType:AVMediaTypeVideo];
@@ -359,14 +485,6 @@
     
     dispatch_queue_t audioQueue =  dispatch_queue_create("coolvideoprocessor.processaudio.queue", nil);
     
-    NSParameterAssert(self.taskId == UIBackgroundTaskInvalid);
-    
-    self.taskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^
-    {
-        [[UIApplication sharedApplication]endBackgroundTask:self.taskId];
-    }];
-    
-    
     BOOL status = [reader startReading];
     
     if (!status)
@@ -391,6 +509,8 @@
                 
                 if (self.count == 2)
                 {
+                    [self prolongBGTask];
+                    
                     [videoWriter finishWritingWithCompletionHandler:^
                      {
                          if (videoWriter.status != AVAssetWriterStatusCompleted)
@@ -402,19 +522,12 @@
                          
                          self.mergedVideo = url;
                          
-                         if (self.taskId != UIBackgroundTaskInvalid)
-                         {
-                             [[UIApplication sharedApplication] endBackgroundTask:self.taskId];
-                             self.taskId = UIBackgroundTaskInvalid;
-                         }
+                         [self leaveBGMode];
                          if ([[UIApplication sharedApplication] applicationState ] == UIApplicationStateActive)
                          {
-                             self.movedToBG = FALSE;
                              [[NSNotificationCenter defaultCenter]removeObserver:self];
                              [self displayMergedVideo];
                          }
-                         else
-                             self.movedToBG = [UIApplication sharedApplication].applicationState == UIApplicationStateBackground;
                      }];
                 }
             }
@@ -438,6 +551,7 @@
     
     [audioWriterInput requestMediaDataWhenReadyOnQueue:audioQueue usingBlock:^
     {
+        [self prolongBGTask];
         while (audioWriterInput.readyForMoreMediaData)
         {
             CMSampleBufferRef sampleBuffer = [audioOutput copyNextSampleBuffer];
@@ -466,17 +580,17 @@
             else
             {
                 terminationBlock(audioWriterInput);
+                audioPercent = 1;
+                [self notifyAboutCurrentProgress:MIN(audioPercent,videoPercent)*100];
                 break;
             }
-            
-            
-            
         }
     }];
 
     
     [adaptor.assetWriterInput requestMediaDataWhenReadyOnQueue:queue usingBlock:^
     {
+        [self prolongBGTask];
         while (adaptor.assetWriterInput.readyForMoreMediaData)
         {
             //CMTime presentTime = nextPTS;
@@ -487,16 +601,17 @@
             if (sampleBuffer)
             {
                 CMTime presentationTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer);
-                
+                [self prolongBGTask];
                 CVPixelBufferRef buffer = [self applyFilter:sampleBuffer poolRef:adaptor.pixelBufferPool];
                 
                 CMTimeShow(presentationTime);
                 
-                
+                [self prolongBGTask];
                 
                 CGFloat presentationTimeFloat = (CGFloat)presentationTime.value/presentationTime.timescale;
                 
                 videoPercent = presentationTimeFloat/totalTimeFloat;
+                
                 
                 [self notifyAboutCurrentProgress:MIN(audioPercent,videoPercent)*100];
                 
@@ -513,6 +628,8 @@
             else
             {
                 terminationBlock(adaptor.assetWriterInput);
+                videoPercent = 1;
+                [self notifyAboutCurrentProgress:MIN(audioPercent,videoPercent)*100];
                 break;
             }
         }
@@ -523,13 +640,21 @@
 - (void)notifyAboutCurrentProgress:(NSUInteger)percentage
 {
     NSLog(@"Current percentage %d",percentage);
-    
+    self.percentage = percentage;
     if (UIApplication.sharedApplication.applicationState == UIApplicationStateActive)
     {
         dispatch_async(dispatch_get_main_queue(), ^
         {
             self.pvProgress.progress = percentage/100.0;
         });
+    }
+    else
+    {
+        [UIApplication sharedApplication].applicationIconBadgeNumber = percentage;
+        if (percentage && (percentage %10 == 0 || percentage == 100))
+        {
+            [self playSystemSound];
+        }
     }
 }
 

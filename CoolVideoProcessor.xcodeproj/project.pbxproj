@@ -14,6 +14,7 @@
 		2109553C17666E21007D0C78 /* MergeVideoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2109553B17666E21007D0C78 /* MergeVideoView.m */; };
 		21095763176BC55C00C7A68A /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21095762176BC55C00C7A68A /* GLKit.framework */; };
 		21095766176BC59D00C7A68A /* LogoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 21095765176BC59D00C7A68A /* LogoViewController.m */; };
+		21119CFE1895101C005B693C /* Sound12.aif in Resources */ = {isa = PBXBuildFile; fileRef = 21119CFD1895101C005B693C /* Sound12.aif */; };
 		211D3A4B1782F1C700665A5E /* MergingProcessorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 211D3A4A1782F1C700665A5E /* MergingProcessorViewController.m */; };
 		21201760180330ED001760DC /* RosyWriterPreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2120175A180330ED001760DC /* RosyWriterPreviewView.m */; };
 		21201761180330ED001760DC /* passThrough.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 2120175C180330ED001760DC /* passThrough.fsh */; };
@@ -63,6 +64,7 @@
 		21FCE9D717416FD20020E973 /* PlayVideoVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 21FCE9D617416FD20020E973 /* PlayVideoVC.m */; };
 		21FCE9DA174171C90020E973 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21FCE9D9174171C90020E973 /* CoreMedia.framework */; };
 		21FCE9DC174171D60020E973 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21FCE9DB174171D60020E973 /* MobileCoreServices.framework */; };
+		21FFB2F3187B0E360000248C /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21FFB2F2187B0E360000248C /* AudioToolbox.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -79,6 +81,7 @@
 		21095762176BC55C00C7A68A /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		21095764176BC59D00C7A68A /* LogoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LogoViewController.h; path = Loggo/LogoViewController.h; sourceTree = "<group>"; };
 		21095765176BC59D00C7A68A /* LogoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LogoViewController.m; path = Loggo/LogoViewController.m; sourceTree = "<group>"; };
+		21119CFD1895101C005B693C /* Sound12.aif */ = {isa = PBXFileReference; lastKnownFileType = file; name = Sound12.aif; path = ../../../../Documents/ObjectiveC/iOSProgramming/25.MediaPlayer/MediaPlayer/MediaPlayer/Sound12.aif; sourceTree = "<group>"; };
 		211D3A491782F1C700665A5E /* MergingProcessorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MergingProcessorViewController.h; sourceTree = "<group>"; };
 		211D3A4A1782F1C700665A5E /* MergingProcessorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MergingProcessorViewController.m; sourceTree = "<group>"; };
 		21201759180330ED001760DC /* RosyWriterPreviewView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RosyWriterPreviewView.h; path = View/Playback/RosyWriterPreviewView.h; sourceTree = "<group>"; };
@@ -164,6 +167,7 @@
 		21FCE9D617416FD20020E973 /* PlayVideoVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayVideoVC.m; sourceTree = "<group>"; };
 		21FCE9D9174171C90020E973 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		21FCE9DB174171D60020E973 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		21FFB2F2187B0E360000248C /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -171,6 +175,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				21FFB2F3187B0E360000248C /* AudioToolbox.framework in Frameworks */,
 				21BEED5917DB6F2200EF7D98 /* QuartzCore.framework in Frameworks */,
 				21ECB9BF17401A96002C8851 /* CoreGraphics.framework in Frameworks */,
 				21F55F73179A6EB400121105 /* CoreImage.framework in Frameworks */,
@@ -369,6 +374,7 @@
 			children = (
 				21ECB9C017401A96002C8851 /* CoolVideoProcessor */,
 				21BD7B6A1767D44B0093BB2C /* checkButton.png */,
+				21119CFD1895101C005B693C /* Sound12.aif */,
 				21ECB9B917401A96002C8851 /* Frameworks */,
 				21ECB9B717401A96002C8851 /* Products */,
 			);
@@ -385,6 +391,7 @@
 		21ECB9B917401A96002C8851 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				21FFB2F2187B0E360000248C /* AudioToolbox.framework */,
 				21BEED4F17DB6A7800EF7D98 /* libFWTPopoverView.a */,
 				21BEED5817DB6F2200EF7D98 /* QuartzCore.framework */,
 				21F55F72179A6EB400121105 /* CoreImage.framework */,
@@ -500,6 +507,7 @@
 				21201761180330ED001760DC /* passThrough.fsh in Resources */,
 				21ECB9C517401A96002C8851 /* InfoPlist.strings in Resources */,
 				21ECB9CD17401A96002C8851 /* Default.png in Resources */,
+				21119CFE1895101C005B693C /* Sound12.aif in Resources */,
 				21ECB9CF17401A96002C8851 /* Default@2x.png in Resources */,
 				21ECB9D117401A96002C8851 /* Default-568h@2x.png in Resources */,
 				21ECB9D417401A96002C8851 /* MainStoryboard_iPhone.storyboard in Resources */,
