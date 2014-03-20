@@ -17,6 +17,9 @@
 #import "AssetItem.h"
 
 
+static NSString * g_MergedVideoKey = @"MVK";
+static NSString * g_FilesKey       = @"DFK";
+
 @interface MergingProcessorViewController ()
 @property (nonatomic,strong) ALAssetsLibrary * library;
 @property (nonatomic,strong) NSOperationQueue * queue;
@@ -26,6 +29,7 @@
 @property (nonatomic) NSTimeInterval startTime;
 @property (nonatomic) UInt32 soundID;
 @property (nonatomic) NSUInteger percentage;
+@property (nonatomic) BOOL shouldOfferActionSheet;
 @end
 
 @implementation MergingProcessorViewController
@@ -37,6 +41,37 @@
         [self setup];
     }
     return self;
+}
+
+
+#pragma mark - Encoding/Decoding Methods
+
+- (void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [super encodeWithCoder:aCoder];
+    
+    if (self.mergedVideo)
+        [aCoder encodeObject:self.mergedVideo forKey:g_MergedVideoKey];
+    else if (self.dictionary)
+        [aCoder encodeObject:self.dictionary forKey:g_FilesKey];
+    
+}
+
+- (void)decodeRestorableStateWithCoder:(NSCoder *)coder
+{
+    [super decodeRestorableStateWithCoder:coder];
+    self.shouldOfferActionSheet = TRUE;
+    if ([coder containsValueForKey:g_MergedVideoKey])
+    {
+        self.mergedVideo = [coder decodeObjectForKey:g_MergedVideoKey];
+    }
+    else if ([coder containsValueForKey:g_FilesKey])
+    {
+        self.dictionary = [coder decodeObjectForKey:g_FilesKey];
+    }
+    else
+        self.shouldOfferActionSheet = FALSE;
+    
 }
 
 +(NSURL*)pathForResultVideo
@@ -245,9 +280,15 @@ void MyAudioServicesSystemSoundCompletionProc (
     return FALSE;
 }
 
--(void)viewDidLoad
+- (void)viewDidLoad
 {
     [super viewDidLoad];
+    if (self.shouldOfferActionSheet)
+    {
+        /*UIActionSheet *sheet = [UIActionSheet alloc]initWithTitle:@"Restored data" delegate:<#(id<UIActionSheetDelegate>)#> cancelButtonTitle:<#(NSString *)#> destructiveButtonTitle:<#(NSString *)#> otherButtonTitles:<#(NSString *), ...#>, nil*/
+        return;
+    }
+    
     [self changeStatus:@"Started exporting" percent:0.0];
     [self.queue addOperationWithBlock:^{
         if (!self.pureImages)
@@ -256,6 +297,8 @@ void MyAudioServicesSystemSoundCompletionProc (
             [self executeTaskForPureImages];
     }];
 }
+
+
 
 -(void)changeStatus:(NSString*)title percent:(NSUInteger)percent
 {
@@ -476,8 +519,9 @@ void MyAudioServicesSystemSoundCompletionProc (
             [reader addOutput:audioOutput];
     }
     
-    CMTime duration = composition.duration;//CMTimeMakeWithSeconds(1.5, 1);//composition.duration;
-    
+    CMTime duration = composition.duration;
+    NSLog(@"Duration of composition...");
+    CMTimeShow(duration);
     reader.timeRange = CMTimeRangeMake(kCMTimeZero, duration);
     
     

@@ -736,7 +736,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "851"
             endingLineNumber = "851"
-            landmarkName = "-executeTask"
+            landmarkName = "-appendTracksFromAsset:toComposition:completition:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -912,7 +912,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "755"
             endingLineNumber = "755"
-            landmarkName = "-appendAudioTrackFromAsset:toCompositionTrack:completition:"
+            landmarkName = "-appendTracksAfterLoadingFromAsset:toComposition:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -992,7 +992,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "901"
             endingLineNumber = "901"
-            landmarkName = "-xyz:index:"
+            landmarkName = "-executeTask"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -2543,7 +2543,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "251"
             endingLineNumber = "251"
-            landmarkName = "-viewDidLoad"
+            landmarkName = "-processDictionary"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -3077,7 +3077,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "273"
             endingLineNumber = "273"
-            landmarkName = "-executeTaskForPureImages"
+            landmarkName = "-displayMergedVideo"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -3093,7 +3093,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "254"
             endingLineNumber = "254"
-            landmarkName = "-viewDidLoad"
+            landmarkName = "-processDictionary"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -3237,7 +3237,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "271"
             endingLineNumber = "271"
-            landmarkName = "-executeTaskForPureImages"
+            landmarkName = "-processDictionary"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -5185,7 +5185,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "752"
             endingLineNumber = "752"
-            landmarkName = "-appendAudioTrackFromAsset:toCompositionTrack:completition:"
+            landmarkName = "-appendTracksAfterLoadingFromAsset:toComposition:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -5201,7 +5201,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "213"
             endingLineNumber = "213"
-            landmarkName = "-processDictionary"
+            landmarkName = "-setDictionary:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -5217,8 +5217,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "234"
             endingLineNumber = "234"
-            landmarkName = "-processDictionary"
-            landmarkType = "5">
+            landmarkName = "MyAudioServicesSystemSoundCompletionProc()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -5375,8 +5375,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "426"
             endingLineNumber = "426"
-            landmarkName = "-readSamples:"
-            landmarkType = "5">
+            landmarkName = "@implementation MergingProcessorViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -5391,7 +5391,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1117"
             endingLineNumber = "1117"
-            landmarkName = "-applyFilter:poolRef:"
+            landmarkName = "-xyz:index:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -5407,7 +5407,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1121"
             endingLineNumber = "1121"
-            landmarkName = "-applyFilter:poolRef:"
+            landmarkName = "-xyz:index:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -5423,7 +5423,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1103"
             endingLineNumber = "1103"
-            landmarkName = "-applyFilter:poolRef:"
+            landmarkName = "-xyz:index:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -5439,7 +5439,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "409"
             endingLineNumber = "409"
-            landmarkName = "-readSamples:"
+            landmarkName = "-appendAudioInputForWriter:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -5455,7 +5455,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "309"
             endingLineNumber = "309"
-            landmarkName = "-exportComposition:filePath:block:"
+            landmarkName = "-changeStatus:percent:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -5487,7 +5487,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "708"
             endingLineNumber = "708"
-            landmarkName = "-appendTracksAfterLoadingFromAsset:toComposition:"
+            landmarkName = "-startInternal:composition:completition:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -5503,8 +5503,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "744"
             endingLineNumber = "744"
-            landmarkName = "-appendAudioTrackFromAsset:toCompositionTrack:completition:"
-            landmarkType = "5">
+            landmarkName = "@implementation MergingProcessorViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -5519,8 +5519,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "704"
             endingLineNumber = "704"
-            landmarkName = "-appendAudioTrackAfterLoadingFromAsset:toComposition:"
-            landmarkType = "5">
+            landmarkName = "@implementation MergingProcessorViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -5535,7 +5535,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "709"
             endingLineNumber = "709"
-            landmarkName = "-appendTracksAfterLoadingFromAsset:toComposition:"
+            landmarkName = "-startInternal:composition:completition:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -5599,7 +5599,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "420"
             endingLineNumber = "420"
-            landmarkName = "-readSamples:"
+            landmarkName = "-prolongBGTask"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -5615,7 +5615,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "724"
             endingLineNumber = "724"
-            landmarkName = "-appendTrack:toComposition:mediaType:"
+            landmarkName = "-allKeysAreLoadedForAsset:keys:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -5631,7 +5631,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "288"
             endingLineNumber = "288"
-            landmarkName = "-start"
+            landmarkName = "-viewDidLoad"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -5679,7 +5679,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "173"
             endingLineNumber = "173"
-            landmarkName = "-setDictionary:"
+            landmarkName = "-leaveBGMode:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -5711,7 +5711,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "424"
             endingLineNumber = "424"
-            landmarkName = "-readSamples:"
+            landmarkName = "-prolongBGTask"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -5727,7 +5727,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "421"
             endingLineNumber = "421"
-            landmarkName = "-readSamples:"
+            landmarkName = "-prolongBGTask"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -5743,7 +5743,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "726"
             endingLineNumber = "726"
-            landmarkName = "-appendTrack:toComposition:mediaType:"
+            landmarkName = "-allKeysAreLoadedForAsset:keys:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -5759,7 +5759,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "664"
             endingLineNumber = "664"
-            landmarkName = "-startInternal:composition:completition:"
+            landmarkName = "-readSamples:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -5775,7 +5775,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "670"
             endingLineNumber = "670"
-            landmarkName = "-startInternal:composition:completition:"
+            landmarkName = "-readSamples:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6095,7 +6095,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "645"
             endingLineNumber = "645"
-            landmarkName = "-notifyAboutCurrentProgress:"
+            landmarkName = "-readSamples:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6111,7 +6111,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "647"
             endingLineNumber = "647"
-            landmarkName = "-notifyAboutCurrentProgress:"
+            landmarkName = "-readSamples:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6127,7 +6127,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "378"
             endingLineNumber = "378"
-            landmarkName = "-prolongBGTask"
+            landmarkName = "-exportComposition:filePath:block:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6143,7 +6143,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "380"
             endingLineNumber = "380"
-            landmarkName = "-prolongBGTask"
+            landmarkName = "-exportComposition:filePath:block:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6159,7 +6159,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "118"
             endingLineNumber = "118"
-            landmarkName = "-_enterBGMode"
+            landmarkName = "-enterBGMode:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6175,7 +6175,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "119"
             endingLineNumber = "119"
-            landmarkName = "-_enterBGMode"
+            landmarkName = "-enterBGMode:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6191,7 +6191,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "122"
             endingLineNumber = "122"
-            landmarkName = "-_enterBGMode"
+            landmarkName = "-enterBGMode:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6207,7 +6207,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "182"
             endingLineNumber = "182"
-            landmarkName = "-playSystemSound"
+            landmarkName = "-leaveBGMode:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6223,7 +6223,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "264"
             endingLineNumber = "264"
-            landmarkName = "-changeStatus:percent:"
+            landmarkName = "-processDictionary"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6239,7 +6239,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "159"
             endingLineNumber = "159"
-            landmarkName = "-leaveBGMode:"
+            landmarkName = "-_enterBGMode"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6278,7 +6278,7 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CoolVideoProcessor/MergingProcessorViewController.m"
@@ -6287,7 +6287,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "141"
             endingLineNumber = "141"
-            landmarkName = "-leaveBGMode:"
+            landmarkName = "-enterBGMode:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

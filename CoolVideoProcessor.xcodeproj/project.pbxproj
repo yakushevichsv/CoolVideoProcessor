@@ -33,8 +33,8 @@
 		21BB5380179ED9CF00E6B639 /* SelectFiltersController.m in Sources */ = {isa = PBXBuildFile; fileRef = 21BB537F179ED9CF00E6B639 /* SelectFiltersController.m */; };
 		21BD7B6B1767D44B0093BB2C /* checkButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 21BD7B6A1767D44B0093BB2C /* checkButton.png */; };
 		21BE238F17B81B5300E2073B /* FilterInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 21BE238E17B81B5300E2073B /* FilterInfo.m */; };
-		21BEED5017DB6A7800EF7D98 /* libFWTPopoverView.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 21BEED4F17DB6A7800EF7D98 /* libFWTPopoverView.a */; };
 		21BEED5917DB6F2200EF7D98 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21BEED5817DB6F2200EF7D98 /* QuartzCore.framework */; };
+		21CFB21218DAF5290062D093 /* libFWTPopoverView.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 21CFB21118DAF5290062D093 /* libFWTPopoverView.a */; };
 		21D51ED017A5762700E18AFF /* FilterSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 21D51ECF17A5762700E18AFF /* FilterSettingsController.m */; };
 		21D51ED317A58B8D00E18AFF /* FilterSettingsScalarCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 21D51ED217A58B8D00E18AFF /* FilterSettingsScalarCell.m */; };
 		21DFBE7F179C7A9B00BCE33B /* UIBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 21DFBE7E179C7A9B00BCE33B /* UIBaseViewController.m */; };
@@ -113,13 +113,13 @@
 		21BD7B6A1767D44B0093BB2C /* checkButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checkButton.png; sourceTree = "<group>"; };
 		21BE238D17B81B5300E2073B /* FilterInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FilterInfo.h; path = Filters/FilterInfo.h; sourceTree = "<group>"; };
 		21BE238E17B81B5300E2073B /* FilterInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FilterInfo.m; path = Filters/FilterInfo.m; sourceTree = "<group>"; };
-		21BEED4F17DB6A7800EF7D98 /* libFWTPopoverView.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libFWTPopoverView.a; path = CoolVideoProcessor/libFWTPopoverView.a; sourceTree = "<group>"; };
 		21BEED5317DB6B7700EF7D98 /* FWTPopoverAnimationHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FWTPopoverAnimationHelper.h; sourceTree = "<group>"; };
 		21BEED5417DB6B7700EF7D98 /* FWTPopoverArrow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FWTPopoverArrow.h; sourceTree = "<group>"; };
 		21BEED5517DB6B7700EF7D98 /* FWTPopoverBackgroundHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FWTPopoverBackgroundHelper.h; sourceTree = "<group>"; };
 		21BEED5617DB6B7700EF7D98 /* FWTPopoverView-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "FWTPopoverView-Prefix.pch"; sourceTree = "<group>"; };
 		21BEED5717DB6B7700EF7D98 /* FWTPopoverView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FWTPopoverView.h; sourceTree = "<group>"; };
 		21BEED5817DB6F2200EF7D98 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		21CFB21118DAF5290062D093 /* libFWTPopoverView.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libFWTPopoverView.a; path = CoolVideoProcessor/libFWTPopoverView.a; sourceTree = "<group>"; };
 		21D51ECE17A5762700E18AFF /* FilterSettingsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FilterSettingsController.h; path = Controllers/FilterSettingsController.h; sourceTree = "<group>"; };
 		21D51ECF17A5762700E18AFF /* FilterSettingsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FilterSettingsController.m; path = Controllers/FilterSettingsController.m; sourceTree = "<group>"; };
 		21D51ED117A58B8D00E18AFF /* FilterSettingsScalarCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FilterSettingsScalarCell.h; path = Filters/FilterSettingsScalarCell.h; sourceTree = "<group>"; };
@@ -189,7 +189,7 @@
 				21FCE9DA174171C90020E973 /* CoreMedia.framework in Frameworks */,
 				21ECB9BB17401A96002C8851 /* UIKit.framework in Frameworks */,
 				21ECB9BD17401A96002C8851 /* Foundation.framework in Frameworks */,
-				21BEED5017DB6A7800EF7D98 /* libFWTPopoverView.a in Frameworks */,
+				21CFB21218DAF5290062D093 /* libFWTPopoverView.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -391,8 +391,8 @@
 		21ECB9B917401A96002C8851 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				21CFB21118DAF5290062D093 /* libFWTPopoverView.a */,
 				21FFB2F2187B0E360000248C /* AudioToolbox.framework */,
-				21BEED4F17DB6A7800EF7D98 /* libFWTPopoverView.a */,
 				21BEED5817DB6F2200EF7D98 /* QuartzCore.framework */,
 				21F55F72179A6EB400121105 /* CoreImage.framework */,
 				21F55F70179A6E7600121105 /* CoreVideo.framework */,
@@ -647,7 +647,8 @@
 				INFOPLIST_FILE = "CoolVideoProcessor/CoolVideoProcessor-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/CoolVideoProcessor\"",
+					"\\\"$(SRCROOT)/CoolVideoProcessor\\\"",
+					/Users/siarheiy/Developer/Projects/CommercialSoft/CoolVideoProcessor/CoolVideoProcessor,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "0AFD17E1-07D5-4DE0-8E97-6E8F139F5E3A";
@@ -666,7 +667,8 @@
 				INFOPLIST_FILE = "CoolVideoProcessor/CoolVideoProcessor-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/CoolVideoProcessor\"",
+					"\\\"$(SRCROOT)/CoolVideoProcessor\\\"",
+					/Users/siarheiy/Developer/Projects/CommercialSoft/CoolVideoProcessor/CoolVideoProcessor,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "0AFD17E1-07D5-4DE0-8E97-6E8F139F5E3A";
